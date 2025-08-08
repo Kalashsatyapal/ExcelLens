@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
-import UploadSection from "./UploadSection";
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useEffect } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import UploadSection from './UploadSection';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -10,9 +10,7 @@ export default function Dashboard() {
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
       <header className="flex justify-between items-center bg-white shadow px-6 py-4">
-        <h1 className="text-xl font-semibold text-gray-700">
-          Dashboard - Welcome, {user.username}
-        </h1>
+        <h1 className="text-xl font-semibold text-gray-700">Dashboard - Welcome, {user.username}</h1>
         <div className="space-x-4">
           <Link
             to="/upload-history"
@@ -32,7 +30,6 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="flex-grow p-6">
         <UploadSection />
-       
       </main>
     </div>
   );

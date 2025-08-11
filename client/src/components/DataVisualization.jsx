@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import API from '../utils/api';
-
 // Chart.js imports
 import {
   Chart as ChartJS,
@@ -18,12 +17,9 @@ import {
   LineController,
 } from 'chart.js';
 import { Bar, Line, Pie, Scatter } from 'react-chartjs-2';
-
 // Three.js imports
 import * as THREE from 'three';
-
 import { jsPDF } from 'jspdf';
-
 // Register Chart.js components
 ChartJS.register(
   CategoryScale,
@@ -39,23 +35,18 @@ ChartJS.register(
   PieController,
   LineController
 );
-
 export default function DataVisualization() {
   const [uploads, setUploads] = useState([]);
   const [selectedUploadId, setSelectedUploadId] = useState('');
   const [selectedUpload, setSelectedUpload] = useState(null);
-
   const [xAxis, setXAxis] = useState('');
   const [yAxis, setYAxis] = useState('');
   const [chartType, setChartType] = useState('bar');
-
   const chartContainerRef = useRef(null);
   const threeContainerRef = useRef(null);
-
   const threeSceneRef = useRef();
   const threeRendererRef = useRef();
   const threeCameraRef = useRef();
-
   // Fetch user uploads
   useEffect(() => {
     const fetchUploads = async () => {
@@ -68,7 +59,6 @@ export default function DataVisualization() {
     };
     fetchUploads();
   }, []);
-
   // When selectedUploadId changes, update selectedUpload
   useEffect(() => {
     const upload = uploads.find((u) => u._id === selectedUploadId);
@@ -76,18 +66,14 @@ export default function DataVisualization() {
     setXAxis('');
     setYAxis('');
   }, [selectedUploadId, uploads]);
-
   // Prepare Chart.js data object
   const getChartData = () => {
     if (!selectedUpload || !xAxis) return null;
-
     const filteredRows = selectedUpload.data.filter(row =>
       row[xAxis] !== undefined && row[xAxis] !== '' &&
       (yAxis ? row[yAxis] !== undefined && row[yAxis] !== '' : true)
     );
-
     const labels = filteredRows.map(row => row[xAxis]);
-
     if (chartType === 'pie') {
       if (!yAxis) {
         const counts = {};
@@ -128,38 +114,30 @@ export default function DataVisualization() {
       };
     }
   };
-
   const generateColors = (num) => {
     return Array.from({ length: num }, (_, i) => `hsl(${(i * 360) / num}, 70%, 60%)`);
   };
-
   // 3D Column Chart
   useEffect(() => {
     if (!selectedUpload || !xAxis || !yAxis || !threeContainerRef.current) return;
     if (chartType !== '3d-column') return;
-
     if (threeRendererRef.current) {
       threeRendererRef.current.dispose();
       threeContainerRef.current.innerHTML = '';
     }
-
     const width = threeContainerRef.current.clientWidth;
     const height = 400;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     camera.position.set(0, 8, 15);
-
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     threeContainerRef.current.appendChild(renderer.domElement);
-
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(5, 10, 7);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0x404040));
-
     scene.add(new THREE.GridHelper(20, 20));
-
     const filteredRows = selectedUpload.data.filter(
       row => row[xAxis] !== undefined && row[yAxis] !== undefined
     );
@@ -168,10 +146,8 @@ export default function DataVisualization() {
       filteredRows.filter(row => row[xAxis] === label)
         .reduce((sum, r) => sum + (Number(r[yAxis]) || 0), 0)
     );
-
     const maxVal = Math.max(...values);
     const scale = 8 / (maxVal || 1);
-
     labels.forEach((label, idx) => {
       const colHeight = values[idx] * scale;
       const geometry = new THREE.BoxGeometry(1, colHeight, 1);
@@ -180,7 +156,6 @@ export default function DataVisualization() {
       bar.position.set(idx * 1.5 - (labels.length * 0.75), colHeight / 2, 0);
       scene.add(bar);
     });
-
     let frameId;
     const animate = () => {
       frameId = requestAnimationFrame(animate);
@@ -188,18 +163,15 @@ export default function DataVisualization() {
       renderer.render(scene, camera);
     };
     animate();
-
     threeSceneRef.current = scene;
     threeRendererRef.current = renderer;
     threeCameraRef.current = camera;
-
     return () => {
       cancelAnimationFrame(frameId);
       renderer.dispose();
       scene.clear();
     };
   }, [selectedUpload, xAxis, yAxis, chartType]);
-
   const renderChartJS = () => {
     if (chartType === 'scatter') {
       if (!xAxis || !yAxis) return <p className="text-red-600">Select valid X and Y axes</p>;
@@ -207,7 +179,6 @@ export default function DataVisualization() {
         row => row[xAxis] !== undefined && row[xAxis] !== '' &&
                row[yAxis] !== undefined && row[yAxis] !== ''
       ) || [];
-
       const scatterData = {
         datasets: [
           {
@@ -222,7 +193,6 @@ export default function DataVisualization() {
           },
         ],
       };
-
       return <Scatter data={scatterData} options={{
         responsive: true,
         plugins: { legend: { display: true }, tooltip: { enabled: true } },
@@ -232,10 +202,8 @@ export default function DataVisualization() {
         }
       }} />;
     }
-
     const data = getChartData();
     if (!data) return <p className="text-red-600">Select valid file and axes for this chart type</p>;
-
     const commonOptions = {
       responsive: true,
       plugins: {
@@ -243,7 +211,6 @@ export default function DataVisualization() {
         tooltip: { enabled: true },
       },
     };
-
     switch (chartType) {
       case 'bar':
         return <Bar data={data} options={commonOptions} />;
@@ -255,7 +222,6 @@ export default function DataVisualization() {
         return <p>Chart type not supported.</p>;
     }
   };
-
   const downloadChart = async (type = 'png') => {
     let canvas;
     if (['bar', 'line', 'pie', 'scatter'].includes(chartType)) {
@@ -263,12 +229,10 @@ export default function DataVisualization() {
     } else if (chartType === '3d-column') {
       canvas = threeContainerRef.current.querySelector('canvas');
     }
-
     if (!canvas) {
       alert('No chart available to download');
       return;
     }
-
     if (type === 'png') {
       const link = document.createElement('a');
       link.download = `chart_${Date.now()}.png`;
@@ -285,11 +249,9 @@ export default function DataVisualization() {
       pdf.save(`chart_${Date.now()}.pdf`);
     }
   };
-
   return (
     <div className="max-w-6xl mx-auto p-4 bg-white rounded shadow">
       <h2 className="text-2xl font-semibold mb-6">Data Visualization</h2>
-
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div>
           <label className="block font-medium mb-1">Select Excel File</label>
@@ -306,7 +268,6 @@ export default function DataVisualization() {
             ))}
           </select>
         </div>
-
         <div>
           <label className="block font-medium mb-1">X Axis</label>
           <select
@@ -324,7 +285,6 @@ export default function DataVisualization() {
               ))}
           </select>
         </div>
-
         <div>
           <label className="block font-medium mb-1">Y Axis</label>
           <select
@@ -342,7 +302,6 @@ export default function DataVisualization() {
               ))}
           </select>
         </div>
-
         <div>
           <label className="block font-medium mb-1">Chart Type</label>
           <select
@@ -359,7 +318,6 @@ export default function DataVisualization() {
           </select>
         </div>
       </div>
-
       <div className="border rounded p-4 min-h-[400px] bg-gray-50 flex justify-center items-center">
         {['bar', 'line', 'pie', 'scatter'].includes(chartType) ? (
           <div ref={chartContainerRef} className="w-full max-w-4xl">
@@ -371,7 +329,6 @@ export default function DataVisualization() {
           <p>Select a chart type</p>
         )}
       </div>
-
       <div className="mt-4 space-x-4 text-center">
         <button
           onClick={() => downloadChart('png')}

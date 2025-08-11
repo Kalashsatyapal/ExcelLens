@@ -12,6 +12,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
 
+
 function PrivateRoute({ children, roles }) {
   const { user } = useContext(AuthContext);
 
@@ -56,6 +57,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

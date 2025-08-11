@@ -11,7 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./components/AdminDashboard";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
-import DataVisualization from "./components/DataVisualization";
+import DataVisualization from "./components/DataVisualization/DataVisualization";
 
 function PrivateRoute({ children, roles }) {
   const { user } = useContext(AuthContext);

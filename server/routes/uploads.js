@@ -79,11 +79,5 @@ router.delete('/:id', authMiddleware(), async (req, res) => {
     res.status(500).json({ message: 'Failed to delete upload' });
   }
 });
-// Get specific file's data for chart generation
-router.get('/:id', verifyToken, async (req, res) => {
-  const file = await Upload.findOne({ _id: req.params.id, userId: req.user.id });
-  if (!file) return res.status(404).json({ message: 'File not found' });
-  res.json(file);
-});
 
 module.exports = router;

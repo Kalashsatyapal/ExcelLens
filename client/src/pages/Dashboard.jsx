@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import UploadSection from "./UploadSection";
+import UploadSection from "../components/UploadSection";
 import { Link } from "react-router-dom";
+
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -26,12 +27,23 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="flex-grow p-6">
         <UploadSection />
-        <Link
-          to="/upload-history"
-          className="inline-block px-4 py-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 text-gray-800 font-medium rounded-md border border-gray-300 hover:from-gray-300 hover:via-gray-400 hover:to-gray-500 transition duration-200"
-        >
-          Upload History
-        </Link>
+        <div>
+          {" "}
+          <Link
+            to="/upload-history"
+            className="inline-block px-4 py-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 text-gray-800 font-medium rounded-md border border-gray-300 hover:from-gray-300 hover:via-gray-400 hover:to-gray-500 transition duration-200"
+          >
+            Upload History
+          </Link>
+        </div>
+        <div>
+          <Link
+            to="/visualize"
+            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 text-blue-800 font-medium rounded-md border border-blue-300 hover:from-blue-300 hover:via-blue-400 hover:to-blue-500 transition duration-200"
+          >
+            Data Visualization
+          </Link>
+          </div>
       </main>
     </div>
   );

@@ -5,12 +5,13 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import LandingPage from "./components/LandingPage";
+import LandingPage from "./pages/LandingPage";
 import AuthForm from "./components/AuthForm";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./components/AdminDashboard";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
+import DataVisualization from "./components/DataVisualization";
 
 function PrivateRoute({ children, roles }) {
   const { user } = useContext(AuthContext);
@@ -56,6 +57,15 @@ function App() {
               </PrivateRoute>
             }
           />
+         <Route
+            path="/visualize"
+            element={
+              <PrivateRoute roles={["user"]}>
+                <DataVisualization />
+              </PrivateRoute>
+            }
+          />
+          
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

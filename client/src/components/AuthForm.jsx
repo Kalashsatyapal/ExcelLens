@@ -50,7 +50,7 @@ export default function AuthForm({ type }) {
 
   return (
     <>
-      <nav className="bg-indigo-600 text-white px-6 py-4 shadow-md">
+      <nav className="bg-green-500 text-white px-6 py-4 shadow-md">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <h1
             className="text-2xl font-bold tracking-wide cursor-pointer"
@@ -60,7 +60,7 @@ export default function AuthForm({ type }) {
           </h1>
           <button
             onClick={() => navigate("/")}
-            className="px-4 py-2 bg-white text-indigo-600 rounded-md hover:bg-gray-100 transition"
+            className="px-4 py-2 bg-white text-green-600 rounded-md hover:bg-gray-100 transition"
           >
             Back to Home
           </button>
@@ -91,7 +91,7 @@ export default function AuthForm({ type }) {
                 required
                 value={formData.username}
                 onChange={handleChange}
-                className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
           )}
@@ -110,7 +110,7 @@ export default function AuthForm({ type }) {
               required
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -128,7 +128,7 @@ export default function AuthForm({ type }) {
               required
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -146,7 +146,7 @@ export default function AuthForm({ type }) {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="user">User</option>
                   <option value="admin">Admin</option>
@@ -168,7 +168,7 @@ export default function AuthForm({ type }) {
                     required
                     value={formData.adminPassKey}
                     onChange={handleChange}
-                    className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
               )}
@@ -178,13 +178,12 @@ export default function AuthForm({ type }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition disabled:opacity-50"
+            className="w-full py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600 transition disabled:opacity-50"
           >
             {loading ? "Please wait..." : isRegister ? "Sign Up" : "Login"}
           </button>
         </form>
 
-        {/* Dialog below form */}
         <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
           {isRegister ? (
             <>
@@ -192,7 +191,7 @@ export default function AuthForm({ type }) {
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="text-indigo-600 hover:underline dark:text-indigo-400"
+                className="text-green-500 hover:underline dark:text-green-400"
               >
                 Login
               </button>
@@ -203,7 +202,7 @@ export default function AuthForm({ type }) {
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className="text-indigo-600 hover:underline dark:text-indigo-400"
+                className="text-green-500 hover:underline dark:text-green-400"
               >
                 Register
               </button>

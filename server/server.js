@@ -18,6 +18,8 @@ app.get('/', (req, res) => res.send('Welcome to MERN Auth API'));
 const uploadRoutes = require('./routes/uploads');
 
 app.use('/api/uploads', uploadRoutes);
+const chartRoutes = require('./routes/charts');
+app.use('/api/charts', chartRoutes);
 // Connect MongoDB and start server
 mongoose.connect(process.env.MONGO_URI, {
 }).then(() => {

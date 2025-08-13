@@ -1,73 +1,106 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-sky-50 flex flex-col">
-      {/* Navbar */}
-      <header className="w-full py-4 px-8 flex justify-between items-center bg-white shadow-md">
-        <h1 className="text-2xl font-bold text-green-600">ExcelLense</h1>
-        <div className="space-x-4">
-          <Link
-            to="/login"
-            className="px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition"
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className="px-4 py-2 text-green-600 border border-green-600 rounded-md hover:bg-sky-100 transition"
-          >
-            Register
-          </Link>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-md">
+        <div className="container mx-auto flex items-center justify-between px-6 py-4">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <img
+              src="/logo2.png"
+              alt="ExcelLense Logo"
+              className="w-10 h-10 object-contain"
+            />
+            <h1 className="text-2xl font-bold text-indigo-600">ExcelLense</h1>
+          </div>
+          <nav className="space-x-4">
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded hover:bg-indigo-50 transition"
+            >
+              Register
+            </Link>
+          </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <main className="flex flex-1 flex-col items-center justify-center text-center px-6">
-        <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800 leading-tight">
-          Build Faster with <span className="text-green-600">MERN + Tailwind</span>
+      <section className="flex flex-col items-center text-center py-20 bg-gradient-to-b from-indigo-50 to-white">
+        <h2 className="text-4xl font-bold text-gray-800 mb-4">
+          Analyze & Visualize Excel Data with Ease
         </h2>
-        <p className="mt-4 text-lg text-gray-600 max-w-2xl">
-          Secure authentication for users and admins, file uploads with Excel parsing, and a clean, modern UI ready for development.
+        <p className="text-lg text-gray-600 max-w-2xl mb-6">
+          ExcelLense is your one-stop solution for **Excel file uploads**, **data visualization**, **3D charting**, and **file management** — all powered by a modern MERN stack.
         </p>
-        <div className="mt-6 flex gap-4">
-          <Link
-            to="/register"
-            className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
-          >
-            Get Started
-          </Link>
-          <Link
-            to="/login"
-            className="px-6 py-3 bg-white text-green-700 border border-green-600 rounded-lg shadow hover:bg-sky-100 transition"
-          >
-            Login
-          </Link>
-        </div>
-      </main>
+        <Link
+          to="/register"
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
+        >
+          Get Started
+        </Link>
+      </section>
 
       {/* Features Section */}
       <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
-          {[
-            { title: "JWT Auth", desc: "Secure login system with user & admin roles." },
-            { title: "Excel Parsing", desc: "Upload Excel files and parse them into structured data." },
-            { title: "Modern UI", desc: "Clean and responsive interface for great UX." },
-          ].map((f, i) => (
-            <div
-              key={i}
-              className="p-6 bg-sky-100 rounded-lg shadow hover:shadow-lg transition"
-            >
-              <h3 className="text-xl font-semibold text-green-600">{f.title}</h3>
-              <p className="mt-2 text-gray-700">{f.desc}</p>
-            </div>
-          ))}
+        <div className="container mx-auto px-6">
+          <h3 className="text-3xl font-bold text-center text-gray-800 mb-12">
+            Powerful Features of ExcelLense
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Secure Authentication",
+                desc: "JWT-based login system with User & Admin roles. Admin registration requires a secret passkey."
+              },
+              {
+                title: "Excel Uploads",
+                desc: "Drag-and-drop Excel file uploads with ExcelJS parsing and MongoDB storage."
+              },
+              {
+                title: "File Management",
+                desc: "View your upload history, preview files, and delete them when needed."
+              },
+              {
+                title: "Data Visualization",
+                desc: "Chart.js and Three.js powered 2D & 3D charts including bar, line, pie, scatter, and 3D column."
+              },
+              {
+                title: "3D Pie Charts",
+                desc: "WebGL-rendered 3D pie charts with the option to capture the canvas."
+              },
+              {
+                title: "Export Charts",
+                desc: "Download your charts as PNG or PDF for reports and presentations."
+              }
+            ].map((f, i) => (
+              <div
+                key={i}
+                className="p-6 bg-gray-50 rounded-lg shadow hover:shadow-lg transition"
+              >
+                <h4 className="text-xl font-semibold text-indigo-600 mb-3">
+                  {f.title}
+                </h4>
+                <p className="text-gray-600">{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-4 text-center bg-sky-100 text-gray-600">
-        © {new Date().getFullYear()} MERN App. All rights reserved.
+      <footer className="bg-gray-100 mt-auto py-6">
+        <div className="container mx-auto text-center text-gray-500 text-sm">
+          © {new Date().getFullYear()} ExcelLense. All rights reserved.
+        </div>
       </footer>
     </div>
   );

@@ -96,12 +96,12 @@ export default function DataVisualization() {
             onChange={(e) => setChartType(e.target.value)}
             disabled={!selectedUpload}
           >
-            <option value="bar">Bar</option>
-            <option value="line">Line</option>
-            <option value="pie">Pie</option>
-            <option value="scatter">Scatter</option>
-            <option value="3d-column">3D Column</option>
-            <option value="3d-pie">3D Pie</option>
+            <option value="bar">Bar(text vs integer)</option>
+            <option value="line">Line(text vs integer)</option>
+            <option value="pie">Pie(text vs integer)</option>
+            <option value="scatter">Scatter(integer vs integer)</option>
+            <option value="3d-column">3D Column(text vs integer)</option>
+            <option value="3d-pie">3D Pie(text vs integer)</option>
           </select>
         </div>
       </div>

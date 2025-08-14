@@ -7,12 +7,11 @@ const generateColors = (num) =>
 
 // 🔠 Abbreviate text into acronym (e.g. "Maruti Suzuki Motors India" → "MSMI")
 const abbreviateText = (text) => {
-  return text
-    .split(/\s+/) // split by spaces
-    .map(word => word[0]?.toUpperCase() || "") // first letter of each word
-    .join(""); // combine into acronym
+  if (!text || text.length < 3) return text;
+  const words = text.trim().split(/\s+/);
+  if (words.length === 1 && words[0].length < 3) return text;
+  return words.map(word => word[0]?.toUpperCase() || "").join("");
 };
-
 // 🏷️ Create label sprite with background and text
 const createLabel = (text, color = "#ffffff") => {
   const size = 256;

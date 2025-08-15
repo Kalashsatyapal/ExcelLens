@@ -3,6 +3,7 @@ import API from "../../utils/api";
 import Chart2D from "./Chart2D";
 import Chart3D from "./Chart3D";
 import ChartDownload from "./ChartDownload";
+import ChartSummary from "./ChartSummary";
 
 export default function DataVisualization() {
   const [uploads, setUploads] = useState([]);
@@ -49,7 +50,9 @@ export default function DataVisualization() {
           >
             <option value="">-- Select file --</option>
             {uploads.map((u) => (
-              <option key={u._id} value={u._id}>{u.filename}</option>
+              <option key={u._id} value={u._id}>
+                {u.filename}
+              </option>
             ))}
           </select>
         </div>
@@ -64,10 +67,11 @@ export default function DataVisualization() {
           >
             <option value="">-- Select X Axis --</option>
             {selectedUpload &&
-              Object.keys(selectedUpload.data[0] || {}).map(k => (
-                <option key={k} value={k}>{k}</option>
-              ))
-            }
+              Object.keys(selectedUpload.data[0] || {}).map((k) => (
+                <option key={k} value={k}>
+                  {k}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -81,10 +85,11 @@ export default function DataVisualization() {
           >
             <option value="">-- Select Y Axis --</option>
             {selectedUpload &&
-              Object.keys(selectedUpload.data[0] || {}).map(k => (
-                <option key={k} value={k}>{k}</option>
-              ))
-            }
+              Object.keys(selectedUpload.data[0] || {}).map((k) => (
+                <option key={k} value={k}>
+                  {k}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -96,12 +101,12 @@ export default function DataVisualization() {
             onChange={(e) => setChartType(e.target.value)}
             disabled={!selectedUpload}
           >
-            <option value="bar">Bar(text vs integer)</option>
-            <option value="line">Line(text vs integer)</option>
-            <option value="pie">Pie(text vs integer)</option>
-            <option value="scatter">Scatter(integer vs integer)</option>
-            <option value="3d-column">3D Column(text vs integer)</option>
-            <option value="3d-pie">3D Pie(text vs integer)</option>
+            <option value="bar">Bar</option>
+            <option value="line">Line</option>
+            <option value="pie">Pie</option>
+            <option value="scatter">Scatter</option>
+            <option value="3d-column">3D Column</option>
+            <option value="3d-pie">3D Pie</option>
           </select>
         </div>
       </div>
@@ -110,14 +115,25 @@ export default function DataVisualization() {
       <div className="border rounded p-4 min-h-[420px] bg-gray-50 flex justify-center items-center">
         {selectedUpload ? (
           is3DChart ? (
-            <Chart3D selectedUpload={selectedUpload} xAxis={xAxis} yAxis={yAxis} chartType={chartType} />
+            <Chart3D
+              selectedUpload={selectedUpload}
+              xAxis={xAxis}
+              yAxis={yAxis}
+              chartType={chartType}
+            />
           ) : (
-            <Chart2D selectedUpload={selectedUpload} xAxis={xAxis} yAxis={yAxis} chartType={chartType} />
+            <Chart2D
+              selectedUpload={selectedUpload}
+              xAxis={xAxis}
+              yAxis={yAxis}
+              chartType={chartType}
+            />
           )
         ) : (
           <p>Select a file and chart type</p>
         )}
       </div>
+      <ChartSummary chartType={chartType} xAxis={xAxis} yAxis={yAxis} />
 
       {/* Download Buttons */}
       <ChartDownload

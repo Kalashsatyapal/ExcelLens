@@ -30,6 +30,29 @@ export default function DataVisualization() {
     setYAxis("");
   }, [selectedUploadId, uploads]);
   const is3DChart = ["3d-column", "3d-pie"].includes(chartType);
+  const handleSaveAnalysis = async () => {
+    try {
+      const canvas = document.querySelector("canvas");
+      const chartImageBase64 = canvas?.toDataURL("image/png") || "";
+
+      const summaryText = `Chart Type: ${chartType}, X: ${xAxis}, Y: ${yAxis}`; // Replace with actual summary if available
+
+      await API.post("/chart-analysis", {
+        uploadId: selectedUpload._id,
+        chartType,
+        xAxis,
+        yAxis,
+        summary: summaryText,
+        chartImageBase64,
+      });
+
+      alert("Chart analysis saved successfully!");
+    } catch (error) {
+      console.error("Save failed:", error);
+      alert("Failed to save chart analysis.");
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-4 bg-white rounded shadow">
       <h2 className="text-2xl font-semibold mb-6">Data Visualization</h2>
@@ -125,6 +148,16 @@ export default function DataVisualization() {
       </div>
       {/* Chart Summary */}
       <ChartSummary chartType={chartType} xAxis={xAxis} yAxis={yAxis} />
+      {/* Save Analysis Button */}
+      <div className="flex justify-end mb-4">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          disabled={!selectedUpload || !xAxis || !yAxis}
+          onClick={handleSaveAnalysis}
+        >
+          Save Analysis
+        </button>
+      </div>
       {/* Download Buttons */}
       <ChartDownload
         selectedUpload={selectedUpload}

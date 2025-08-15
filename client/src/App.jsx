@@ -13,8 +13,6 @@ import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
 import DataVisualization from "./pages/DataVisualization/DataVisualization";
 
-
-
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);
 

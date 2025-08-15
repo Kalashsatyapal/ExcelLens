@@ -9,11 +9,9 @@ export default function DataVisualization() {
   const [uploads, setUploads] = useState([]);
   const [selectedUploadId, setSelectedUploadId] = useState("");
   const [selectedUpload, setSelectedUpload] = useState(null);
-
   const [xAxis, setXAxis] = useState("");
   const [yAxis, setYAxis] = useState("");
   const [chartType, setChartType] = useState("bar");
-
   useEffect(() => {
     const fetchUploads = async () => {
       try {
@@ -25,20 +23,16 @@ export default function DataVisualization() {
     };
     fetchUploads();
   }, []);
-
   useEffect(() => {
     const upload = uploads.find((u) => u._id === selectedUploadId);
     setSelectedUpload(upload);
     setXAxis("");
     setYAxis("");
   }, [selectedUploadId, uploads]);
-
   const is3DChart = ["3d-column", "3d-pie"].includes(chartType);
-
   return (
     <div className="max-w-6xl mx-auto p-4 bg-white rounded shadow">
       <h2 className="text-2xl font-semibold mb-6">Data Visualization</h2>
-
       {/* Controls */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div>
@@ -56,7 +50,6 @@ export default function DataVisualization() {
             ))}
           </select>
         </div>
-
         <div>
           <label className="block font-medium mb-1">X Axis</label>
           <select
@@ -74,7 +67,6 @@ export default function DataVisualization() {
               ))}
           </select>
         </div>
-
         <div>
           <label className="block font-medium mb-1">Y Axis</label>
           <select
@@ -92,7 +84,6 @@ export default function DataVisualization() {
               ))}
           </select>
         </div>
-
         <div>
           <label className="block font-medium mb-1">Chart Type</label>
           <select
@@ -101,16 +92,15 @@ export default function DataVisualization() {
             onChange={(e) => setChartType(e.target.value)}
             disabled={!selectedUpload}
           >
-            <option value="bar">Bar</option>
-            <option value="line">Line</option>
-            <option value="pie">Pie</option>
-            <option value="scatter">Scatter</option>
-            <option value="3d-column">3D Column</option>
-            <option value="3d-pie">3D Pie</option>
+            <option value="bar">Bar(text vs integer)</option>
+            <option value="line">Line(text vs integer)</option>
+            <option value="pie">Pie(text vs integer)</option>
+            <option value="scatter">Scatter(integer vs integer)</option>
+            <option value="3d-column">3D Column(text vs integer)</option>
+            <option value="3d-pie">3D Pie(text vs integer)</option>
           </select>
         </div>
       </div>
-
       {/* Chart Display */}
       <div className="border rounded p-4 min-h-[420px] bg-gray-50 flex justify-center items-center">
         {selectedUpload ? (
@@ -133,8 +123,8 @@ export default function DataVisualization() {
           <p>Select a file and chart type</p>
         )}
       </div>
+      {/* Chart Summary */}
       <ChartSummary chartType={chartType} xAxis={xAxis} yAxis={yAxis} />
-
       {/* Download Buttons */}
       <ChartDownload
         selectedUpload={selectedUpload}

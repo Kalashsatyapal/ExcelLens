@@ -23,5 +23,23 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Failed to save chart analysis" });
   }
 });
-
+// ✅ GET all analyses
+router.get("/", async (req, res) => {
+  try {
+    const analyses = await ChartAnalysis.find().sort({ createdAt: -1 });
+    res.json(analyses);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch analyses" });
+  }
+});
+// ✅ DELETE analysis by ID
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleted = await ChartAnalysis.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "Analysis not found" });
+    res.json({ message: "Deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete analysis" });
+  }
+});
 module.exports = router;

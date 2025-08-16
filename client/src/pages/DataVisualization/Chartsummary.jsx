@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-export default function ChartSummary({ chartType, xAxis, yAxis }) {
+export default function ChartSummary({ chartType, xAxis, yAxis, setChartSummary }) {
   const [summary, setSummary] = useState("");
   const [progress, setProgress] = useState(0);
   const progressInterval = useRef(null);
@@ -8,18 +8,20 @@ export default function ChartSummary({ chartType, xAxis, yAxis }) {
   useEffect(() => {
     if (!chartType || !xAxis) {
       setSummary("");
+      setChartSummary("");
       setProgress(0);
       return;
     }
 
     setSummary("");
+    setChartSummary("");
     setProgress(0);
 
-    // Start fake but smooth progress
+    // Start smooth progress animation
     progressInterval.current = setInterval(() => {
       setProgress((prev) => {
-        if (prev < 90) return prev + Math.random() * 5; // speed changes for realism
-        return prev; // hold at 90% until AI returns
+        if (prev < 90) return prev + Math.random() * 5;
+        return prev;
       });
     }, 200);
 
@@ -33,21 +35,28 @@ export default function ChartSummary({ chartType, xAxis, yAxis }) {
       .chat(prompt.trim(), { model: "gpt-4o-mini" })
       .then((res) => {
         clearInterval(progressInterval.current);
-        setProgress(100); // instantly finish when AI is done
+        setProgress(100);
+
         if (res?.message?.content) {
-          setTimeout(() => setSummary(res.message.content), 500); // small delay for smoothness
+          const finalSummary = res.message.content;
+          setTimeout(() => {
+            setSummary(finalSummary);
+            setChartSummary(finalSummary); // ✅ send to parent
+          }, 500);
         } else {
           setSummary("No summary generated.");
+          setChartSummary("No summary generated.");
         }
       })
       .catch(() => {
         clearInterval(progressInterval.current);
         setProgress(100);
         setSummary("Failed to generate summary.");
+        setChartSummary("Failed to generate summary.");
       });
 
     return () => clearInterval(progressInterval.current);
-  }, [chartType, xAxis, yAxis]);
+  }, [chartType, xAxis, yAxis, setChartSummary]);
 
   return (
     <div className="mt-6 p-4 bg-gray-100 rounded">
@@ -67,7 +76,7 @@ export default function ChartSummary({ chartType, xAxis, yAxis }) {
         </div>
       )}
 
-      {summary && <p className="mt-2">{summary}</p>}
+      {summary && <p className="mt-2 text-gray-800">{summary}</p>}
     </div>
   );
 }

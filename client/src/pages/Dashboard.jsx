@@ -3,7 +3,6 @@ import { AuthContext } from "../context/AuthContext";
 import UploadSection from "../components/UploadSection";
 import { Link } from "react-router-dom";
 
-
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
 
@@ -27,13 +26,19 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="flex-grow p-6">
         <UploadSection />
+
         <div>
-          {" "}
           <Link
             to="/upload-history"
             className="inline-block px-4 py-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 text-gray-800 font-medium rounded-md border border-gray-300 hover:from-gray-300 hover:via-gray-400 hover:to-gray-500 transition duration-200"
           >
             Upload History
+          </Link>
+          <Link
+            to="/analysis-history"
+            className="inline-block px-4 py-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 text-gray-800 font-medium rounded-md border border-gray-300 hover:from-gray-300 hover:via-gray-400 hover:to-gray-500 transition duration-200 ml-4"
+          >
+            View Analysis History
           </Link>
         </div>
         <div>
@@ -43,7 +48,7 @@ export default function Dashboard() {
           >
             Data Visualization
           </Link>
-          </div>
+        </div>
       </main>
     </div>
   );

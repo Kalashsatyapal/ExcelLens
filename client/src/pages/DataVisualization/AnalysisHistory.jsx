@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import API from "../../utils/api";
 
 export default function AnalysisHistory() {
   const [analyses, setAnalyses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteStatus, setDeleteStatus] = useState("");
+  const hasFetched = useRef(false);
 
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchAnalyses = async () => {
       try {
         const res = await API.get("/chart-analysis");
-        setAnalyses(res.data);
+        const uniqueAnalyses = deduplicateAnalyses(res.data);
+        setAnalyses(uniqueAnalyses);
       } catch (error) {
         console.error("Failed to fetch analysis history:", error);
       } finally {
@@ -19,6 +24,16 @@ export default function AnalysisHistory() {
     };
     fetchAnalyses();
   }, []);
+
+  const deduplicateAnalyses = (data) => {
+    const seen = new Set();
+    return data.filter((a) => {
+      const key = `${a.chartType}-${a.xAxis}-${a.yAxis}-${a.summary}-${a.chartImageBase64}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -69,9 +84,7 @@ export default function AnalysisHistory() {
               <p className="text-sm text-gray-600 mb-1">
                 <strong>X:</strong> {a.xAxis} | <strong>Y:</strong> {a.yAxis}
               </p>
-              <p className="text-sm text-gray-600 mb-2 italic">
-                {a.summary}
-              </p>
+              <p className="text-sm text-gray-600 mb-2 italic">{a.summary}</p>
               <img
                 src={a.chartImageBase64}
                 alt="Chart Preview"

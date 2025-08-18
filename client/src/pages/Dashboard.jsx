@@ -2,10 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import UploadSection from "../components/UploadSection";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
@@ -14,6 +15,15 @@ export default function Dashboard() {
           Dashboard - Welcome, {user.username}
         </h1>
         <div className="space-x-4">
+          {/* Show admin button only for admin users */}
+          {user.role === "admin" && (
+            <button
+              onClick={() => navigate("/admin")}
+              className="mb-4 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+            >
+              Go to Admin Panel
+            </button>
+          )}
           <button
             onClick={logout}
             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"

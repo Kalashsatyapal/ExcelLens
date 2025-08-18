@@ -12,7 +12,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
 import DataVisualization from "./pages/DataVisualization/DataVisualization";
-import AnalysisHistory from "./pages/DataVisualization/AnalysisHistory"
+import AnalysisHistory from "./pages/DataVisualization/AnalysisHistory";
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);
@@ -36,7 +36,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute roles={["user"]}>
+              <PrivateRoute roles={["user", "admin"]}>
                 <Dashboard />
               </PrivateRoute>
             }

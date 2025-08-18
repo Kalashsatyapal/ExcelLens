@@ -106,6 +106,22 @@ export default function DataVisualization() {
           </select>
         </div>
         <div>
+          <label className="block font-medium mb-1">Chart Type</label>
+          <select
+            className="w-full border rounded px-3 py-2"
+            value={chartType}
+            onChange={(e) => setChartType(e.target.value)}
+            disabled={!selectedUpload}
+          >
+            <option value="bar">Bar(text vs integer)</option>
+            <option value="line">Line(text vs integer)</option>
+            <option value="pie">Pie(text vs integer)</option>
+            <option value="scatter">Scatter(integer vs integer)</option>
+            <option value="3d-column">3D Column(text vs integer)</option>
+            <option value="3d-pie">3D Pie(text vs integer)</option>
+          </select>
+        </div>
+        <div>
           <label className="block font-medium mb-1">X Axis</label>
           <select
             className="w-full border rounded px-3 py-2"
@@ -137,22 +153,6 @@ export default function DataVisualization() {
                   {k}
                 </option>
               ))}
-          </select>
-        </div>
-        <div>
-          <label className="block font-medium mb-1">Chart Type</label>
-          <select
-            className="w-full border rounded px-3 py-2"
-            value={chartType}
-            onChange={(e) => setChartType(e.target.value)}
-            disabled={!selectedUpload}
-          >
-            <option value="bar">Bar(text vs integer)</option>
-            <option value="line">Line(text vs integer)</option>
-            <option value="pie">Pie(text vs integer)</option>
-            <option value="scatter">Scatter(integer vs integer)</option>
-            <option value="3d-column">3D Column(text vs integer)</option>
-            <option value="3d-pie">3D Pie(text vs integer)</option>
           </select>
         </div>
       </div>

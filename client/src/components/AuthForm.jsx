@@ -40,7 +40,8 @@ export default function AuthForm({ type }) {
         const { email, password } = formData;
         const res = await API.post("/auth/login", { email, password });
         login(res.data.user, res.data.token);
-        navigate(res.data.user.role === "admin" ? "/admin" : "/dashboard");
+        // Always redirect to Dashboard (both user and admin)
+        navigate("/dashboard");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

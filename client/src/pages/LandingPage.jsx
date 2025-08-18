@@ -14,18 +14,19 @@ export default function LandingPage() {
               alt="ExcelLense Logo"
               className="w-10 h-10 object-contain"
             />
-            <h1 className="text-2xl font-bold text-indigo-600">ExcelLense</h1>
+            <h1 className="text-2xl font-bold text-green-600">ExcelLense</h1>
           </div>
           <nav className="space-x-4">
             <Link
               to="/login"
-              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+              className="px-4 py-2 bg-white text-green-600 border border-blue-600 rounded hover:bg-blue-50 transition"
             >
               Login
             </Link>
+
             <Link
               to="/register"
-              className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded hover:bg-indigo-50 transition"
+              className="px-4 py-2 border border-green-600 text-green-600 rounded hover:bg-green-50 transition"
             >
               Register
             </Link>
@@ -34,16 +35,19 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center text-center py-20 bg-gradient-to-b from-indigo-50 to-white">
+      <section className="flex flex-col items-center text-center py-20 bg-gradient-to-b from-green-50 to-white">
         <h2 className="text-4xl font-bold text-gray-800 mb-4">
           Analyze & Visualize Excel Data with Ease
         </h2>
         <p className="text-lg text-gray-600 max-w-2xl mb-6">
-          ExcelLense is your one-stop solution for **Excel file uploads**, **data visualization**, **3D charting**, and **file management** — all powered by a modern MERN stack.
+          ExcelLense is your one-stop solution for{" "}
+          <strong>Excel file uploads</strong>,{" "}
+          <strong>data visualization</strong>, <strong>3D charting</strong>, and{" "}
+          <strong>file management</strong> — all powered by a modern MERN stack.
         </p>
         <Link
           to="/register"
-          className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
+          className="px-6 py-3 bg-white text-green-600 border border-green-600 rounded-lg shadow hover:bg-blue-50 transition"
         >
           Get Started
         </Link>
@@ -59,34 +63,34 @@ export default function LandingPage() {
             {[
               {
                 title: "Secure Authentication",
-                desc: "JWT-based login system with User & Admin roles. Admin registration requires a secret passkey."
+                desc: "JWT-based login system with User & Admin roles. Admin registration requires a secret passkey.",
               },
               {
                 title: "Excel Uploads",
-                desc: "Drag-and-drop Excel file uploads with ExcelJS parsing and MongoDB storage."
+                desc: "Drag-and-drop Excel file uploads with ExcelJS parsing and MongoDB storage.",
               },
               {
                 title: "File Management",
-                desc: "View your upload history, preview files, and delete them when needed."
+                desc: "View your upload history, preview files, and delete them when needed.",
               },
               {
                 title: "Data Visualization",
-                desc: "Chart.js and Three.js powered 2D & 3D charts including bar, line, pie, scatter, and 3D column."
+                desc: "Chart.js and Three.js powered 2D & 3D charts including bar, line, pie, scatter, and 3D column.",
               },
               {
                 title: "3D Pie Charts",
-                desc: "WebGL-rendered 3D pie charts with the option to capture the canvas."
+                desc: "WebGL-rendered 3D pie charts with the option to capture the canvas.",
               },
               {
                 title: "Export Charts",
-                desc: "Download your charts as PNG or PDF for reports and presentations."
-              }
+                desc: "Download your charts as PNG or PDF for reports and presentations.",
+              },
             ].map((f, i) => (
               <div
                 key={i}
                 className="p-6 bg-gray-50 rounded-lg shadow hover:shadow-lg transition"
               >
-                <h4 className="text-xl font-semibold text-indigo-600 mb-3">
+                <h4 className="text-xl font-semibold text-green-600 mb-3">
                   {f.title}
                 </h4>
                 <p className="text-gray-600">{f.desc}</p>

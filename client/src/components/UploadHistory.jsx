@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import API from '../utils/api';
+import React, { useEffect, useState } from "react";
+import API from "../utils/api";
 
 export default function UploadHistory() {
   const [uploads, setUploads] = useState([]);
@@ -8,10 +8,10 @@ export default function UploadHistory() {
 
   const fetchUploads = async () => {
     try {
-      const res = await API.get('/uploads');
+      const res = await API.get("/uploads");
       setUploads(res.data);
     } catch (err) {
-      alert('Failed to fetch upload history');
+      alert("Failed to fetch upload history");
     }
     setLoading(false);
   };
@@ -21,20 +21,28 @@ export default function UploadHistory() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this upload?')) return;
+    if (!window.confirm("Are you sure you want to delete this upload?")) return;
 
     try {
       await API.delete(`/uploads/${id}`);
       setUploads((prev) => prev.filter((upload) => upload._id !== id));
       if (previewData?._id === id) setPreviewData(null);
     } catch (err) {
-      alert('Failed to delete upload');
+      alert("Failed to delete upload");
     }
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Upload History</h1>
+    <div className="min-h-screen p-6 bg-gray-50 w-full">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Upload History</h1>
+        <button
+          onClick={() => (window.location.href = "/dashboard")}
+          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
+        >
+          Go to Dashboard
+        </button>
+      </div>
 
       {loading ? (
         <p>Loading...</p>
@@ -50,7 +58,9 @@ export default function UploadHistory() {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-semibold">{upload.filename}</p>
-                      <p className="text-xs text-gray-500">{new Date(upload.uploadedAt).toLocaleString()}</p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(upload.uploadedAt).toLocaleString()}
+                      </p>
                     </div>
                     <div className="space-x-2">
                       <button
@@ -76,7 +86,9 @@ export default function UploadHistory() {
           <div className="flex-1 bg-white rounded-md shadow p-4 overflow-auto max-h-[70vh]">
             {previewData ? (
               <>
-                <h2 className="text-xl font-semibold mb-4">Preview: {previewData.filename}</h2>
+                <h2 className="text-xl font-semibold mb-4">
+                  Preview: {previewData.filename}
+                </h2>
                 {previewData.data.length === 0 ? (
                   <p>No data available.</p>
                 ) : (
@@ -95,9 +107,15 @@ export default function UploadHistory() {
                     </thead>
                     <tbody>
                       {previewData.data.slice(0, 10).map((row, idx) => (
-                        <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <tr
+                          key={idx}
+                          className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                        >
                           {Object.values(row).map((val, i) => (
-                            <td key={i} className="border border-gray-300 px-2 py-1">
+                            <td
+                              key={i}
+                              className="border border-gray-300 px-2 py-1"
+                            >
                               {val}
                             </td>
                           ))}
@@ -106,7 +124,11 @@ export default function UploadHistory() {
                     </tbody>
                   </table>
                 )}
-                {previewData.data.length > 10 && <p className="mt-2 text-xs text-gray-500">Showing first 10 rows</p>}
+                {previewData.data.length > 10 && (
+                  <p className="mt-2 text-xs text-gray-500">
+                    Showing first 10 rows
+                  </p>
+                )}
               </>
             ) : (
               <p>Select a file to preview.</p>

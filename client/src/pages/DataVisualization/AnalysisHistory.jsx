@@ -5,6 +5,7 @@ export default function AnalysisHistory() {
   const [analyses, setAnalyses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteStatus, setDeleteStatus] = useState("");
+  const [fetchError, setFetchError] = useState("");
   const hasFetched = useRef(false);
 
   useEffect(() => {
@@ -18,6 +19,7 @@ export default function AnalysisHistory() {
         setAnalyses(uniqueAnalyses);
       } catch (error) {
         console.error("Failed to fetch analysis history:", error);
+        setFetchError("⚠️ Unable to load analysis history.");
       } finally {
         setLoading(false);
       }
@@ -28,7 +30,7 @@ export default function AnalysisHistory() {
   const deduplicateAnalyses = (data) => {
     const seen = new Set();
     return data.filter((a) => {
-      const key = `${a.chartType}-${a.xAxis}-${a.yAxis}-${a.summary}-${a.chartImageBase64}`;
+      const key = `${a.chartType}-${a.xAxis}-${a.yAxis}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
@@ -43,6 +45,8 @@ export default function AnalysisHistory() {
     } catch (error) {
       console.error("Delete failed:", error);
       setDeleteStatus("⚠️ Failed to delete analysis.");
+    } finally {
+      setTimeout(() => setDeleteStatus(""), 3000); // Clear status after 3s
     }
   };
 
@@ -74,6 +78,8 @@ export default function AnalysisHistory() {
 
       {loading ? (
         <p>Loading...</p>
+      ) : fetchError ? (
+        <p className="text-red-600">{fetchError}</p>
       ) : analyses.length === 0 ? (
         <p>No analyses found.</p>
       ) : (

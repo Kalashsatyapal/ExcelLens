@@ -8,7 +8,7 @@ import {
 import LandingPage from "./pages/LandingPage";
 import AuthForm from "./components/AuthForm";
 import Dashboard from "./pages/Dashboard";
-import AdminDashboard from "./components/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
 import DataVisualization from "./pages/DataVisualization/DataVisualization";

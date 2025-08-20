@@ -13,7 +13,7 @@ import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
 import DataVisualization from "./pages/DataVisualization/DataVisualization";
 import AnalysisHistory from "./pages/DataVisualization/AnalysisHistory";
-import AllUploadHistory from "./pages/AdminDashboard/UploadHistory";
+import AllUploadHistory from "./pages/AdminDashboard/AllUploadHistory";
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);

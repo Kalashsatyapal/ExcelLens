@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import API from "../../utils/api";
 
 export default function AnalysisHistory() {
@@ -7,14 +8,21 @@ export default function AnalysisHistory() {
   const [deleteStatus, setDeleteStatus] = useState("");
   const [fetchError, setFetchError] = useState("");
   const hasFetched = useRef(false);
-
+  const { user } = useContext(AuthContext);
+  const currentUserEmail = user?.email;
   useEffect(() => {
     if (hasFetched.current) return;
     hasFetched.current = true;
 
     const fetchAnalyses = async () => {
       try {
-        const res = await API.get("/chart-analysis");
+        if (!currentUserEmail) {
+          setFetchError("⚠️ User not authenticated.");
+          setLoading(false);
+          return;
+        }
+
+        const res = await API.get(`/chart-analysis/user/${currentUserEmail}`);
         const uniqueAnalyses = deduplicateAnalyses(res.data);
         setAnalyses(uniqueAnalyses);
       } catch (error) {
@@ -24,19 +32,18 @@ export default function AnalysisHistory() {
         setLoading(false);
       }
     };
+
+    const deduplicateAnalyses = (data) => {
+      const seen = new Set();
+      return data.filter((a) => {
+        const key = `${a.chartType}-${a.xAxis}-${a.yAxis}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    };
     fetchAnalyses();
   }, []);
-
-  const deduplicateAnalyses = (data) => {
-    const seen = new Set();
-    return data.filter((a) => {
-      const key = `${a.chartType}-${a.xAxis}-${a.yAxis}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  };
-
   const handleDelete = async (id) => {
     try {
       await API.delete(`/chart-analysis/${id}`);
@@ -67,7 +74,9 @@ export default function AnalysisHistory() {
   return (
     <div className="w-screen p-6 bg-white min-h-screen">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">📁 Analysis History</h1>
+        <h1 className="text-2xl font-bold text-gray-800">
+          📁 Analysis History
+        </h1>
         <button
           onClick={() => (window.location.href = "/visualize")}
           className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow"
@@ -98,7 +107,9 @@ export default function AnalysisHistory() {
               />
               <div className="flex gap-2">
                 <button
-                  onClick={() => downloadImage(a.chartImageBase64, a._id, "png")}
+                  onClick={() =>
+                    downloadImage(a.chartImageBase64, a._id, "png")
+                  }
                   className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                 >
                   Download PNG

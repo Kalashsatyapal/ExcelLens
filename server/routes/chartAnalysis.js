@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ChartAnalysis = require("../models/ChartAnalysis");
-
+// auto-save route
 router.post("/", async (req, res) => {
   try {
     const {
@@ -28,6 +28,17 @@ router.post("/", async (req, res) => {
   } catch (err) {
     console.error("Error saving chart analysis:", err);
     res.status(500).json({ error: "Failed to save chart analysis" });
+  }
+});
+//Get User Specific analysis
+router.get("/user/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    const analyses = await ChartAnalysis.find({ userEmail: email }).sort({ createdAt: -1 });
+    res.json(analyses);
+  } catch (err) {
+    console.error("Error fetching user analyses:", err);
+    res.status(500).json({ error: "Failed to fetch analysis history" });
   }
 });
 

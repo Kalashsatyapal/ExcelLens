@@ -1,32 +1,36 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import UploadSection from "../components/UploadSection";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen bg-white text-gray-800">
       {/* Header */}
-      <header className="flex justify-between items-center bg-white shadow px-6 py-4">
-        <h1 className="text-xl font-semibold text-gray-700">
-          Dashboard - Welcome, {user.username}
-        </h1>
-        <div className="space-x-4">
-          {/* Show admin button only for admin users */}
+      <header className="sticky top-0 z-10 bg-green-500 text-white shadow-md px-6 py-5 flex justify-between items-center rounded-b-xl">
+        <div className="flex items-center gap-4">
+          <img
+            src="/src/assets/logo.png"
+            alt="Logo"
+            className="h-10 w-auto rounded-md shadow-sm"
+          />
+          <h1 className="text-2xl font-bold tracking-wide">ExcelLense</h1>
+        </div>
+        <div className="flex items-center gap-3">
           {user.role === "admin" && (
             <button
               onClick={() => navigate("/admin")}
-              className="mb-4 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+              className="px-4 py-2 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-100 transition"
             >
-              Go to Admin Panel
+              Admin Panel
             </button>
           )}
           <button
             onClick={logout}
-            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+            className="px-4 py-2 bg-white text-red-600 font-semibold rounded-lg hover:bg-red-100 transition"
           >
             Logout
           </button>
@@ -34,31 +38,33 @@ export default function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow p-6">
-        <UploadSection />
+      <main className="p-6 space-y-8">
+        {/* Upload Section */}
+        <section className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+          <UploadSection />
+        </section>
 
-        <div>
+        {/* Navigation Links */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <Link
             to="/upload-history"
-            className="inline-block px-4 py-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 text-gray-800 font-medium rounded-md border border-gray-300 hover:from-gray-300 hover:via-gray-400 hover:to-gray-500 transition duration-200"
+            className="block bg-green-100 text-green-900 font-semibold text-center py-5 rounded-xl shadow hover:bg-green-200 transition"
           >
-            Upload History
+            📁 Upload History
           </Link>
           <Link
             to="/analysis-history"
-            className="inline-block px-4 py-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 text-gray-800 font-medium rounded-md border border-gray-300 hover:from-gray-300 hover:via-gray-400 hover:to-gray-500 transition duration-200 ml-4"
+            className="block bg-sky-100 text-sky-900 font-semibold text-center py-5 rounded-xl shadow hover:bg-sky-200 transition"
           >
-            View Analysis History
+            📊 Analysis History
           </Link>
-        </div>
-        <div>
           <Link
             to="/visualize"
-            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 text-blue-800 font-medium rounded-md border border-blue-300 hover:from-blue-300 hover:via-blue-400 hover:to-blue-500 transition duration-200"
+            className="block bg-gray-100 text-gray-800 font-semibold text-center py-5 rounded-xl shadow hover:bg-gray-200 transition"
           >
-            Data Visualization
+            📈 Data Visualization
           </Link>
-        </div>
+        </section>
       </main>
     </div>
   );

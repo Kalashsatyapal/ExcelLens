@@ -47,19 +47,15 @@ export default function AdminDashboard() {
             >
               Go to Dashboard
             </button>
-            <button
-              onClick={logout}
-              className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition"
-            >
-              Logout
-            </button>
           </div>
         </div>
 
         {/* 👤 Logged-in Admin Info */}
         <div className="py-4">
           <div className="bg-purple-800 rounded-lg p-4 text-white shadow-md">
-            <h2 className="text-lg font-semibold mb-2">Current Logged-in Admin</h2>
+            <h2 className="text-lg font-semibold mb-2">
+              Current Logged-in Admin
+            </h2>
             <p className="text-sm">
               Name: <span className="font-medium">{user?.username}</span>
             </p>
@@ -68,7 +64,14 @@ export default function AdminDashboard() {
             </p>
           </div>
         </div>
-
+        <div>
+          <button
+            onClick={() => navigate("/admin/uploads")}
+            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md transition"
+          >
+            View Upload History
+          </button>
+        </div>
         {/* 📊 Summary Container */}
         <div className="py-6">
           <div className="bg-white rounded-xl shadow-lg p-6">

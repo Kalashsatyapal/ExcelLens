@@ -40,7 +40,6 @@ export default function AuthForm({ type }) {
         const { email, password } = formData;
         const res = await API.post("/auth/login", { email, password });
         login(res.data.user, res.data.token);
-        // Always redirect to Dashboard (both user and admin)
         navigate("/dashboard");
       }
     } catch (err) {
@@ -61,19 +60,22 @@ export default function AuthForm({ type }) {
           </h1>
           <button
             onClick={() => navigate("/")}
-            className="px-4 py-2 bg-white text-green-600 rounded-md hover:bg-gray-100 transition"
+            className="px-4 py-2 bg-white text-green-600 rounded-md hover:bg-sky-100 transition"
           >
             Back to Home
           </button>
         </div>
       </nav>
-      <div className="max-w-md mx-auto mt-16 px-6 py-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg transition-all">
-        <h2 className="text-3xl font-semibold text-center mb-6 text-gray-800 dark:text-white">
+
+      <div className="max-w-md mx-auto mt-16 px-6 py-8 bg-sky-100 dark:bg-gray-900 rounded-xl shadow-lg transition-all">
+        <h2 className="text-3xl font-semibold text-center mb-6 text-green-600 dark:text-green-400">
           {isRegister ? "Create Account" : "Welcome Back"}
         </h2>
 
         {error && (
-          <p className="mb-4 text-center text-red-500 font-medium">{error}</p>
+          <p className="mb-4 text-center bg-red-100 text-red-700 font-medium py-2 px-4 rounded-md">
+            {error}
+          </p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -92,7 +94,7 @@ export default function AuthForm({ type }) {
                 required
                 value={formData.username}
                 onChange={handleChange}
-                className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
           )}
@@ -111,7 +113,7 @@ export default function AuthForm({ type }) {
               required
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -129,7 +131,7 @@ export default function AuthForm({ type }) {
               required
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
@@ -147,7 +149,7 @@ export default function AuthForm({ type }) {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="user">User</option>
                   <option value="admin">Admin</option>
@@ -169,7 +171,7 @@ export default function AuthForm({ type }) {
                     required
                     value={formData.adminPassKey}
                     onChange={handleChange}
-                    className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
               )}
@@ -179,7 +181,7 @@ export default function AuthForm({ type }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600 transition disabled:opacity-50"
+            className="w-full py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600 shadow-md hover:shadow-lg transition disabled:opacity-50"
           >
             {loading ? "Please wait..." : isRegister ? "Sign Up" : "Login"}
           </button>

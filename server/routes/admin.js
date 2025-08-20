@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
+const Upload= require('../models/Upload')
 
 // Get all users
 router.get('/users', authMiddleware('admin'), async (req, res) => {
@@ -30,6 +31,18 @@ router.put('/users/:id/role', authMiddleware('admin'), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ✅ Upload History Route (accessible to admin/superadmin)
+router.get("/uploads", async (req, res) => {
+  try {
+    const uploads = await Upload.find({ user: { $exists: true } })
+      .populate("user", "username email");
+    res.json(uploads);
+  } catch (err) {
+    console.error("Upload fetch error:", err);
+    res.status(500).json({ message: "Failed to fetch uploads" });
   }
 });
 

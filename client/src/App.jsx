@@ -13,7 +13,7 @@ import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
 import DataVisualization from "./pages/DataVisualization/DataVisualization";
 import AnalysisHistory from "./pages/DataVisualization/AnalysisHistory";
-
+import AllUploadHistory from "./pages/AdminDashboard/UploadHistory";
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);
@@ -56,7 +56,7 @@ function App() {
           <Route path="/upload-history" element={<UploadHistory />} />
           <Route path="/analysis-history" element={<AnalysisHistory />} />
           <Route path="/visualize" element={<DataVisualization />} />
-
+          <Route path="/admin/uploads" element={<AllUploadHistory />} />
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
@@ -64,6 +64,5 @@ function App() {
     </AuthProvider>
   );
 }
-
 
 export default App;

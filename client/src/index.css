@@ -6,8 +6,16 @@
 
   color-scheme: light dark;
   color: black;
-  background-color: rgb(231, 231, 231);
-
+   background: linear-gradient(
+    135deg,
+    #fdfbfb 0%,       /* soft white shimmer */
+    #e0c3fc 30%,      /* pastel violet */
+    #8ec5fc 60%,      /* vibrant sky blue */
+    #a9ffcb 100%      /* minty green pop */
+  );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

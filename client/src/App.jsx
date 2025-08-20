@@ -8,11 +8,12 @@ import {
 import LandingPage from "./pages/LandingPage";
 import AuthForm from "./components/AuthForm";
 import Dashboard from "./pages/Dashboard";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import UploadHistory from "./components/UploadHistory";
 import DataVisualization from "./pages/DataVisualization/DataVisualization";
 import AnalysisHistory from "./pages/DataVisualization/AnalysisHistory";
+
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);

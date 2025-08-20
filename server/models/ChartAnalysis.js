@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const ChartAnalysisSchema = new mongoose.Schema({
+  userEmail: { type: String, required: true },
   uploadId: { type: String, required: true },
   chartType: { type: String, required: true },
   xAxis: { type: String, required: true },

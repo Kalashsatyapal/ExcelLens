@@ -4,18 +4,25 @@ const ChartAnalysis = require("../models/ChartAnalysis");
 
 router.post("/", async (req, res) => {
   try {
-    const { uploadId, chartType, xAxis, yAxis, summary, chartImageBase64 } = req.body;
-
-    const newAnalysis = new ChartAnalysis({
+    const {
+      userEmail,
       uploadId,
       chartType,
       xAxis,
       yAxis,
       summary,
       chartImageBase64,
-      createdAt: new Date()
-    });
+    } = req.body;
 
+    const newAnalysis = new ChartAnalysis({
+      userEmail,
+      uploadId,
+      chartType,
+      xAxis,
+      yAxis,
+      summary,
+      chartImageBase64,
+    });
     await newAnalysis.save();
     res.status(201).json({ message: "Chart analysis saved successfully" });
   } catch (err) {
@@ -23,6 +30,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Failed to save chart analysis" });
   }
 });
+
 // ✅ GET all analyses
 router.get("/", async (req, res) => {
   try {

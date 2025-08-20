@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import API from "../../utils/api";
 import Chart2D from "./Chart2D";
 import Chart3D from "./Chart3D";
 import ChartSummary from "./ChartSummary";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 export default function DataVisualization() {
   const [uploads, setUploads] = useState([]);
   const [selectedUploadId, setSelectedUploadId] = useState("");
@@ -13,7 +14,8 @@ export default function DataVisualization() {
   const [chartType, setChartType] = useState("bar");
   const [chartSummary, setChartSummary] = useState(""); // ✅ lifted summary
   const [saveStatus, setSaveStatus] = useState(""); // ✅ status line
-
+  const { user } = useContext(AuthContext);
+  const currentUserEmail = user?.email;
   useEffect(() => {
     const fetchUploads = async () => {
       try {
@@ -47,6 +49,7 @@ export default function DataVisualization() {
         const chartImageBase64 = canvas?.toDataURL("image/png") || "";
 
         await API.post("/chart-analysis", {
+          userEmail: currentUserEmail,
           uploadId: selectedUpload._id,
           chartType,
           xAxis,

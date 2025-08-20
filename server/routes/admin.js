@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
 const Upload= require('../models/Upload')
-
+const ChartAnalysis = require('../models/ChartAnalysis');
 // Get all users
 router.get('/users', authMiddleware('admin'), async (req, res) => {
   try {
@@ -45,5 +45,13 @@ router.get("/uploads", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch uploads" });
   }
 });
-
+// ✅ GET all analyses
+router.get("/analyses", async (req, res) => {
+  try {
+    const analyses = await ChartAnalysis.find().sort({ createdAt: -1 });
+    res.json(analyses);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch chart analyses" });
+  }
+});
 module.exports = router;

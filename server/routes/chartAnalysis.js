@@ -43,14 +43,15 @@ router.get("/user/:email", async (req, res) => {
 });
 
 // ✅ GET all analyses
-router.get("/", async (req, res) => {
+router.get("/analyses", async (req, res) => {
   try {
     const analyses = await ChartAnalysis.find().sort({ createdAt: -1 });
     res.json(analyses);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch analyses" });
+    res.status(500).json({ message: "Failed to fetch chart analyses" });
   }
 });
+
 // ✅ DELETE analysis by ID
 router.delete("/:id", async (req, res) => {
   try {

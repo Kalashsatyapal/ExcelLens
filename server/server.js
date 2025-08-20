@@ -25,10 +25,10 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 // 🚦 Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/uploads', uploadRoutes);
-app.use('/api/chart-analysis', chartAnalysisRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/auth', authRoutes);
+app.use('/uploads', uploadRoutes);
+app.use('/chart-analysis', chartAnalysisRoutes);
+app.use('/admin', adminRoutes);
 
 app.get('/', (req, res) => res.send('🚀 MERN Auth API is up and running!'));
 

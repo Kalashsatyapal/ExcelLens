@@ -71,6 +71,12 @@ export default function AdminDashboard() {
           >
             View Upload History
           </button>
+          <button
+            onClick={() => navigate("/admin/analyses")}
+            className="px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md transition"
+          >
+            View All Analyses
+          </button>
         </div>
         {/* 📊 Summary Container */}
         <div className="py-6">

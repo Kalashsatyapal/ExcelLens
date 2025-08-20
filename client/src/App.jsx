@@ -51,23 +51,11 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/upload-history"
-            element={
-              <PrivateRoute roles={["user"]}>
-                <UploadHistory />
-              </PrivateRoute>
-            }
-          />
+
+          {/* Removed PrivateRoute wrapper */}
+          <Route path="/upload-history" element={<UploadHistory />} />
           <Route path="/analysis-history" element={<AnalysisHistory />} />
-          <Route
-            path="/visualize"
-            element={
-              <PrivateRoute roles={["user"]}>
-                <DataVisualization />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/visualize" element={<DataVisualization />} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
@@ -76,5 +64,6 @@ function App() {
     </AuthProvider>
   );
 }
+
 
 export default App;

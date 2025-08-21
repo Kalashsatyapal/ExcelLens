@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const ChartAnalysisSchema = new mongoose.Schema({
   userEmail: { type: String, required: true },
   uploadId: { type: String, required: true },
@@ -10,5 +9,4 @@ const ChartAnalysisSchema = new mongoose.Schema({
   chartImageBase64: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }
 });
-
 module.exports = mongoose.model("ChartAnalysis", ChartAnalysisSchema);

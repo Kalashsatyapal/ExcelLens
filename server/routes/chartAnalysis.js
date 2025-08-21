@@ -13,7 +13,6 @@ router.post("/", async (req, res) => {
       summary,
       chartImageBase64,
     } = req.body;
-
     const newAnalysis = new ChartAnalysis({
       userEmail,
       uploadId,
@@ -41,7 +40,6 @@ router.get("/user/:email", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch analysis history" });
   }
 });
-
 // ✅ GET all analyses
 router.get("/analyses", async (req, res) => {
   try {
@@ -51,7 +49,6 @@ router.get("/analyses", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch chart analyses" });
   }
 });
-
 // ✅ DELETE analysis by ID
 router.delete("/:id", async (req, res) => {
   try {

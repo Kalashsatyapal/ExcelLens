@@ -5,6 +5,8 @@ import Chart3D from "./Chart3D";
 import ChartSummary from "./ChartSummary";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import jsPDF from "jspdf"; // ✅ Import jsPDF
+
 export default function DataVisualization() {
   const [uploads, setUploads] = useState([]);
   const [selectedUploadId, setSelectedUploadId] = useState("");
@@ -12,10 +14,12 @@ export default function DataVisualization() {
   const [xAxis, setXAxis] = useState("");
   const [yAxis, setYAxis] = useState("");
   const [chartType, setChartType] = useState("bar");
-  const [chartSummary, setChartSummary] = useState(""); // ✅ lifted summary
-  const [saveStatus, setSaveStatus] = useState(""); // ✅ status line
+  const [chartSummary, setChartSummary] = useState("");
+  const [saveStatus, setSaveStatus] = useState("");
+  const [chartImageBase64, setChartImageBase64] = useState("");
   const { user } = useContext(AuthContext);
   const currentUserEmail = user?.email;
+
   useEffect(() => {
     const fetchUploads = async () => {
       try {
@@ -35,18 +39,19 @@ export default function DataVisualization() {
     setYAxis("");
     setChartSummary("");
     setSaveStatus("");
+    setChartImageBase64("");
   }, [selectedUploadId, uploads]);
 
   const is3DChart = ["3d-column", "3d-pie"].includes(chartType);
 
-  // ✅ Auto-save when summary is ready
   useEffect(() => {
     const autoSaveAnalysis = async () => {
       if (!selectedUpload || !xAxis || !yAxis || !chartSummary) return;
 
       try {
         const canvas = document.querySelector("canvas");
-        const chartImageBase64 = canvas?.toDataURL("image/png") || "";
+        const imageBase64 = canvas?.toDataURL("image/png") || "";
+        setChartImageBase64(imageBase64);
 
         await API.post("/chart-analysis", {
           userEmail: currentUserEmail,
@@ -55,7 +60,7 @@ export default function DataVisualization() {
           xAxis,
           yAxis,
           summary: chartSummary,
-          chartImageBase64,
+          chartImageBase64: imageBase64,
         });
 
         setSaveStatus("✅ Analysis saved successfully.");
@@ -69,9 +74,48 @@ export default function DataVisualization() {
     return () => clearTimeout(timeout);
   }, [selectedUpload, xAxis, yAxis, chartType, chartSummary]);
 
+  const handleDownloadPNG = () => {
+    if (!chartImageBase64) return;
+    const link = document.createElement("a");
+    link.href = chartImageBase64;
+    link.download = "chart.png";
+    link.click();
+  };
+
+  const handleDownloadPDF = () => {
+  if (!chartImageBase64) return;
+
+  const pdf = new jsPDF({
+    orientation: "landscape",
+    unit: "mm",
+    format: "a4",
+  });
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const img = new Image();
+  img.src = chartImageBase64;
+
+  img.onload = () => {
+    const imgWidth = img.width;
+    const imgHeight = img.height;
+
+    const scaleRatio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+    const scaledWidth = imgWidth * scaleRatio;
+    const scaledHeight = imgHeight * scaleRatio;
+
+    const x = (pageWidth - scaledWidth) / 2;
+    const y = (pageHeight - scaledHeight) / 2;
+
+    pdf.addImage(chartImageBase64, "PNG", x, y, scaledWidth, scaledHeight);
+    pdf.save("chart.pdf");
+  };
+};
+
   return (
     <div className="w-screen p-4 bg-white rounded shadow">
-      {/* Header with Dashboard Button */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold text-gray-800">
           📊 Data Visualization Tool
@@ -89,10 +133,12 @@ export default function DataVisualization() {
           Go to Dashboard
         </button>
       </div>
+
       <h2 className="text-2xl font-semibold mb-6">Data Visualization</h2>
 
       {/* Controls */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        {/* Upload Selector */}
         <div>
           <label className="block font-medium mb-1">Select Excel File</label>
           <select
@@ -108,6 +154,8 @@ export default function DataVisualization() {
             ))}
           </select>
         </div>
+
+        {/* Chart Type */}
         <div>
           <label className="block font-medium mb-1">Chart Type</label>
           <select
@@ -124,6 +172,8 @@ export default function DataVisualization() {
             <option value="3d-pie">3D Pie(text vs integer)</option>
           </select>
         </div>
+
+        {/* X Axis */}
         <div>
           <label className="block font-medium mb-1">X Axis</label>
           <select
@@ -141,6 +191,8 @@ export default function DataVisualization() {
               ))}
           </select>
         </div>
+
+        {/* Y Axis */}
         <div>
           <label className="block font-medium mb-1">Y Axis</label>
           <select
@@ -160,42 +212,60 @@ export default function DataVisualization() {
         </div>
       </div>
 
-      {/* Chart Display */}
-      <div className="border rounded p-4 min-h-[420px] bg-gray-50 flex justify-center items-center">
-        {selectedUpload ? (
-          is3DChart ? (
-            <Chart3D
-              selectedUpload={selectedUpload}
-              xAxis={xAxis}
-              yAxis={yAxis}
-              chartType={chartType}
-            />
+      {/* Chart + Summary Side by Side */}
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        {/* Chart Display */}
+        <div className="flex-1 border rounded p-4 min-h-[378px] bg-gray-50 flex justify-center items-center">
+          {selectedUpload ? (
+            is3DChart ? (
+              <Chart3D
+                selectedUpload={selectedUpload}
+                xAxis={xAxis}
+                yAxis={yAxis}
+                chartType={chartType}
+              />
+            ) : (
+              <Chart2D
+                selectedUpload={selectedUpload}
+                xAxis={xAxis}
+                yAxis={yAxis}
+                chartType={chartType}
+              />
+            )
           ) : (
-            <Chart2D
-              selectedUpload={selectedUpload}
-              xAxis={xAxis}
-              yAxis={yAxis}
-              chartType={chartType}
-            />
-          )
-        ) : (
-          <p>Select a file and chart type</p>
-        )}
+            <p>Select a file and chart type</p>
+          )}
+        </div>
+
+        {/* Chart Summary */}
+        <div className="md:w-[300px] w-full border rounded p-4 bg-gray-50">
+          <ChartSummary
+            chartType={chartType}
+            xAxis={xAxis}
+            yAxis={yAxis}
+            setChartSummary={setChartSummary}
+          />
+        </div>
       </div>
 
-      {/* Chart Summary */}
-      <ChartSummary
-        chartType={chartType}
-        xAxis={xAxis}
-        yAxis={yAxis}
-        setChartSummary={setChartSummary}
-      />
-
-      {/* Save Status Line */}
+      {/* Save Status + Download Buttons */}
       {saveStatus && (
-        <p className="text-sm mt-2 text-right text-gray-600 italic">
-          {saveStatus}
-        </p>
+        <div className="mt-4 flex flex-col md:flex-row justify-end items-center gap-3">
+          <p className="text-sm text-gray-600 italic">{saveStatus}</p>
+          <button
+            onClick={handleDownloadPNG}
+            className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white
+                        text-white text-sm rounded shadow"
+          >
+            ⬇️ Download PNG
+          </button>
+          <button
+            onClick={handleDownloadPDF}
+            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded shadow"
+          >
+            ⬇️ Download PDF
+          </button>
+        </div>
       )}
     </div>
   );

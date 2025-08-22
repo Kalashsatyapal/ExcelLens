@@ -27,31 +27,39 @@ export default function AuthForm({ type }) {
     e.preventDefault();
     setError("");
     setLoading(true);
-    try {
-      if (isRegister) {
-        const { username, email, password, role, adminPassKey } = formData;
-        const payload = { username, email, password, role };
-        if (role === "admin") payload.adminPassKey = adminPassKey;
 
-        await API.post("/auth/register", payload);
-        alert("Registration successful! Please login.");
-        navigate("/login");
+    try {
+      const { username, email, password, role, adminPassKey } = formData;
+
+      if (isRegister) {
+        if (role === "admin") {
+          // Submit admin registration request
+          await API.post("/auth/admin-requests", {
+            username,
+            email,
+            password,
+            adminPassKey,
+          });
+          alert("Admin registration request submitted. Await superadmin approval.");
+          navigate("/login");
+        } else {
+          // Register regular user
+          await API.post("/auth/register", { username, email, password, role });
+          alert("Registration successful! Please login.");
+          navigate("/login");
+        }
       } else {
-        const { email, password } = formData;
+        // Login flow
         const res = await API.post("/auth/login", { email, password });
         login(res.data.user, res.data.token);
 
-        // ✅ Role-based redirect
         const userRole = res.data.user.role;
-        if (userRole === "superadmin") {
-          navigate("/dashboard");
-        } else {
-          navigate("/dashboard"); // You can customize this for other roles later
-        }
+        navigate("/dashboard"); // You can customize this per role later
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }
+
     setLoading(false);
   };
 
@@ -88,10 +96,7 @@ export default function AuthForm({ type }) {
         <form onSubmit={handleSubmit} className="space-y-5">
           {isRegister && (
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Username
               </label>
               <input
@@ -107,10 +112,7 @@ export default function AuthForm({ type }) {
           )}
 
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Email
             </label>
             <input
@@ -125,10 +127,7 @@ export default function AuthForm({ type }) {
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Password
             </label>
             <input
@@ -145,10 +144,7 @@ export default function AuthForm({ type }) {
           {isRegister && (
             <>
               <div>
-                <label
-                  htmlFor="role"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Role
                 </label>
                 <select
@@ -165,10 +161,7 @@ export default function AuthForm({ type }) {
 
               {formData.role === "admin" && (
                 <div>
-                  <label
-                    htmlFor="adminPassKey"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
+                  <label htmlFor="adminPassKey" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Admin PassKey
                   </label>
                   <input

@@ -20,12 +20,20 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold tracking-wide">ExcelLense</h1>
         </div>
         <div className="flex items-center gap-3">
-          {user.role === "admin" && (
+          {["admin", "superadmin"].includes(user.role) && (
             <button
               onClick={() => navigate("/admin")}
               className="px-4 py-2 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-100 transition"
             >
               Admin Panel
+            </button>
+          )}
+          {user.role === "superadmin" && (
+            <button
+              onClick={() => navigate("/superadmin")}
+              className="px-4 py-2 bg-white text-purple-700 font-semibold rounded-lg hover:bg-purple-100 transition"
+            >
+              Super Admin Panel
             </button>
           )}
           <button

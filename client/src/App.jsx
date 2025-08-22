@@ -14,7 +14,9 @@ import UploadHistory from "./components/UploadHistory";
 import DataVisualization from "./pages/DataVisualization/DataVisualization";
 import AnalysisHistory from "./pages/DataVisualization/AnalysisHistory";
 import AllUploadHistory from "./pages/AdminDashboard/AllUploadHistory";
-import AdminAnalyses from "./pages/AdminDashboard/AdminAnalyses"
+import AdminAnalyses from "./pages/AdminDashboard/AdminAnalyses";
+import SuperAdminPanel from "./pages/SuperAdmin/SuperAdminPanel";
+
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);
 
@@ -37,7 +39,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute roles={["user", "admin"]}>
+              <PrivateRoute roles={["user", "admin", "superadmin"]}>
                 <Dashboard />
               </PrivateRoute>
             }
@@ -46,7 +48,7 @@ function App() {
           <Route
             path="/admin"
             element={
-              <PrivateRoute roles={["admin"]}>
+              <PrivateRoute roles={["admin", "superadmin"]}>
                 <AdminDashboard />
               </PrivateRoute>
             }
@@ -58,6 +60,15 @@ function App() {
           <Route path="/visualize" element={<DataVisualization />} />
           <Route path="/admin/uploads" element={<AllUploadHistory />} />
           <Route path="/admin/analyses" element={<AdminAnalyses />} />
+          <Route
+            path="/superadmin"
+            element={
+              <PrivateRoute roles={["superadmin"]}>
+                <SuperAdminPanel />
+              </PrivateRoute>
+            }
+          />
+
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

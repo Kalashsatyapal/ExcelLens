@@ -21,8 +21,7 @@ const seedSuperAdmin = async () => {
       username: SUPERADMIN_USERNAME,
       email: SUPERADMIN_EMAIL,
       password: hashedPassword,
-      role: 'admin',
-      isSuperAdmin: true
+      role: 'superadmin' // 👈 now the only flag needed
     });
 
     await superAdmin.save();

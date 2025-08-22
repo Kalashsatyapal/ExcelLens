@@ -47,6 +47,14 @@ export default function AdminDashboard() {
             >
               Go to Dashboard
             </button>
+            {user.role === "superadmin" && (
+              <button
+                onClick={() => navigate("/superadmin")}
+                className="px-4 py-2 bg-white text-purple-700 font-semibold rounded-lg hover:bg-purple-100 transition"
+              >
+                Super Admin Panel
+              </button>
+            )}
           </div>
         </div>
 
@@ -95,10 +103,7 @@ export default function AdminDashboard() {
               <div className="bg-gradient-to-br from-green-400 to-teal-500 text-white rounded-lg p-4 shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Users</h3>
                 <p className="text-3xl font-bold">
-                  {
-                    users.filter((u) => u.role === "user" && !u.isSuperAdmin)
-                      .length
-                  }
+                  {users.filter((u) => u.role === "user").length}
                 </p>
               </div>
 
@@ -106,10 +111,7 @@ export default function AdminDashboard() {
               <div className="bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-lg p-4 shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Admins</h3>
                 <p className="text-3xl font-bold">
-                  {
-                    users.filter((u) => u.role === "admin" && !u.isSuperAdmin)
-                      .length
-                  }
+                  {users.filter((u) => u.role === "admin").length}
                 </p>
               </div>
 
@@ -117,7 +119,7 @@ export default function AdminDashboard() {
               <div className="bg-gradient-to-br from-pink-500 to-red-500 text-white rounded-lg p-4 shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Super Admins</h3>
                 <p className="text-3xl font-bold">
-                  {users.filter((u) => u.isSuperAdmin).length}
+                  {users.filter((u) => u.role === "superadmin").length}
                 </p>
               </div>
             </div>
@@ -160,10 +162,10 @@ export default function AdminDashboard() {
                       {u.email}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 capitalize">
-                      {u.isSuperAdmin ? "Super Admin" : u.role}
+                      {u.role === "superadmin" ? "Super Admin" : u.role}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {u.isSuperAdmin ? (
+                      {u.role === "superadmin" ? (
                         <span className="text-gray-400 italic">Immutable</span>
                       ) : (
                         <select

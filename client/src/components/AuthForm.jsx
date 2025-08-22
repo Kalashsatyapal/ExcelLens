@@ -40,7 +40,14 @@ export default function AuthForm({ type }) {
         const { email, password } = formData;
         const res = await API.post("/auth/login", { email, password });
         login(res.data.user, res.data.token);
-        navigate("/dashboard");
+
+        // ✅ Role-based redirect
+        const userRole = res.data.user.role;
+        if (userRole === "superadmin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/dashboard"); // You can customize this for other roles later
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

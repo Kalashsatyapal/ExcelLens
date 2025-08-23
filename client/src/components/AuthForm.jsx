@@ -34,7 +34,7 @@ export default function AuthForm({ type }) {
       if (isRegister) {
         if (role === "admin") {
           // Submit admin registration request
-          await API.post("/auth/admin-requests", {
+          await API.post("/admin/admin-requests", {
             username,
             email,
             password,

@@ -1,6 +1,5 @@
 // models/AdminRequest.js
 const mongoose = require('mongoose');
-
 const AdminRequestSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -9,5 +8,4 @@ const AdminRequestSchema = new mongoose.Schema({
   rejectionReason: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
-
 module.exports = mongoose.model('AdminRequest', AdminRequestSchema);

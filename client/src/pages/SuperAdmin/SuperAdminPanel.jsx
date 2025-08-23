@@ -2,47 +2,41 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import API from "../../utils/api";
-
 export default function SuperAdminPanel() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   const fetchRequests = async () => {
     try {
-      const res = await API.get("/auth/admin-requests");
+      const res = await API.get("/admin/admin-requests");
       setRequests(res.data);
     } catch (err) {
       setError("Failed to load requests");
     }
     setLoading(false);
   };
-
   const handleApprove = async (id) => {
     try {
-      await API.post(`/auth/admin-requests/${id}/approve`);
+      await API.post(`/admin/admin-requests/${id}/approve`);
       setRequests((prev) => prev.filter((r) => r._id !== id));
     } catch (err) {
       alert("Approval failed");
     }
   };
-
   const handleReject = async (id) => {
     const reason = prompt("Enter rejection reason (optional):");
     try {
-      await API.post(`/auth/admin-requests/${id}/reject`, { reason });
+      await API.post(`/admin/admin-requests/${id}/reject`, { reason });
       setRequests((prev) => prev.filter((r) => r._id !== id));
     } catch (err) {
       alert("Rejection failed");
     }
   };
-
   useEffect(() => {
     fetchRequests();
   }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-700 to-pink-600 text-white flex flex-col">
       {/* Topbar */}
@@ -72,12 +66,10 @@ export default function SuperAdminPanel() {
           </button>
         </div>
       </header>
-
       {/* Main Content */}
       <main className="flex-grow px-6 py-10">
         <div className="bg-white text-gray-800 rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-6 text-center">Pending Admin Requests</h1>
-
           {loading ? (
             <p className="text-center text-gray-500">Loading...</p>
           ) : error ? (
@@ -91,7 +83,6 @@ export default function SuperAdminPanel() {
                   <p><strong>Username:</strong> {req.username}</p>
                   <p><strong>Email:</strong> {req.email}</p>
                   <p><strong>Requested At:</strong> {new Date(req.createdAt).toLocaleString()}</p>
-
                   <div className="mt-4 flex gap-4">
                     <button
                       onClick={() => handleApprove(req._id)}

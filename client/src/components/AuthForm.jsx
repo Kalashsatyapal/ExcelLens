@@ -33,7 +33,6 @@ export default function AuthForm({ type }) {
 
       if (isRegister) {
         if (role === "admin") {
-          // Submit admin registration request
           await API.post("/auth/admin-requests", {
             username,
             email,
@@ -43,18 +42,14 @@ export default function AuthForm({ type }) {
           alert("Admin registration request submitted. Await superadmin approval.");
           navigate("/login");
         } else {
-          // Register regular user
           await API.post("/auth/register", { username, email, password, role });
           alert("Registration successful! Please login.");
           navigate("/login");
         }
       } else {
-        // Login flow
         const res = await API.post("/auth/login", { email, password });
         login(res.data.user, res.data.token);
-
-        const userRole = res.data.user.role;
-        navigate("/dashboard"); // You can customize this per role later
+        navigate("/dashboard");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
@@ -64,26 +59,28 @@ export default function AuthForm({ type }) {
   };
 
   return (
-    <>
-      <nav className="bg-green-500 text-white px-6 py-4 shadow-md">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
+      {/* Header */}
+      <nav className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="container mx-auto flex items-center justify-between px-6 py-4">
           <h1
-            className="text-2xl font-bold tracking-wide cursor-pointer"
+            className="text-2xl font-bold text-green-700 tracking-tight cursor-pointer"
             onClick={() => navigate("/")}
           >
             ExcelLense
           </h1>
           <button
             onClick={() => navigate("/")}
-            className="px-4 py-2 bg-white text-green-600 rounded-md hover:bg-sky-100 transition"
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
           >
             Back to Home
           </button>
         </div>
       </nav>
 
-      <div className="max-w-md mx-auto mt-16 px-6 py-8 bg-sky-100 dark:bg-gray-900 rounded-xl shadow-lg transition-all">
-        <h2 className="text-3xl font-semibold text-center mb-6 text-green-600 dark:text-green-400">
+      {/* Form Container */}
+      <div className="container mx-auto max-w-md mt-16 px-6 py-8 bg-white rounded-xl shadow-lg">
+        <h2 className="text-3xl font-bold text-center mb-6 text-green-700">
           {isRegister ? "Create Account" : "Welcome Back"}
         </h2>
 
@@ -96,7 +93,7 @@ export default function AuthForm({ type }) {
         <form onSubmit={handleSubmit} className="space-y-5">
           {isRegister && (
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                 Username
               </label>
               <input
@@ -106,13 +103,13 @@ export default function AuthForm({ type }) {
                 required
                 value={formData.username}
                 onChange={handleChange}
-                className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input
@@ -122,12 +119,12 @@ export default function AuthForm({ type }) {
               required
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -137,14 +134,14 @@ export default function AuthForm({ type }) {
               required
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
           {isRegister && (
             <>
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                   Role
                 </label>
                 <select
@@ -152,7 +149,7 @@ export default function AuthForm({ type }) {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="user">User</option>
                   <option value="admin">Admin</option>
@@ -161,7 +158,7 @@ export default function AuthForm({ type }) {
 
               {formData.role === "admin" && (
                 <div>
-                  <label htmlFor="adminPassKey" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="adminPassKey" className="block text-sm font-medium text-gray-700">
                     Admin PassKey
                   </label>
                   <input
@@ -171,7 +168,7 @@ export default function AuthForm({ type }) {
                     required
                     value={formData.adminPassKey}
                     onChange={handleChange}
-                    className="mt-1 w-full px-4 py-2 border rounded-md bg-sky-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
               )}
@@ -181,20 +178,20 @@ export default function AuthForm({ type }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600 shadow-md hover:shadow-lg transition disabled:opacity-50"
+            className="w-full py-2 px-4 bg-gradient-to-r from-green-600 to-blue-600 text-white font-medium rounded-md shadow hover:shadow-lg transition disabled:opacity-50"
           >
             {loading ? "Please wait..." : isRegister ? "Sign Up" : "Login"}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+        <div className="mt-6 text-center text-sm text-gray-600">
           {isRegister ? (
             <>
               Already have an account?{" "}
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="text-green-500 hover:underline dark:text-green-400"
+                className="text-green-600 hover:underline"
               >
                 Login
               </button>
@@ -205,7 +202,7 @@ export default function AuthForm({ type }) {
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className="text-green-500 hover:underline dark:text-green-400"
+                className="text-green-600 hover:underline"
               >
                 Register
               </button>
@@ -213,6 +210,13 @@ export default function AuthForm({ type }) {
           )}
         </div>
       </div>
-    </>
+
+      {/* Footer */}
+      <footer className="bg-gray-100 py-6 mt-auto">
+        <div className="container mx-auto text-center text-gray-600 text-sm">
+          © {new Date().getFullYear()} ExcelLense. Built with precision and passion.
+        </div>
+      </footer>
+    </div>
   );
 }

@@ -16,6 +16,9 @@ import AnalysisHistory from "./pages/DataVisualization/AnalysisHistory";
 import AllUploadHistory from "./pages/AdminDashboard/AllUploadHistory";
 import AdminAnalyses from "./pages/AdminDashboard/AdminAnalyses";
 import SuperAdminPanel from "./pages/SuperAdmin/SuperAdminPanel";
+import UserManagementPanel from "./pages/SuperAdmin/UserManagementPanel";
+import UploadRecordsPanel from "./pages/SuperAdmin/UploadRecordsPanel";
+import ChartAnalysesPanel from "./pages/SuperAdmin/ChartAnalysesPanel";
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);
@@ -58,8 +61,23 @@ function App() {
           <Route path="/upload-history" element={<UploadHistory />} />
           <Route path="/analysis-history" element={<AnalysisHistory />} />
           <Route path="/visualize" element={<DataVisualization />} />
-          <Route path="/admin/uploads" element={<AllUploadHistory />} />
-          <Route path="/admin/analyses" element={<AdminAnalyses />} />
+          <Route
+            path="/admin/uploads"
+            element={
+              <PrivateRoute roles={["admin", "superadmin"]}>
+                <AllUploadHistory />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/analyses"
+            element={
+              <PrivateRoute roles={["admin", "superadmin"]}>
+                <AdminAnalyses />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/superadmin"
             element={
@@ -68,7 +86,30 @@ function App() {
               </PrivateRoute>
             }
           />
-
+          <Route
+            path="/admin/users/manage"
+            element={
+              <PrivateRoute roles={["superadmin"]}>
+                <UserManagementPanel />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="admin/upload-records"
+            element={
+              <PrivateRoute roles={["superadmin"]}>
+                <UploadRecordsPanel />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/chart-analyses"
+            element={
+              <PrivateRoute roles={["admin", "superadmin"]}>
+                <ChartAnalysesPanel />
+              </PrivateRoute>
+            }
+          />
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

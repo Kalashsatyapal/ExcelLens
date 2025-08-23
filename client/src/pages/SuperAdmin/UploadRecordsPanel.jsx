@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import API from "../../utils/api";
-import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import API from "../../utils/api";
 
-export default function AllUploadHistory() {
+export default function UploadRecordsPanel() {
   const { user } = useContext(AuthContext);
   const [uploads, setUploads] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,6 @@ export default function AllUploadHistory() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Explicit role check
     if (!["admin", "superadmin"].includes(user?.role)) {
       console.warn(`Unauthorized access attempt by role: ${user?.role}`);
       navigate("/dashboard");
@@ -33,30 +32,40 @@ export default function AllUploadHistory() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-sky-100 to-green-100 text-gray-800">
+    <div className="min-h-screen bg-gradient-to-r from-green-100 via-sky-100 to-white text-gray-800">
       {/* Topbar */}
-      <div className="sticky top-0 z-10 bg-white shadow-md">
-        <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-green-700">📁 Upload History</h1>
-          <button
-            onClick={() => navigate("/admin")}
-            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
-          >
-            Go to Admin Dashboard
-          </button>
-        </div>
-      </div>
+      <header className="w-full px-6 py-4 flex items-center justify-between bg-green-200 shadow-md">
+        <h1 className="text-2xl font-bold text-green-800">Upload Records</h1>
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition"
+        >
+          Go to Dashboard
+        </button>
+      </header>
+
+      {/* Navigation Bar */}
+      <nav className="bg-white text-green-700 shadow-md px-6 py-3 flex flex-wrap gap-4 justify-start font-medium">
+        <NavButton label="Dashboard" path="/dashboard" />
+        <NavButton label="Admin Panel" path="/admin" />
+        <NavButton label="Admin Requests" path="/superadmin" />
+        <NavButton label="Uploads" path="/admin/uploads" active />
+        <NavButton label="Analyses History" path="/admin/analyses" />
+        <NavButton label="User Management" path="/admin/users/manage" />
+      </nav>
 
       {/* Main Content */}
-      <div className="max-w-screen-xl mx-auto px-4 py-6">
-        {loading ? (
-          <p className="text-sky-600">Loading uploads...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : uploads.length === 0 ? (
-          <p className="text-gray-600">No uploads found.</p>
-        ) : (
-          <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+      <div className="px-6 py-10 max-w-screen-xl mx-auto">
+        <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+          <h2 className="text-2xl font-semibold mb-4 text-green-700">📁 Upload History</h2>
+
+          {loading ? (
+            <p className="text-sky-600">Loading uploads...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : uploads.length === 0 ? (
+            <p className="text-gray-600">No uploads found.</p>
+          ) : (
             <table className="min-w-full border-collapse border border-gray-300">
               <thead className="bg-green-100 text-green-800">
                 <tr>
@@ -87,9 +96,27 @@ export default function AllUploadHistory() {
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
+  );
+}
+
+// 🔹 NavButton Subcomponent
+function NavButton({ label, path, active }) {
+  const navigate = useNavigate();
+
+  return (
+    <button
+      onClick={() => navigate(path)}
+      className={`px-4 py-2 rounded-md transition ${
+        active
+          ? "bg-green-600 text-white"
+          : "hover:bg-green-100 text-green-700"
+      }`}
+    >
+      {label}
+    </button>
   );
 }

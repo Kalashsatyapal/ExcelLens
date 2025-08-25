@@ -21,13 +21,13 @@ export default function LandingPage() {
           <nav className="space-x-4">
             <Link
               to="/login"
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+              className="px-4 py-2 bg-green-400 text-white rounded-md hover:bg-green-700 transition"
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              className="px-4 py-2 bg-blue-400 text-white rounded-md hover:bg-blue-700 transition"
             >
               Register
             </Link>
@@ -48,7 +48,7 @@ export default function LandingPage() {
         </p>
         <Link
           to="/register"
-          className="px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white font-medium rounded-md shadow hover:shadow-lg transition"
+          className="px-6 py-3 bg-gradient-to-r from-green-400 to-blue-400 text-white font-medium rounded-md shadow hover:shadow-lg transition"
         >
           Get Started
         </Link>

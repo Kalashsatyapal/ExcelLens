@@ -37,7 +37,7 @@ router.post('/', authMiddleware(), upload.single('file'), async (req, res) => {
 
     // Save parsed data to MongoDB
     const newUpload = new Upload({
-      user: req.user.userId,
+      user: req.user._id,
       filename: req.file.originalname,
       data: rows,
     });
@@ -54,7 +54,7 @@ router.post('/', authMiddleware(), upload.single('file'), async (req, res) => {
 // Get upload history for current user
 router.get('/', authMiddleware(), async (req, res) => {
   try {
-    const uploads = await Upload.find({ user: req.user.userId }).sort({ uploadedAt: -1 });
+    const uploads = await Upload.find({ user: req.user._id }).sort({ uploadedAt: -1 });
     res.json(uploads);
   } catch (error) {
     console.error('Fetch upload history error:', error);
@@ -68,7 +68,7 @@ router.delete('/:id', authMiddleware(), async (req, res) => {
     const upload = await Upload.findById(req.params.id);
     if (!upload) return res.status(404).json({ message: 'Upload not found' });
 
-    if (upload.user.toString() !== req.user.userId) {
+    if (upload.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'You are not authorized to delete this upload' });
     }
 

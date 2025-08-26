@@ -79,7 +79,7 @@ export default function AnalysisHistory() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white shadow-sm px-6 py-5 flex justify-between items-center border-b border-gray-200">
+      <header className="sticky top-0 z-10 bg-white shadow-md px-6 py-5 flex justify-between items-center border-b border-gray-200">
         <div className="flex items-center gap-4">
           <img
             src="/src/assets/logo2.png"
@@ -119,9 +119,13 @@ export default function AnalysisHistory() {
         </h1>
 
         {loading ? (
-          <p>Loading...</p>
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-green-600"></div>
+          </div>
         ) : fetchError ? (
-          <p className="text-red-600">{fetchError}</p>
+          <div className="text-red-600 flex items-center gap-2">
+            <span>⚠️</span> <span>{fetchError}</span>
+          </div>
         ) : analyses.length === 0 ? (
           <p>No analyses found.</p>
         ) : (
@@ -129,38 +133,45 @@ export default function AnalysisHistory() {
             {analyses.map((a) => (
               <div
                 key={a._id}
-                className="border rounded-md p-4 shadow bg-white"
+                className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-5 flex flex-col justify-between"
               >
-                <h2 className="font-semibold text-lg mb-2 text-green-700">
-                  {a.chartType}
-                </h2>
-                <p className="text-sm text-gray-600 mb-1">
-                  <strong>X:</strong> {a.xAxis} | <strong>Y:</strong> {a.yAxis}
-                </p>
-                <p className="text-sm text-gray-600 mb-2 italic">{a.summary}</p>
-                <img
-                  src={a.chartImageBase64}
-                  alt="Chart Preview"
-                  className="w-full h-48 object-contain bg-white border mb-3"
-                />
-                <div className="flex flex-wrap gap-2">
+                <div>
+                  <h2 className="text-xl font-semibold text-green-700 mb-2">
+                    {a.chartType}
+                  </h2>
+                  <p className="text-sm text-gray-700 mb-1">
+                    <span className="font-medium">X:</span> {a.xAxis} |{" "}
+                    <span className="font-medium">Y:</span> {a.yAxis}
+                  </p>
+                  <p className="text-sm text-gray-600 italic mb-3">
+                    {a.summary}
+                  </p>
+                  <div className="rounded overflow-hidden border bg-white mb-4">
+                    <img
+                      src={a.chartImageBase64}
+                      alt="Chart Preview"
+                      className="w-full h-48 object-contain"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-auto">
                   <button
                     onClick={() =>
                       downloadImage(a.chartImageBase64, a._id, "png")
                     }
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition"
                   >
-                    Download PNG
+                    PNG
                   </button>
                   <button
                     onClick={() => downloadPDF(a.chartImageBase64, a._id)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm"
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition"
                   >
-                    Download PDF
+                    PDF
                   </button>
                   <button
                     onClick={() => handleDelete(a._id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition"
                   >
                     Delete
                   </button>
@@ -171,9 +182,9 @@ export default function AnalysisHistory() {
         )}
 
         {deleteStatus && (
-          <p className="text-sm mt-4 text-right text-gray-600 italic">
+          <div className="text-sm mt-4 text-right text-gray-600 italic transition-opacity duration-500">
             {deleteStatus}
-          </p>
+          </div>
         )}
       </main>
 

@@ -8,7 +8,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white shadow-sm px-6 py-5 flex justify-between items-center border-b border-gray-200">
         <div className="flex items-center gap-4">
@@ -48,13 +48,11 @@ export default function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-10 space-y-8">
-        {/* Upload Section */}
+      <main className="container mx-auto px-6 py-10 space-y-8 flex-grow">
         <section className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
           <UploadSection />
         </section>
 
-        {/* Navigation Links */}
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <Link
             to="/upload-history"

@@ -37,7 +37,7 @@ export default function UploadHistory() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white shadow-sm px-6 py-5 flex justify-between items-center border-b border-gray-200">
         <div className="flex items-center gap-4">
@@ -67,7 +67,7 @@ export default function UploadHistory() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-10 space-y-8">
+      <main className="container mx-auto px-6 py-10 space-y-8 flex-grow">
         <h1 className="text-3xl font-bold mb-6 text-green-800">Upload History</h1>
 
         {loading ? (

@@ -37,10 +37,10 @@ export default function UploadRecordsPanel() {
       <header className="w-full px-6 py-4 flex items-center justify-between bg-green-200 shadow-md">
         <h1 className="text-2xl font-bold text-green-800">Upload Records</h1>
         <button
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/superadmin")}
           className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition"
         >
-          Go to Dashboard
+          Go to Superadmin Panel
         </button>
       </header>
 
@@ -50,7 +50,7 @@ export default function UploadRecordsPanel() {
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
         <NavButton label="Uploads" path="/admin/uploads" active />
-        <NavButton label="Analyses History" path="/admin/analyses" />
+        <NavButton label="Analyses History" path="/admin/chart-analyses" />
         <NavButton label="User Management" path="/admin/users/manage" />
       </nav>
 

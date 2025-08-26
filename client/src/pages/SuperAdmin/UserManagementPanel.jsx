@@ -52,8 +52,8 @@ export default function UserManagementPanel() {
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
-        <NavButton label="Uploads" path="/admin/uploads" />
-        <NavButton label="Analyses History" path="/admin/analyses" />
+        <NavButton label="Uploads History" path="/admin/upload-records" />
+        <NavButton label="Analyses History" path="/admin/chart-analyses" />
         <NavButton label="User Management" path="/admin/users/manage" active />
       </nav>
 

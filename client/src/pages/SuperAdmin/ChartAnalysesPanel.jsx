@@ -37,10 +37,10 @@ export default function ChartAnalysesPanel() {
       <header className="w-full px-6 py-4 flex items-center justify-between bg-sky-200 shadow-md">
         <h1 className="text-2xl font-bold text-sky-800">Chart Analyses</h1>
         <button
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/superadmin")}
           className="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-md transition"
         >
-          Go to Dashboard
+          Go to Superadmin panel
         </button>
       </header>
 
@@ -49,7 +49,7 @@ export default function ChartAnalysesPanel() {
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
-        <NavButton label="Uploads" path="/admin/uploads" />
+        <NavButton label="Uploads History" path="/admin/upload-records" />
         <NavButton label="Analyses History" path="/admin/chart-analyses" active />
         <NavButton label="User Management" path="/admin/users/manage" />
       </nav>

@@ -11,7 +11,7 @@ export default function AllUploadHistory() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Explicit role check
+    // 🔐 Explicit role check
     if (!["admin", "superadmin"].includes(user?.role)) {
       console.warn(`Unauthorized access attempt by role: ${user?.role}`);
       navigate("/dashboard");
@@ -33,32 +33,62 @@ export default function AllUploadHistory() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-white via-sky-100 to-green-100 text-gray-800">
-      {/* Topbar */}
-      <div className="sticky top-0 z-10 bg-white shadow-md">
-        <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-green-700">📁 Upload History</h1>
-          <button
-            onClick={() => navigate("/admin")}
-            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
-          >
-            Go to Admin Dashboard
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-purple-50 text-gray-800">
+      {/* 🌟 Topbar */}
+      <div className="sticky top-0 z-10 bg-white shadow-md border-b border-purple-200">
+        <div className="max-w-screen-xl mx-auto px-6 py-4 space-y-2">
+          {/* 🔷 Logo and Title */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <img
+                src="/logo2.png"
+                alt="Admin Logo"
+                className="h-10 w-10 object-contain"
+              />
+              <h1 className="text-2xl font-bold tracking-tight text-green-700">
+                ExcelLense
+              </h1>
+            </div>
+          </div>
+
+          {/* 👤 User Info + Page Title + Navigation */}
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
+              <h6 className="text-2xl font-bold text-purple-700">
+                📁 Upload History
+              </h6>
+              <p className="text-sm text-gray-600 mt-1 sm:mt-0">
+                Logged in as{" "}
+                <span className="font-medium text-gray-800">
+                  {user?.username}
+                </span>{" "}
+                (
+                <span className="capitalize text-purple-600">{user?.role}</span>
+                )
+              </p>
+            </div>
+            <button
+              onClick={() => navigate("/admin")}
+              className="px-4 py-2 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700 font-semibold rounded-md hover:from-purple-200 hover:to-purple-300 transition"
+            >
+              Go to Admin Dashboard
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-screen-xl mx-auto px-4 py-6">
+      {/* 📄 Main Content */}
+      <div className="max-w-screen-xl mx-auto px-6 py-8">
         {loading ? (
-          <p className="text-sky-600">Loading uploads...</p>
+          <p className="text-purple-600">Loading uploads...</p>
         ) : error ? (
-          <p className="text-red-500">{error}</p>
+          <p className="text-red-600">{error}</p>
         ) : uploads.length === 0 ? (
           <p className="text-gray-600">No uploads found.</p>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 overflow-x-auto">
             <table className="min-w-full border-collapse border border-gray-300">
-              <thead className="bg-green-100 text-green-800">
+              <thead className="bg-purple-100 text-purple-800">
                 <tr>
                   <th className="border px-4 py-2 text-left">User</th>
                   <th className="border px-4 py-2 text-left">Email</th>
@@ -68,7 +98,7 @@ export default function AllUploadHistory() {
               </thead>
               <tbody>
                 {uploads.map((upload) => (
-                  <tr key={upload._id} className="hover:bg-sky-100">
+                  <tr key={upload._id} className="hover:bg-purple-50">
                     <td className="border px-4 py-2">
                       {upload.user?.username || "Unknown"}
                     </td>

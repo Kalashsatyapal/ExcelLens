@@ -39,7 +39,9 @@ export default function AuthForm({ type }) {
             password,
             adminPassKey,
           });
-          alert("Admin registration request submitted. Await superadmin approval.");
+          alert(
+            "Admin registration request submitted. Await superadmin approval."
+          );
           navigate("/login");
         } else {
           await API.post("/auth/register", { username, email, password, role });
@@ -63,12 +65,21 @@ export default function AuthForm({ type }) {
       {/* Header */}
       <nav className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <h1
-            className="text-2xl font-bold text-green-700 tracking-tight cursor-pointer"
+          {/* 👇 Wrap logo and title in a flex container */}
+          <div
+            className="flex items-center space-x-3 cursor-pointer"
             onClick={() => navigate("/")}
           >
-            ExcelLense
-          </h1>
+            <img
+              src="/logo2.png" // Adjust path if needed
+              alt="Admin Logo"
+              className="h-10 w-10 object-contain"
+            />
+            <h1 className="text-2xl font-bold text-green-700 tracking-tight">
+              ExcelLense
+            </h1>
+          </div>
+
           <button
             onClick={() => navigate("/")}
             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
@@ -93,7 +104,10 @@ export default function AuthForm({ type }) {
         <form onSubmit={handleSubmit} className="space-y-5">
           {isRegister && (
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Username
               </label>
               <input
@@ -109,7 +123,10 @@ export default function AuthForm({ type }) {
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
@@ -124,7 +141,10 @@ export default function AuthForm({ type }) {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -141,7 +161,10 @@ export default function AuthForm({ type }) {
           {isRegister && (
             <>
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Role
                 </label>
                 <select
@@ -158,7 +181,10 @@ export default function AuthForm({ type }) {
 
               {formData.role === "admin" && (
                 <div>
-                  <label htmlFor="adminPassKey" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="adminPassKey"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Admin PassKey
                   </label>
                   <input
@@ -214,7 +240,8 @@ export default function AuthForm({ type }) {
       {/* Footer */}
       <footer className="bg-gray-100 py-6 mt-auto">
         <div className="container mx-auto text-center text-gray-600 text-sm">
-          © {new Date().getFullYear()} ExcelLense. Built with precision and passion.
+          © {new Date().getFullYear()} ExcelLense. Built with precision and
+          passion.
         </div>
       </footer>
     </div>

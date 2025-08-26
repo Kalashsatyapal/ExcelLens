@@ -39,6 +39,16 @@ export default function AdminDashboard() {
       <div className="container mx-auto px-6 py-8">
         {/* 🌟 Topbar */}
         <div className="flex justify-between items-center py-4 bg-white shadow-md rounded-xl px-6 border border-purple-200">
+          <div className="flex items-center space-x-4">
+            <img
+              src="/logo2.png" // Adjust path if needed
+              alt="Admin Logo"
+              className="h-10 w-10 object-contain"
+            />
+            <h1 className="text-2xl font-bold tracking-tight text-green-700">
+              ExcelLense
+            </h1>
+          </div>
           <h1 className="text-2xl font-bold text-purple-700">Admin Panel</h1>
           <div className="space-x-4">
             <button
@@ -61,9 +71,15 @@ export default function AdminDashboard() {
         {/* 👤 Logged-in Admin Info */}
         <div className="py-6">
           <div className="bg-purple-100 rounded-xl p-6 text-purple-900 shadow-md border border-purple-200">
-            <h2 className="text-lg font-semibold mb-2">Current Logged-in Admin</h2>
-            <p className="text-sm">Name: <span className="font-medium">{user?.username}</span></p>
-            <p className="text-sm">Email: <span className="font-medium">{user?.email}</span></p>
+            <h2 className="text-lg font-semibold mb-2">
+              Current Logged-in Admin
+            </h2>
+            <p className="text-sm">
+              Name: <span className="font-medium">{user?.username}</span>
+            </p>
+            <p className="text-sm">
+              Email: <span className="font-medium">{user?.email}</span>
+            </p>
           </div>
         </div>
 
@@ -86,7 +102,9 @@ export default function AdminDashboard() {
         {/* 📊 Summary Container */}
         <div className="py-6">
           <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Account Overview</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Account Overview
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-lg p-4 shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Total Accounts</h3>
@@ -125,17 +143,29 @@ export default function AdminDashboard() {
             <table className="min-w-full border-collapse border border-gray-300">
               <thead className="bg-gray-100">
                 <tr>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Username</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Role</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">
+                    Username
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">
+                    Email
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">
+                    Role
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((u) => (
                   <tr key={u._id} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-2 break-words max-w-xs">{u.username}</td>
-                    <td className="border border-gray-300 px-4 py-2 break-words max-w-xs">{u.email}</td>
+                    <td className="border border-gray-300 px-4 py-2 break-words max-w-xs">
+                      {u.username}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 break-words max-w-xs">
+                      {u.email}
+                    </td>
                     <td className="border border-gray-300 px-4 py-2 capitalize">
                       {u.role === "superadmin" ? "Super Admin" : u.role}
                     </td>

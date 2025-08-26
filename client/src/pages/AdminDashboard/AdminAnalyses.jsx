@@ -25,12 +25,12 @@ export default function AdminAnalyses() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-200 via-white to-green-100 text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-purple-50 text-gray-800">
       <div className="max-w-screen-xl mx-auto px-4 py-6">
-        {/* 🧭 Modern Header */}
-        <div className="bg-white rounded-lg shadow flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 mb-6 border border-green-200">
+        {/* 🧭 Header */}
+        <div className="bg-white rounded-xl shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 mb-6 border border-purple-200">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-green-700 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-purple-700 tracking-tight">
               📊 Uploaded Chart Analyses
             </h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -39,7 +39,7 @@ export default function AdminAnalyses() {
           </div>
           <button
             onClick={() => navigate("/admin")}
-            className="mt-4 sm:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-md transition"
+            className="mt-4 sm:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-100 to-green-200 text-green-700 font-medium rounded-md hover:from-green-200 hover:to-green-300 transition"
           >
             ← Back to Admin Panel
           </button>
@@ -47,15 +47,15 @@ export default function AdminAnalyses() {
 
         {/* 📊 Table */}
         {loading ? (
-          <p className="text-green-600">Loading analyses...</p>
+          <p className="text-purple-600">Loading analyses...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : analyses.length === 0 ? (
           <p className="text-gray-600">No analyses found.</p>
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
+          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 overflow-x-auto">
             <table className="min-w-full border-collapse border border-gray-300">
-              <thead className="bg-sky-100">
+              <thead className="bg-purple-100">
                 <tr>
                   <th className="border px-4 py-2 text-left">Upload ID</th>
                   <th className="border px-4 py-2 text-left">User Email</th>
@@ -68,16 +68,12 @@ export default function AdminAnalyses() {
               </thead>
               <tbody>
                 {analyses.map((a) => (
-                  <tr key={a._id} className="hover:bg-green-50">
-                    <td className="border px-4 py-2 break-words">
-                      {a.uploadId}
-                    </td>
+                  <tr key={a._id} className="hover:bg-purple-50">
+                    <td className="border px-4 py-2 break-words">{a.uploadId}</td>
                     <td className="border px-4 py-2 text-sm text-gray-700">
                       {a.userEmail || "—"}
                     </td>
-                    <td className="border px-4 py-2 capitalize">
-                      {a.chartType}
-                    </td>
+                    <td className="border px-4 py-2 capitalize">{a.chartType}</td>
                     <td className="border px-4 py-2">{a.xAxis}</td>
                     <td className="border px-4 py-2">{a.yAxis}</td>
                     <td className="border px-4 py-2 max-w-xs">

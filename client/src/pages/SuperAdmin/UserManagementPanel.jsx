@@ -36,16 +36,35 @@ export default function UserManagementPanel() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-700 to-purple-800 text-white">
-      {/* Topbar */}
-      <header className="w-full px-6 py-4 flex items-center justify-between bg-indigo-900 shadow-md">
-        <h1 className="text-3xl font-bold">User Management</h1>
-        <button
-          onClick={() => navigate("/dashboard")}
-          className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md transition"
-        >
-          Go to Dashboard
-        </button>
-      </header>
+      {/* 🌟 Modern Two-Line Sticky Topbar for User Management */}
+      <div className="sticky top-0 z-20 bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-700 shadow-md border-b border-indigo-500">
+        <div className="max-w-screen-xl mx-auto px-6 py-4 text-white space-y-3">
+          {/* 🔷 Line 1: Logo + Brand */}
+          <div className="flex items-center gap-4">
+            <img
+              src="/logo2.png"
+              alt="ExcelLense Logo"
+              className="h-10 w-10 object-contain rounded-md shadow-md"
+            />
+            <h1 className="text-2xl font-extrabold tracking-tight text-indigo-200">
+              ExcelLense
+            </h1>
+          </div>
+
+          {/* 🧑‍💼 Line 2: Panel Title + Navigation Button */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-wide text-white">
+              👥 User Management Panel
+            </h2>
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm font-semibold transition duration-200 ease-in-out"
+            >
+              Go to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Navigation Bar */}
       <nav className="bg-white text-purple-700 shadow-md px-6 py-3 flex flex-wrap gap-4 justify-start font-medium">
@@ -61,10 +80,26 @@ export default function UserManagementPanel() {
       <div className="px-6 py-10">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <SummaryCard title="Total Accounts" value={users.length} color="from-indigo-500 to-purple-600" />
-          <SummaryCard title="Users" value={users.filter(u => u.role === "user").length} color="from-green-400 to-teal-500" />
-          <SummaryCard title="Admins" value={users.filter(u => u.role === "admin").length} color="from-yellow-400 to-orange-500" />
-          <SummaryCard title="Super Admins" value={users.filter(u => u.role === "superadmin").length} color="from-pink-500 to-red-500" />
+          <SummaryCard
+            title="Total Accounts"
+            value={users.length}
+            color="from-indigo-500 to-purple-600"
+          />
+          <SummaryCard
+            title="Users"
+            value={users.filter((u) => u.role === "user").length}
+            color="from-green-400 to-teal-500"
+          />
+          <SummaryCard
+            title="Admins"
+            value={users.filter((u) => u.role === "admin").length}
+            color="from-yellow-400 to-orange-500"
+          />
+          <SummaryCard
+            title="Super Admins"
+            value={users.filter((u) => u.role === "superadmin").length}
+            color="from-pink-500 to-red-500"
+          />
         </div>
 
         {/* User Table */}
@@ -87,8 +122,12 @@ export default function UserManagementPanel() {
               <tbody>
                 {users.map((u) => (
                   <tr key={u._id} className="hover:bg-gray-100">
-                    <td className="border px-4 py-2 break-words max-w-xs">{u.username}</td>
-                    <td className="border px-4 py-2 break-words max-w-xs">{u.email}</td>
+                    <td className="border px-4 py-2 break-words max-w-xs">
+                      {u.username}
+                    </td>
+                    <td className="border px-4 py-2 break-words max-w-xs">
+                      {u.email}
+                    </td>
                     <td className="border px-4 py-2 capitalize">
                       {u.role === "superadmin" ? "Super Admin" : u.role}
                     </td>
@@ -120,7 +159,9 @@ export default function UserManagementPanel() {
 // 🔹 Summary Card Subcomponent
 function SummaryCard({ title, value, color }) {
   return (
-    <div className={`bg-gradient-to-br ${color} text-white rounded-lg p-4 shadow-md`}>
+    <div
+      className={`bg-gradient-to-br ${color} text-white rounded-lg p-4 shadow-md`}
+    >
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-3xl font-bold">{value}</p>
     </div>

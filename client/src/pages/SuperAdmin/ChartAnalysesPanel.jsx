@@ -33,16 +33,35 @@ export default function ChartAnalysesPanel() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-sky-100 via-white to-green-100 text-gray-800">
-      {/* Topbar */}
-      <header className="w-full px-6 py-4 flex items-center justify-between bg-sky-200 shadow-md">
-        <h1 className="text-2xl font-bold text-sky-800">Chart Analyses</h1>
-        <button
-          onClick={() => navigate("/superadmin")}
-          className="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-md transition"
-        >
-          Go to Superadmin panel
-        </button>
-      </header>
+      {/* 🌟 Modern Two-Line Sticky Topbar for Chart Analyses */}
+      <div className="sticky top-0 z-20 bg-gradient-to-r from-sky-800 via-sky-700 to-sky-600 shadow-md border-b border-sky-400">
+        <div className="max-w-screen-xl mx-auto px-6 py-4 text-white space-y-3">
+          {/* 🔷 Line 1: Logo + Brand */}
+          <div className="flex items-center gap-4">
+            <img
+              src="/logo2.png"
+              alt="ExcelLense Logo"
+              className="h-10 w-10 object-contain rounded-md shadow-md"
+            />
+            <h1 className="text-2xl font-extrabold tracking-tight text-sky-200">
+              ExcelLense
+            </h1>
+          </div>
+
+          {/* 📊 Line 2: Panel Title + Navigation Button */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-wide text-white">
+              📊 Chart Analyses Panel
+            </h2>
+            <button
+              onClick={() => navigate("/superadmin")}
+              className="px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md text-sm font-semibold transition duration-200 ease-in-out"
+            >
+              Go to Superadmin Panel
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Navigation Bar */}
       <nav className="bg-white text-sky-700 shadow-md px-6 py-3 flex flex-wrap gap-4 justify-start font-medium">
@@ -50,14 +69,20 @@ export default function ChartAnalysesPanel() {
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
         <NavButton label="Uploads History" path="/admin/upload-records" />
-        <NavButton label="Analyses History" path="/admin/chart-analyses" active />
+        <NavButton
+          label="Analyses History"
+          path="/admin/chart-analyses"
+          active
+        />
         <NavButton label="User Management" path="/admin/users/manage" />
       </nav>
 
       {/* Main Content */}
       <div className="px-6 py-10 max-w-screen-xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
-          <h2 className="text-2xl font-semibold mb-4 text-sky-700">📊 Chart Analyses History</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-sky-700">
+            📊 Chart Analyses History
+          </h2>
 
           {loading ? (
             <p className="text-green-600">Loading chart analyses...</p>
@@ -81,11 +106,15 @@ export default function ChartAnalysesPanel() {
               <tbody>
                 {analyses.map((a) => (
                   <tr key={a._id} className="hover:bg-green-50">
-                    <td className="border px-4 py-2 break-words">{a.uploadId}</td>
+                    <td className="border px-4 py-2 break-words">
+                      {a.uploadId}
+                    </td>
                     <td className="border px-4 py-2 text-sm text-gray-700">
                       {a.userEmail || "—"}
                     </td>
-                    <td className="border px-4 py-2 capitalize">{a.chartType}</td>
+                    <td className="border px-4 py-2 capitalize">
+                      {a.chartType}
+                    </td>
                     <td className="border px-4 py-2">{a.xAxis}</td>
                     <td className="border px-4 py-2">{a.yAxis}</td>
                     <td className="border px-4 py-2 max-w-xs">
@@ -115,9 +144,7 @@ function NavButton({ label, path, active }) {
     <button
       onClick={() => navigate(path)}
       className={`px-4 py-2 rounded-md transition ${
-        active
-          ? "bg-sky-600 text-white"
-          : "hover:bg-sky-100 text-sky-700"
+        active ? "bg-sky-600 text-white" : "hover:bg-sky-100 text-sky-700"
       }`}
     >
       {label}

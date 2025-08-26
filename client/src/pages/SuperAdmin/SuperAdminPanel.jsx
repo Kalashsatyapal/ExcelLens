@@ -49,21 +49,43 @@ export default function SuperAdminPanel() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-700 to-pink-600 text-white">
-      {/* Topbar */}
-      <header className="w-full px-6 py-4 flex items-center justify-between bg-purple-800 shadow-md">
-        <h2 className="text-2xl font-bold tracking-wide">Super Admin Panel</h2>
-        <div className="flex items-center gap-4 text-sm">
-          <span className="hidden sm:inline">
-            {user?.username} <span className="opacity-70">({user?.role})</span>
-          </span>
-          <button
-            onClick={logout}
-            className="px-3 py-1 bg-red-500 hover:bg-red-600 rounded-md text-xs font-semibold"
-          >
-            Logout
-          </button>
+      {/* 🌟 Modern Two-Line Sticky Topbar */}
+      <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-900 via-purple-700 to-purple-600 shadow-md border-b border-purple-400">
+        <div className="max-w-screen-xl mx-auto px-6 py-4 text-white space-y-3">
+          {/* 🔷 Line 1: Logo + Brand */}
+          <div className="flex items-center gap-4">
+            <img
+              src="/logo2.png"
+              alt="ExcelLense Logo"
+              className="h-10 w-10 object-contain rounded-md shadow-md"
+            />
+            <h1 className="text-2xl font-extrabold tracking-tight text-green-200">
+              ExcelLense
+            </h1>
+          </div>
+
+          {/* 🧑‍💼 Line 2: Panel Title + User Info + Logout */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-wide text-white">
+              🛡️ Super Admin Panel
+            </h2>
+            <div className="flex items-center gap-4 text-sm">
+              <span className="hidden sm:inline text-white font-medium">
+                {user?.username}{" "}
+                <span className="opacity-80 text-purple-200">
+                  ({user?.role})
+                </span>
+              </span>
+              <button
+                onClick={logout}
+                className="px-3 py-1 bg-red-500 hover:bg-red-600 rounded-md text-xs font-semibold transition duration-200 ease-in-out"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
-      </header>
+      </div>
 
       {/* Navigation Bar */}
       <nav className="bg-white text-purple-700 shadow-md px-6 py-3 flex flex-wrap gap-4 justify-start font-medium">
@@ -78,7 +100,9 @@ export default function SuperAdminPanel() {
       {/* Main Content */}
       <div className="px-6 py-10">
         <div className="bg-white text-gray-800 rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-center">Admin Requests</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center">
+            Admin Requests
+          </h1>
 
           {/* Tabs */}
           <div className="flex justify-center gap-4 mb-6">
@@ -109,10 +133,20 @@ export default function SuperAdminPanel() {
           ) : (
             <ul className="space-y-6">
               {requests.map((req) => (
-                <li key={req._id} className="bg-sky-100 p-4 rounded-lg shadow-md">
-                  <p><strong>Username:</strong> {req.username}</p>
-                  <p><strong>Email:</strong> {req.email}</p>
-                  <p><strong>Requested At:</strong> {new Date(req.createdAt).toLocaleString()}</p>
+                <li
+                  key={req._id}
+                  className="bg-sky-100 p-4 rounded-lg shadow-md"
+                >
+                  <p>
+                    <strong>Username:</strong> {req.username}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {req.email}
+                  </p>
+                  <p>
+                    <strong>Requested At:</strong>{" "}
+                    {new Date(req.createdAt).toLocaleString()}
+                  </p>
 
                   {view === "rejected" && req.rejectionReason && (
                     <p className="mt-2 text-sm text-red-600">

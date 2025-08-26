@@ -10,7 +10,7 @@ export default function LandingPage() {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <img
-              src="/logo2.png"
+              src="/src/assets/logo2.png"
               alt="ExcelLense Logo"
               className="w-10 h-10 object-contain"
             />

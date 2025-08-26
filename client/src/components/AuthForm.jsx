@@ -71,7 +71,7 @@ export default function AuthForm({ type }) {
             onClick={() => navigate("/")}
           >
             <img
-              src="/logo2.png" // Adjust path if needed
+              src="/src/assets/logo2.png" 
               alt="Admin Logo"
               className="h-10 w-10 object-contain"
             />

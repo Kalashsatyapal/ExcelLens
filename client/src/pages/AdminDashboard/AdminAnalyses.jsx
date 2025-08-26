@@ -11,6 +11,13 @@ export default function AdminAnalyses() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // 🔐 Explicit role check
+    if (!["admin", "superadmin"].includes(user?.role)) {
+      console.warn(`Unauthorized access attempt by role: ${user?.role}`);
+      navigate("/dashboard");
+      return;
+    }
+
     const fetchAnalyses = async () => {
       try {
         const res = await API.get("/admin/analyses");
@@ -21,41 +28,67 @@ export default function AdminAnalyses() {
         setLoading(false);
       }
     };
+
     fetchAnalyses();
-  }, []);
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-purple-50 text-gray-800">
-      <div className="max-w-screen-xl mx-auto px-4 py-6">
-        {/* 🧭 Header */}
-        <div className="bg-white rounded-xl shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 mb-6 border border-purple-200">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-purple-700 tracking-tight">
-              📊 Uploaded Chart Analyses
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Admin view of all saved chart summaries
-            </p>
+      {/* 🌟 Topbar */}
+      <div className="sticky top-0 z-10 bg-white shadow-md border-b border-purple-200">
+        <div className="max-w-screen-xl mx-auto px-6 py-4 space-y-2">
+          {/* 🔷 Logo and Title */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <img
+                src="/logo2.png"
+                alt="Admin Logo"
+                className="h-10 w-10 object-contain"
+              />
+              <h1 className="text-2xl font-bold tracking-tight text-green-700">
+                ExcelLense
+              </h1>
+            </div>
           </div>
-          <button
-            onClick={() => navigate("/admin")}
-            className="mt-4 sm:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-100 to-green-200 text-green-700 font-medium rounded-md hover:from-green-200 hover:to-green-300 transition"
-          >
-            ← Back to Admin Panel
-          </button>
-        </div>
 
-        {/* 📊 Table */}
+          {/* 👤 User Info + Page Title + Navigation */}
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
+              <h6 className="text-2xl font-bold text-purple-700">
+                📊 Chart Analyses
+              </h6>
+              <p className="text-sm text-gray-600 mt-1 sm:mt-0">
+                Logged in as{" "}
+                <span className="font-medium text-gray-800">
+                  {user?.username}
+                </span>{" "}
+                (
+                <span className="capitalize text-purple-600">{user?.role}</span>
+                )
+              </p>
+            </div>
+            <button
+              onClick={() => navigate("/admin")}
+              className="px-4 py-2 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700 font-semibold rounded-md hover:from-purple-200 hover:to-purple-300 transition"
+            >
+              Go to Admin Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 📄 Main Content */}
+      <div className="max-w-screen-xl mx-auto px-6 py-8">
         {loading ? (
           <p className="text-purple-600">Loading analyses...</p>
         ) : error ? (
-          <p className="text-red-500">{error}</p>
+          <p className="text-red-600">{error}</p>
         ) : analyses.length === 0 ? (
           <p className="text-gray-600">No analyses found.</p>
         ) : (
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 overflow-x-auto">
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 overflow-x-auto">
             <table className="min-w-full border-collapse border border-gray-300">
-              <thead className="bg-purple-100">
+              <thead className="bg-purple-100 text-purple-800">
                 <tr>
                   <th className="border px-4 py-2 text-left">Upload ID</th>
                   <th className="border px-4 py-2 text-left">User Email</th>

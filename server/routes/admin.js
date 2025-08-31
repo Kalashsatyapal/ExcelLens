@@ -5,7 +5,6 @@ const Upload = require("../models/Upload");
 const ChartAnalysis = require("../models/ChartAnalysis");
 const authMiddleware = require("../middleware/authMiddleware");
 const AdminRequest = require("../models/AdminRequest");
-const { sendEmail } = require("../utils/mailer");
 
 // 🔐 Get all users (admin or superadmin only)
 router.get(
@@ -122,17 +121,6 @@ router.post(
         status: "approved",
       });
 
-      await sendEmail({
-        to: request.email,
-        subject: "Your Admin Request Has Been Approved",
-        html: `
-          <h2>Hi ${request.username},</h2>
-          <p>Your request to become an admin has been <strong>approved</strong>.</p>
-          <p>You can now log in using your credentials.</p>
-          <p>Welcome aboard! 🚀</p>
-        `,
-      });
-
       console.log(`✅ Admin approved: ${request.email}`);
       res.status(201).json({ message: "Admin approved and created" });
     } catch (err) {
@@ -153,31 +141,15 @@ router.post(
       if (!request)
         return res.status(404).json({ message: "Request not found" });
 
-      await AdminRequest.findByIdAndUpdate(req.params.id, {
-        status: "rejected",
-        rejectionReason: reason || "",
-      });
-
-      await sendEmail({
-        to: request.email,
-        subject: "Your Admin Request Was Rejected",
-        html: `
-          <h2>Hi ${request.username},</h2>
-          <p>Unfortunately, your request to become an admin was <strong>rejected</strong>.</p>
-          ${
-            reason
-              ? `<p><strong>Reason:</strong> ${reason}</p>`
-              : `<p>No specific reason was provided.</p>`
-          }
-          <p>You may contact support for further clarification.</p>
-        `,
-      });
-
       console.log(
         `❌ Admin request rejected: ${request.email} | Reason: ${
           reason || "No reason provided"
         }`
       );
+      await AdminRequest.findByIdAndUpdate(req.params.id, {
+        status: "rejected",
+        rejectionReason: reason || "",
+      });
       res.json({ message: "Request rejected" });
     } catch (err) {
       console.error(err);
@@ -185,7 +157,5 @@ router.post(
     }
   }
 );
-
-module.exports = router;
 
 module.exports = router;

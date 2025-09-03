@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import API from "../../utils/api";
 import Chart2D from "./Chart2D";
 import Chart3D from "./Chart3D";
-import ChartSummary from "./ChartSummary";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import jsPDF from "jspdf";
@@ -14,7 +13,7 @@ export default function DataVisualization() {
   const [xAxis, setXAxis] = useState("");
   const [yAxis, setYAxis] = useState("");
   const [chartType, setChartType] = useState("bar");
-  const [chartSummary, setChartSummary] = useState("");
+ 
   const [saveStatus, setSaveStatus] = useState("");
   const [chartImageBase64, setChartImageBase64] = useState("");
   const { user } = useContext(AuthContext);
@@ -37,7 +36,6 @@ export default function DataVisualization() {
     setSelectedUpload(upload);
     setXAxis("");
     setYAxis("");
-    setChartSummary("");
     setSaveStatus("");
     setChartImageBase64("");
   }, [selectedUploadId, uploads]);
@@ -46,7 +44,7 @@ export default function DataVisualization() {
 
   useEffect(() => {
     const autoSaveAnalysis = async () => {
-      if (!selectedUpload || !xAxis || !yAxis || !chartSummary) return;
+      if (!selectedUpload || !xAxis || !yAxis ) return;
 
       try {
         const canvas = document.querySelector("canvas");
@@ -59,7 +57,6 @@ export default function DataVisualization() {
           chartType,
           xAxis,
           yAxis,
-          summary: chartSummary,
           chartImageBase64: imageBase64,
         });
 
@@ -72,7 +69,7 @@ export default function DataVisualization() {
 
     const timeout = setTimeout(autoSaveAnalysis, 500);
     return () => clearTimeout(timeout);
-  }, [selectedUpload, xAxis, yAxis, chartType, chartSummary]);
+  }, [selectedUpload, xAxis, yAxis, chartType]);
 
   const handleDownloadPNG = () => {
     if (!chartImageBase64) return;
@@ -247,16 +244,6 @@ export default function DataVisualization() {
                 Select a file and chart type to begin.
               </p>
             )}
-          </div>
-
-          {/* Chart Summary */}
-          <div className="md:w-[300px] w-full border rounded p-4 bg-gray-50">
-            <ChartSummary
-              chartType={chartType}
-              xAxis={xAxis}
-              yAxis={yAxis}
-              setChartSummary={setChartSummary}
-            />
           </div>
         </div>
 

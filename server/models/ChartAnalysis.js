@@ -5,7 +5,6 @@ const ChartAnalysisSchema = new mongoose.Schema({
   chartType: { type: String, required: true },
   xAxis: { type: String, required: true },
   yAxis: { type: String, required: true },
-  summary: { type: String, required: true },
   chartImageBase64: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }
 });

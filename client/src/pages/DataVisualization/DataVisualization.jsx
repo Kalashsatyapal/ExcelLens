@@ -20,7 +20,6 @@ export default function DataVisualization() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const currentUserEmail = user?.email;
-
   useEffect(() => {
     const fetchUploads = async () => {
       try {

@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+
 export default function ChartSummary({ chartType, xAxis, yAxis, setChartSummary }) {
   const [summary, setSummary] = useState("");
   const [progress, setProgress] = useState(0);
@@ -31,22 +33,35 @@ export default function ChartSummary({ chartType, xAxis, yAxis, setChartSummary 
       X-axis: ${xAxis}. ${yAxis ? `Y-axis: ${yAxis}.` : ""}
     `;
 
-    puter.ai
-      .chat(prompt.trim(), { model: "gpt-4o-mini" })
-      .then((res) => {
+    // Call OpenRouter API
+    fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": window.location.origin, // Optional, for OpenRouter compliance
+        "X-Title": "ExcelLens Chart Summary"    // Optional, for OpenRouter compliance
+      },
+      body: JSON.stringify({
+        model: "mistralai/mistral-7b-instruct",
+        messages: [
+          { role: "system", content: "You are a helpful assistant for summarizing data visualizations." },
+          { role: "user", content: prompt.trim() }
+        ],
+        max_tokens: 256,
+        temperature: 0.7
+      })
+    })
+      .then(async (res) => {
         clearInterval(progressInterval.current);
         setProgress(100);
-
-        if (res?.message?.content) {
-          const finalSummary = res.message.content;
-          setTimeout(() => {
-            setSummary(finalSummary);
-            setChartSummary(finalSummary); // ✅ send to parent
-          }, 500);
-        } else {
-          setSummary("No summary generated.");
-          setChartSummary("No summary generated.");
-        }
+        if (!res.ok) throw new Error("OpenRouter API error");
+        const data = await res.json();
+        const finalSummary = data.choices?.[0]?.message?.content || "No summary generated.";
+        setTimeout(() => {
+          setSummary(finalSummary);
+          setChartSummary(finalSummary);
+        }, 500);
       })
       .catch(() => {
         clearInterval(progressInterval.current);

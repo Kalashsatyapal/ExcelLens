@@ -47,7 +47,6 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route
             path="/admin"
             element={

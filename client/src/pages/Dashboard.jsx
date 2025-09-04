@@ -2,6 +2,15 @@ import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import UploadSection from "../components/UploadSection";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@radix-ui/react-dropdown-menu";
+import { User, LogOut, Settings } from "lucide-react";
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -40,7 +49,7 @@ export default function Dashboard() {
           )}
           <button
             onClick={logout}
-            className="px-4 py-2 bg-gradient-to-r from-red-100 to-red-200 text-red-600 font-semibold rounded-md hover:from-red-200 hover:to-red-300 transition"
+            className="px-3 py-1 bg-red-500 hover:bg-red-600 rounded-md text-xs font-semibold transition duration-200 ease-in-out"
           >
             Logout
           </button>
@@ -78,7 +87,8 @@ export default function Dashboard() {
       {/* Footer */}
       <footer className="bg-gray-100 py-6 mt-auto">
         <div className="container mx-auto text-center text-gray-600 text-sm">
-          © {new Date().getFullYear()} ExcelLense. Built with precision and passion.
+          © {new Date().getFullYear()} ExcelLense. Built with precision and
+          passion.
         </div>
       </footer>
     </div>

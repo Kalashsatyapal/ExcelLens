@@ -177,6 +177,7 @@ export default function AdminDashboard() {
                           value={u.role}
                           onChange={(e) => changeRole(u._id, e.target.value)}
                           className="px-2 py-1 border rounded-md"
+                          disabled={user.role === "admin" && u.role !== "user"}
                         >
                           <option value="user">User</option>
                           <option value="admin">Admin</option>

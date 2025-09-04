@@ -28,26 +28,35 @@ router.put(
   async (req, res) => {
     try {
       const { role } = req.body;
-      const user = await User.findById(req.params.id);
+      const targetUser = await User.findById(req.params.id);
+      const requester = req.user;
 
-      if (!user) return res.status(404).json({ message: "User not found" });
-
-      // Prevent modifying superadmin accounts unless caller is also superadmin
-      if (user.role === "superadmin" && req.user.role !== "superadmin") {
-        return res
-          .status(403)
-          .json({
-            message: "Only Super Admins can modify Super Admin accounts",
-          });
+      if (!targetUser) {
+        return res.status(404).json({ message: "User not found" });
       }
 
-      user.role = role;
-      await user.save();
+      // 🛡️ Superadmin protection
+      if (targetUser.role === "superadmin" && requester.role !== "superadmin") {
+        return res.status(403).json({
+          message: "Only Super Admins can modify Super Admin accounts",
+        });
+      }
 
-      res.json({ message: "User role updated", user });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
+      // 🛡️ Admins can only modify 'user' accounts
+      if (requester.role === "admin" && targetUser.role !== "user") {
+        return res.status(403).json({
+          message: "Admins can only modify roles of regular users",
+        });
+      }
+
+      // ✅ Proceed with role update
+      targetUser.role = role;
+      await targetUser.save();
+
+      return res.status(200).json({ message: "Role updated successfully" });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Server error" });
     }
   }
 );

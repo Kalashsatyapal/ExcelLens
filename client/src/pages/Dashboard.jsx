@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import UploadSection from "../components/UploadSection";
 import { Link, useNavigate } from "react-router-dom";
-
+import { Menu } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -38,12 +39,59 @@ export default function Dashboard() {
               Super Admin Panel
             </button>
           )}
-          <button
-            onClick={logout}
-            className="px-3 py-1 bg-red-500 hover:bg-red-600 rounded-md text-xs font-semibold transition duration-200 ease-in-out"
-          >
-            Logout
-          </button>
+          {/* Profile Dropdown */}
+          <Menu as="div" className="relative inline-block text-left">
+            <Menu.Button className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium text-gray-700 transition">
+              <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center font-semibold">
+                {user.username?.[0]?.toUpperCase()}
+              </div>
+              <span>{user.username}</span>
+              <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+            </Menu.Button>
+
+            <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none z-20">
+              <div className="px-1 py-1">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => navigate("/profile")}
+                      className={`${
+                        active ? "bg-gray-100" : ""
+                      } group flex w-full items-center rounded-md px-4 py-2 text-sm text-gray-700`}
+                    >
+                      My Profile
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => navigate("/settings")}
+                      className={`${
+                        active ? "bg-gray-100" : ""
+                      } group flex w-full items-center rounded-md px-4 py-2 text-sm text-gray-700`}
+                    >
+                      Account Settings
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+              <div className="px-1 py-1">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={logout}
+                      className={`${
+                        active ? "bg-red-100 text-red-700" : "text-red-600"
+                      } group flex w-full items-center rounded-md px-4 py-2 text-sm font-semibold`}
+                    >
+                      Log Out
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Menu>
         </div>
       </header>
 

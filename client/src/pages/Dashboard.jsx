@@ -2,15 +2,6 @@ import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import UploadSection from "../components/UploadSection";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from "@radix-ui/react-dropdown-menu";
-import { User, LogOut, Settings } from "lucide-react";
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);

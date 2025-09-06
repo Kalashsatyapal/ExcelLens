@@ -13,7 +13,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
-      <Header showAdminButtons={false} />
+      <Header showAdminButtons={true} />
 
       <main className="container mx-auto px-6 py-10 space-y-8 flex-grow">
         <section className="bg-white rounded-xl shadow-md p-6 border border-gray-200">

@@ -63,11 +63,9 @@ router.post("/admin-requests", async (req, res) => {
     const existingRequest = await AdminRequest.findOne({ email });
 
     if (existingUser || existingRequest) {
-      return res
-        .status(400)
-        .json({
-          message: "Email or Username already exists or is pending approval",
-        });
+      return res.status(400).json({
+        message: "Email or Username already exists or is pending approval",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -80,12 +78,10 @@ router.post("/admin-requests", async (req, res) => {
 
     await request.save();
     console.log(`✅ Admin request saved for ${email}`);
-    res
-      .status(201)
-      .json({
-        message:
-          "Admin registration request submitted. Await superadmin approval.",
-      });
+    res.status(201).json({
+      message:
+        "Admin registration request submitted. Await superadmin approval.",
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -104,6 +100,9 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
+    if (user.blocked) {
+      return res.status(403).json({ message: "Your account is blocked" });
+    }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });

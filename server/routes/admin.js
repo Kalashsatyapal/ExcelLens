@@ -93,16 +93,22 @@ router.get(
   }
 );
 // Get all pending admin requests
-router.get('/admin-requests', authMiddleware('superadmin'), async (req, res) => {
-  try {
-    const { status = 'pending' } = req.query;
-    const requests = await AdminRequest.find({ status }).sort({ createdAt: -1 });
-    res.json(requests);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+router.get(
+  "/admin-requests",
+  authMiddleware("superadmin"),
+  async (req, res) => {
+    try {
+      const { status = "pending" } = req.query;
+      const requests = await AdminRequest.find({ status }).sort({
+        createdAt: -1,
+      });
+      res.json(requests);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Server error" });
+    }
   }
-});
+);
 
 // Approve admin request
 router.post(
@@ -166,5 +172,26 @@ router.post(
     }
   }
 );
+// Block/Unblock user (superadmin only)
+router.put(
+  "/users/:id/block",
+  authMiddleware("superadmin"),
+  async (req, res) => {
+    try {
+      const { blocked } = req.body;
+      const user = await User.findById(req.params.id);
+      if (!user) return res.status(404).json({ message: "User not found" });
+      if (user.role === "superadmin")
+        return res.status(403).json({ message: "Cannot block superadmin" });
 
+      user.blocked = !!blocked;
+      await user.save();
+      res.json({
+        message: `User ${blocked ? "blocked" : "unblocked"} successfully`,
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
 module.exports = router;

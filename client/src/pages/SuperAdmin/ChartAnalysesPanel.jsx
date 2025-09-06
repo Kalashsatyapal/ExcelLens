@@ -8,6 +8,8 @@ export default function ChartAnalysesPanel() {
   const [analyses, setAnalyses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [chartTypeFilter, setChartTypeFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,98 +33,114 @@ export default function ChartAnalysesPanel() {
     fetchAnalyses();
   }, [user, navigate]);
 
+  const filteredAnalyses = analyses.filter((a) => {
+    const matchesType = chartTypeFilter ? a.chartType === chartTypeFilter : true;
+    const matchesDate = dateFilter
+      ? new Date(a.createdAt).toISOString().slice(0, 10) === dateFilter
+      : true;
+    return matchesType && matchesDate;
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-sky-100 via-white to-green-100 text-gray-800">
-      {/* 🌟 Modern Two-Line Sticky Topbar for Chart Analyses */}
+      {/* 🔝 Topbar */}
       <div className="sticky top-0 z-20 bg-gradient-to-r from-sky-800 via-sky-700 to-sky-600 shadow-md border-b border-sky-400">
-        <div className="max-w-screen-xl mx-auto px-6 py-4 text-white space-y-3">
-          {/* 🔷 Line 1: Logo + Brand */}
-          <div className="flex items-center gap-4">
+        <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between relative">
+          <div className="flex items-center gap-3">
             <img
               src="/logo2.png"
               alt="ExcelLense Logo"
               className="h-10 w-10 object-contain rounded-md shadow-md"
             />
-            <h1 className="text-2xl font-extrabold tracking-tight text-sky-200">
-              ExcelLense
-            </h1>
+            <h1 className="text-2xl font-bold text-sky-200">ExcelLense</h1>
           </div>
-
-          {/* 📊 Line 2: Panel Title + Navigation Button */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-semibold tracking-wide text-white">
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <h2 className="text-xl sm:text-2xl font-semibold text-white tracking-wide">
               📊 Chart Analyses Panel
             </h2>
-            <button
-              onClick={() => navigate("/superadmin")}
-              className="px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md text-sm font-semibold transition duration-200 ease-in-out"
-            >
-              Go to Superadmin Panel
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Navigation Bar */}
-      <nav className="bg-white text-sky-700 shadow-md px-6 py-3 flex flex-wrap gap-4 justify-start font-medium">
+      {/* 🧭 Navigation Bar */}
+      <nav className="bg-white text-sky-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium">
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
-        <NavButton label="Uploads History" path="/admin/upload-records" />
-        <NavButton
-          label="Analyses History"
-          path="/admin/chart-analyses"
-          active
-        />
+        <NavButton label="Uploads records" path="/admin/upload-records" />
+        <NavButton label="Analyses History" path="/admin/chart-analyses" active />
         <NavButton label="User Management" path="/admin/users/manage" />
       </nav>
 
-      {/* Main Content */}
+      {/* 📄 Main Content */}
       <div className="px-6 py-10 max-w-screen-xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
-          <h2 className="text-2xl font-semibold mb-4 text-sky-700">
+          <h2 className="text-2xl font-semibold mb-6 text-sky-700">
             📊 Chart Analyses History
           </h2>
 
+          {/* 🔍 Filters */}
+          <div className="flex flex-wrap gap-4 mb-6">
+            <select
+              value={chartTypeFilter}
+              onChange={(e) => setChartTypeFilter(e.target.value)}
+              className="px-4 py-2 border rounded-md bg-white shadow-sm"
+            >
+              <option value="">All Chart Types</option>
+              {[...new Set(analyses.map((a) => a.chartType))].map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+
+            <input
+              type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="px-4 py-2 border rounded-md bg-white shadow-sm"
+            />
+          </div>
+
+          {/* 📊 Table */}
           {loading ? (
-            <p className="text-green-600">Loading chart analyses...</p>
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="animate-pulse bg-sky-200 h-6 rounded-md w-full" />
+              ))}
+            </div>
           ) : error ? (
             <p className="text-red-500">{error}</p>
-          ) : analyses.length === 0 ? (
+          ) : filteredAnalyses.length === 0 ? (
             <p className="text-gray-600">No chart analyses found.</p>
           ) : (
-            <table className="min-w-full border-collapse border border-gray-300">
-              <thead className="bg-sky-100 text-sky-800">
+            <table className="min-w-full border-separate border-spacing-0 rounded-lg overflow-hidden">
+              <thead className="bg-sky-100 text-sky-800 sticky top-0 z-10">
                 <tr>
-                  <th className="border px-4 py-2 text-left">Upload ID</th>
-                  <th className="border px-4 py-2 text-left">User Email</th>
-                  <th className="border px-4 py-2 text-left">Chart Type</th>
-                  <th className="border px-4 py-2 text-left">X Axis</th>
-                  <th className="border px-4 py-2 text-left">Y Axis</th>
-                  <th className="border px-4 py-2 text-left">Summary</th>
-                  <th className="border px-4 py-2 text-left">Created At</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Upload ID</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">User Email</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Chart Type</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">X Axis</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Y Axis</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Created At</th>
                 </tr>
               </thead>
               <tbody>
-                {analyses.map((a) => (
-                  <tr key={a._id} className="hover:bg-green-50">
-                    <td className="border px-4 py-2 break-words">
-                      {a.uploadId}
-                    </td>
-                    <td className="border px-4 py-2 text-sm text-gray-700">
+                {filteredAnalyses.map((a, i) => (
+                  <tr
+                    key={a._id}
+                    className={`${
+                      i % 2 === 0 ? "bg-white" : "bg-green-50"
+                    } hover:bg-sky-50 transition`}
+                  >
+                    <td className="border border-gray-300 px-4 py-2 break-words">{a.uploadId}</td>
+                    <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
                       {a.userEmail || "—"}
                     </td>
-                    <td className="border px-4 py-2 capitalize">
-                      {a.chartType}
-                    </td>
-                    <td className="border px-4 py-2">{a.xAxis}</td>
-                    <td className="border px-4 py-2">{a.yAxis}</td>
-                    <td className="border px-4 py-2 max-w-xs">
-                      <div className="overflow-x-auto whitespace-nowrap text-sm text-gray-700">
-                        {a.summary}
-                      </div>
-                    </td>
-                    <td className="border px-4 py-2">
+                    <td className="border border-gray-300 px-4 py-2 capitalize">{a.chartType}</td>
+                    <td className="border border-gray-300 px-4 py-2">{a.xAxis}</td>
+                    <td className="border border-gray-300 px-4 py-2">{a.yAxis}</td>
+                    <td className="border border-gray-300 px-4 py-2">
                       {new Date(a.createdAt).toLocaleString()}
                     </td>
                   </tr>
@@ -143,8 +161,8 @@ function NavButton({ label, path, active }) {
   return (
     <button
       onClick={() => navigate(path)}
-      className={`px-4 py-2 rounded-md transition ${
-        active ? "bg-sky-600 text-white" : "hover:bg-sky-100 text-sky-700"
+      className={`px-4 py-2 rounded-md transition duration-200 ease-in-out ${
+        active ? "bg-sky-600 text-white shadow-sm" : "hover:bg-sky-100 text-sky-700"
       }`}
     >
       {label}

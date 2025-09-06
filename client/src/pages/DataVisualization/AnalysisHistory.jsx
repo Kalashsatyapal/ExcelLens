@@ -79,44 +79,21 @@ export default function AnalysisHistory() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-green-50 text-gray-800">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white shadow-md px-6 py-5 flex justify-between items-center border-b border-gray-200">
+      <header className="sticky top-0 z-10 bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200">
         <div className="flex items-center gap-4">
-          <img
-            src="/src/assets/logo2.png"
-            alt="Logo"
-            className="h-10 w-auto rounded-md shadow-sm"
-          />
-          <h1 className="text-2xl font-bold tracking-tight text-green-700">
-            ExcelLense
-          </h1>
+          <img src="/src/assets/logo2.png" alt="Logo" className="h-10 w-auto rounded-md shadow-sm" />
+          <h1 className="text-2xl font-bold tracking-tight text-green-700">ExcelLense</h1>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="px-4 py-2 bg-indigo-100 text-indigo-700 font-semibold rounded-md hover:bg-indigo-200 transition"
-          >
-            Dashboard
-          </button>
-          <button
-            onClick={() => navigate("/visualize")}
-            className="px-4 py-2 bg-blue-100 text-blue-700 font-semibold rounded-md hover:bg-blue-200 transition"
-          >
-            Back to Visualization
-          </button>
-          <button
-            onClick={logout}
-            className="px-4 py-2 bg-gradient-to-r from-red-100 to-red-200 text-red-600 font-semibold rounded-md hover:from-red-200 hover:to-red-300 transition"
-          >
-            Logout
-          </button>
+          <button onClick={() => navigate("/dashboard")} className="px-4 py-2 bg-indigo-100 text-indigo-700 font-medium rounded-md hover:bg-indigo-200 transition duration-200">Dashboard</button>
+          <button onClick={() => navigate("/visualize")} className="px-4 py-2 bg-blue-100 text-blue-700 font-medium rounded-md hover:bg-blue-200 transition duration-200">Back to Visualization</button>
+          <button onClick={logout} className="px-4 py-2 bg-gradient-to-r from-red-100 to-red-200 text-red-600 font-medium rounded-md hover:from-red-200 hover:to-red-300 transition duration-200">Logout</button>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-10 space-y-8 flex-grow">
-        <h1 className="text-3xl font-bold mb-6 text-green-800">
-          Analysis History
-        </h1>
+      <main className="container mx-auto px-6 py-10 space-y-10 flex-grow">
+        <h1 className="text-3xl font-bold text-green-800">Analysis History</h1>
 
         {loading ? (
           <div className="flex justify-center items-center h-40">
@@ -127,54 +104,25 @@ export default function AnalysisHistory() {
             <span>⚠️</span> <span>{fetchError}</span>
           </div>
         ) : analyses.length === 0 ? (
-          <p>No analyses found.</p>
+          <div className="text-center text-gray-500">No analyses found.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {analyses.map((a) => (
-              <div
-                key={a._id}
-                className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-5 flex flex-col justify-between"
-              >
+              <div key={a._id} className="bg-white/80 backdrop-blur-md border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-5 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-green-700 mb-2">
-                    {a.chartType}
-                  </h2>
+                  <h2 className="text-xl font-semibold text-green-700 mb-2">{a.chartType}</h2>
                   <p className="text-sm text-gray-700 mb-1">
-                    <span className="font-medium">X:</span> {a.xAxis} |{" "}
-                    <span className="font-medium">Y:</span> {a.yAxis}
+                    <span className="font-medium">X:</span> {a.xAxis} | <span className="font-medium">Y:</span> {a.yAxis}
                   </p>
-                  <p className="text-sm text-gray-600 italic mb-3">
-                    {a.summary}
-                  </p>
+                  <p className="text-sm text-gray-600 italic mb-3">{a.summary}</p>
                   <div className="rounded overflow-hidden border bg-white mb-4">
-                    <img
-                      src={a.chartImageBase64}
-                      alt="Chart Preview"
-                      className="w-full h-48 object-contain"
-                    />
+                    <img src={a.chartImageBase64} alt="Chart Preview" className="w-full h-48 object-contain" />
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-auto">
-                  <button
-                    onClick={() =>
-                      downloadImage(a.chartImageBase64, a._id, "png")
-                    }
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition"
-                  >
-                    PNG
-                  </button>
-                  <button
-                    onClick={() => downloadPDF(a.chartImageBase64, a._id)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition"
-                  >
-                    PDF
-                  </button>
-                  <button
-                    onClick={() => handleDelete(a._id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition"
-                  >
-                    Delete
-                  </button>
+                  <button onClick={() => downloadImage(a.chartImageBase64, a._id, "png")} className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">PNG</button>
+                  <button onClick={() => downloadPDF(a.chartImageBase64, a._id)} className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">PDF</button>
+                  <button onClick={() => handleDelete(a._id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">Delete</button>
                 </div>
               </div>
             ))}

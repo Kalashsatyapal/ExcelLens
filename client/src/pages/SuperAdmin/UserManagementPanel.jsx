@@ -30,16 +30,25 @@ export default function UserManagementPanel() {
     }
   };
 
+  const blockUnblockUser = async (id, blocked) => {
+    try {
+      await API.put(`/admin/users/${id}/block`, { blocked });
+      fetchUsers();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update block status");
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-700 to-purple-800 text-white">
-      {/* 🌟 Modern Two-Line Sticky Topbar for User Management */}
+      {/* 🌟 Modern Sticky Topbar */}
       <div className="sticky top-0 z-20 bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-700 shadow-md border-b border-indigo-500">
-        <div className="max-w-screen-xl mx-auto px-6 py-4 text-white space-y-3">
-          {/* 🔷 Line 1: Logo + Brand */}
+        <div className="max-w-screen-xl mx-auto px-6 py-6 relative flex items-center justify-start gap-4">
+          {/* 🔷 Logo + Brand (Left) */}
           <div className="flex items-center gap-4">
             <img
               src="/logo2.png"
@@ -51,34 +60,28 @@ export default function UserManagementPanel() {
             </h1>
           </div>
 
-          {/* 🧑‍💼 Line 2: Panel Title + Navigation Button */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
+          {/* 🧑‍💼 Panel Title (Centered) */}
+          <div className="absolute left-1/2 transform -translate-x-1/2">
             <h2 className="text-xl sm:text-2xl font-semibold tracking-wide text-white">
               👥 User Management Panel
             </h2>
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm font-semibold transition duration-200 ease-in-out"
-            >
-              Go to Dashboard
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Navigation Bar */}
+      {/* 🧭 Navigation Bar */}
       <nav className="bg-white text-purple-700 shadow-md px-6 py-3 flex flex-wrap gap-4 justify-start font-medium">
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
-        <NavButton label="Uploads History" path="/admin/upload-records" />
+        <NavButton label="Uploads records" path="/admin/upload-records" />
         <NavButton label="Analyses History" path="/admin/chart-analyses" />
         <NavButton label="User Management" path="/admin/users/manage" active />
       </nav>
 
-      {/* Main Content */}
-      <div className="px-6 py-10">
-        {/* Summary Cards */}
+      {/* 📄 Main Content */}
+      <div className="px-6 py-10 max-w-screen-xl mx-auto">
+        {/* 📊 Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <SummaryCard
             title="Total Accounts"
@@ -102,7 +105,7 @@ export default function UserManagementPanel() {
           />
         </div>
 
-        {/* User Table */}
+        {/* 👥 User Table */}
         <div className="bg-white text-gray-800 rounded-lg shadow-md p-6 overflow-x-auto">
           <h2 className="text-2xl font-semibold mb-4">Registered Users</h2>
           {loading ? (
@@ -116,33 +119,54 @@ export default function UserManagementPanel() {
                   <th className="border px-4 py-2 text-left">Username</th>
                   <th className="border px-4 py-2 text-left">Email</th>
                   <th className="border px-4 py-2 text-left">Role</th>
+                  <th className="border px-4 py-2 text-left">Status</th>
                   <th className="border px-4 py-2 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((u) => (
                   <tr key={u._id} className="hover:bg-gray-100">
-                    <td className="border px-4 py-2 break-words max-w-xs">
-                      {u.username}
-                    </td>
-                    <td className="border px-4 py-2 break-words max-w-xs">
-                      {u.email}
-                    </td>
+                    <td className="border px-4 py-2 break-words max-w-xs">{u.username}</td>
+                    <td className="border px-4 py-2 break-words max-w-xs">{u.email}</td>
                     <td className="border px-4 py-2 capitalize">
                       {u.role === "superadmin" ? "Super Admin" : u.role}
+                    </td>
+                    <td className="border px-4 py-2">
+                      {u.blocked ? (
+                        <span className="text-red-500 font-semibold">Blocked</span>
+                      ) : (
+                        <span className="text-green-600 font-semibold">Active</span>
+                      )}
                     </td>
                     <td className="border px-4 py-2">
                       {u.role === "superadmin" ? (
                         <span className="text-gray-400 italic">Immutable</span>
                       ) : (
-                        <select
-                          value={u.role}
-                          onChange={(e) => changeRole(u._id, e.target.value)}
-                          className="px-2 py-1 border rounded-md"
-                        >
-                          <option value="user">User</option>
-                          <option value="admin">Admin</option>
-                        </select>
+                        <div className="flex gap-2 items-center">
+                          <select
+                            value={u.role}
+                            onChange={(e) => changeRole(u._id, e.target.value)}
+                            className="px-2 py-1 border rounded-md"
+                          >
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                          {u.blocked ? (
+                            <button
+                              className="px-2 py-1 bg-green-500 text-white rounded"
+                              onClick={() => blockUnblockUser(u._id, false)}
+                            >
+                              Unblock
+                            </button>
+                          ) : (
+                            <button
+                              className="px-2 py-1 bg-red-500 text-white rounded"
+                              onClick={() => blockUnblockUser(u._id, true)}
+                            >
+                              Block
+                            </button>
+                          )}
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -159,9 +183,7 @@ export default function UserManagementPanel() {
 // 🔹 Summary Card Subcomponent
 function SummaryCard({ title, value, color }) {
   return (
-    <div
-      className={`bg-gradient-to-br ${color} text-white rounded-lg p-4 shadow-md`}
-    >
+    <div className={`bg-gradient-to-br ${color} text-white rounded-lg p-4 shadow-md`}>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-3xl font-bold">{value}</p>
     </div>
@@ -176,9 +198,7 @@ function NavButton({ label, path, active }) {
     <button
       onClick={() => navigate(path)}
       className={`px-4 py-2 rounded-md transition ${
-        active
-          ? "bg-purple-700 text-white"
-          : "hover:bg-purple-100 text-purple-700"
+        active ? "bg-purple-700 text-white" : "hover:bg-purple-100 text-purple-700"
       }`}
     >
       {label}

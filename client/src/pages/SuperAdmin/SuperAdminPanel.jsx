@@ -1,12 +1,12 @@
+// SuperAdminPanel.jsx
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import API from "../../utils/api";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function SuperAdminPanel() {
   const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,9 +27,10 @@ export default function SuperAdminPanel() {
   const handleApprove = async (id) => {
     try {
       await API.post(`/admin/admin-requests/${id}/approve`);
+      toast.success("Request approved");
       setRequests((prev) => prev.filter((r) => r._id !== id));
-    } catch (err) {
-      alert("Approval failed");
+    } catch {
+      toast.error("Approval failed");
     }
   };
 
@@ -37,9 +38,10 @@ export default function SuperAdminPanel() {
     const reason = prompt("Enter rejection reason (optional):");
     try {
       await API.post(`/admin/admin-requests/${id}/reject`, { reason });
+      toast.success("Request rejected");
       setRequests((prev) => prev.filter((r) => r._id !== id));
-    } catch (err) {
-      alert("Rejection failed");
+    } catch {
+      toast.error("Rejection failed");
     }
   };
 
@@ -49,46 +51,34 @@ export default function SuperAdminPanel() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-700 to-pink-600 text-white">
-      {/* 🌟 Modern Two-Line Sticky Topbar */}
+      <Toaster position="top-right" />
+
+      {/* Topbar */}
       <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-900 via-purple-700 to-purple-600 shadow-md border-b border-purple-400">
-        <div className="max-w-screen-xl mx-auto px-6 py-4 text-white space-y-3">
-          {/* 🔷 Line 1: Logo + Brand */}
+        <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
           <div className="flex items-center gap-4">
             <img
               src="/logo2.png"
               alt="ExcelLense Logo"
-              className="h-10 w-10 object-contain rounded-md shadow-md"
+              className="h-10 w-10 rounded-md shadow-md"
             />
             <h1 className="text-2xl font-extrabold tracking-tight text-green-200">
               ExcelLense
             </h1>
           </div>
 
-          {/* 🧑‍💼 Line 2: Panel Title + User Info + Logout */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <h2 className="text-xl sm:text-2xl font-semibold tracking-wide text-white">
+          {/* Centered Heading */}
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <h2 className="text-xl sm:text-2xl font-semibold text-white">
               🛡️ Super Admin Panel
             </h2>
-            <div className="flex items-center gap-4 text-sm">
-              <span className="hidden sm:inline text-white font-medium">
-                {user?.username}{" "}
-                <span className="opacity-80 text-purple-200">
-                  ({user?.role})
-                </span>
-              </span>
-              <button
-                onClick={logout}
-                className="px-3 py-1 bg-red-500 hover:bg-red-600 rounded-md text-xs font-semibold transition duration-200 ease-in-out"
-              >
-                Logout
-              </button>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Navigation Bar */}
-      <nav className="bg-white text-purple-700 shadow-md px-6 py-3 flex flex-wrap gap-4 justify-start font-medium">
+      {/* Navigation */}
+      <nav className="bg-white text-purple-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium">
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" active />
@@ -97,7 +87,7 @@ export default function SuperAdminPanel() {
         <NavButton label="User Management" path="/admin/users/manage" />
       </nav>
 
-      {/* Main Content */}
+      {/* Main */}
       <div className="px-6 py-10">
         <div className="bg-white text-gray-800 rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-6 text-center">
@@ -105,25 +95,35 @@ export default function SuperAdminPanel() {
           </h1>
 
           {/* Tabs */}
-          <div className="flex justify-center gap-4 mb-6">
+          <div className="flex justify-center gap-4 mb-6 border-b border-gray-300">
             {["pending", "approved", "rejected"].map((status) => (
               <button
                 key={status}
                 onClick={() => setView(status)}
-                className={`px-4 py-2 rounded-md font-semibold transition ${
+                className={`relative px-4 py-2 font-semibold transition ${
                   view === status
-                    ? "bg-green-600 text-white"
-                    : "bg-white text-green-600 hover:bg-green-100"
+                    ? "text-green-700"
+                    : "text-gray-500 hover:text-green-600"
                 }`}
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
+                {view === status && (
+                  <span className="absolute bottom-0 left-0 w-full h-1 bg-green-500 rounded-t-md" />
+                )}
               </button>
             ))}
           </div>
 
           {/* Request List */}
           {loading ? (
-            <p className="text-center text-gray-500">Loading...</p>
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="animate-pulse bg-sky-200 h-20 rounded-lg"
+                />
+              ))}
+            </div>
           ) : error ? (
             <p className="text-center text-red-500">{error}</p>
           ) : requests.length === 0 ? (
@@ -133,44 +133,13 @@ export default function SuperAdminPanel() {
           ) : (
             <ul className="space-y-6">
               {requests.map((req) => (
-                <li
+                <RequestCard
                   key={req._id}
-                  className="bg-sky-100 p-4 rounded-lg shadow-md"
-                >
-                  <p>
-                    <strong>Username:</strong> {req.username}
-                  </p>
-                  <p>
-                    <strong>Email:</strong> {req.email}
-                  </p>
-                  <p>
-                    <strong>Requested At:</strong>{" "}
-                    {new Date(req.createdAt).toLocaleString()}
-                  </p>
-
-                  {view === "rejected" && req.rejectionReason && (
-                    <p className="mt-2 text-sm text-red-600">
-                      <strong>Reason:</strong> {req.rejectionReason}
-                    </p>
-                  )}
-
-                  {view === "pending" && (
-                    <div className="mt-4 flex gap-4">
-                      <button
-                        onClick={() => handleApprove(req._id)}
-                        className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => handleReject(req._id)}
-                        className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  )}
-                </li>
+                  req={req}
+                  view={view}
+                  onApprove={handleApprove}
+                  onReject={handleReject}
+                />
               ))}
             </ul>
           )}
@@ -180,10 +149,9 @@ export default function SuperAdminPanel() {
   );
 }
 
-// 🔹 NavButton Subcomponent
+// 🔹 NavButton Component
 function NavButton({ label, path, active }) {
   const navigate = useNavigate();
-
   return (
     <button
       onClick={() => navigate(path)}
@@ -195,5 +163,46 @@ function NavButton({ label, path, active }) {
     >
       {label}
     </button>
+  );
+}
+
+// 🔸 RequestCard Component
+function RequestCard({ req, view, onApprove, onReject }) {
+  return (
+    <li className="bg-sky-100 p-4 rounded-lg shadow-md hover:shadow-xl hover:bg-sky-200 transition duration-200">
+      <p>
+        <strong>Username:</strong> {req.username}
+      </p>
+      <p>
+        <strong>Email:</strong> {req.email}
+      </p>
+      <p>
+        <strong>Requested At:</strong>{" "}
+        {new Date(req.createdAt).toLocaleString()}
+      </p>
+
+      {view === "rejected" && req.rejectionReason && (
+        <p className="mt-2 text-sm text-red-600">
+          <strong>Reason:</strong> {req.rejectionReason}
+        </p>
+      )}
+
+      {view === "pending" && (
+        <div className="mt-4 flex gap-4">
+          <button
+            onClick={() => onApprove(req._id)}
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md"
+          >
+            Approve
+          </button>
+          <button
+            onClick={() => onReject(req._id)}
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md"
+          >
+            Reject
+          </button>
+        </div>
+      )}
+    </li>
   );
 }

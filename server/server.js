@@ -10,6 +10,7 @@ const uploadRoutes = require('./routes/uploads');
 const chartAnalysisRoutes = require('./routes/chartAnalysis');
 const adminRoutes = require('./routes/admin');
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -29,6 +30,7 @@ app.use('/auth', authRoutes);
 app.use('/uploads', uploadRoutes);
 app.use('/chart-analysis', chartAnalysisRoutes);
 app.use('/admin', adminRoutes);
+
 
 app.get('/', (req, res) => res.send('🚀 MERN Auth API is up and running!'));
 

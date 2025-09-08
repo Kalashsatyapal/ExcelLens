@@ -54,13 +54,13 @@ export default function LandingPage() {
           <nav className="space-x-4 flex items-center">
             <Link
               to="/login"
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-emerald-700 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-400 text-white rounded-md hover:bg-emerald-700 transition"
             >
               <FaLock /> Login
             </Link>
             <Link
               to="/register"
-              className="flex items-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-700 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-sky-400 text-white rounded-md hover:bg-sky-700 transition"
             >
               <FaFileExcel /> Register
             </Link>
@@ -82,7 +82,7 @@ export default function LandingPage() {
         </p>
         <Link
           to="/register"
-          className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-semibold rounded-md shadow-lg hover:scale-105 hover:shadow-xl transition transform duration-200"
+          className="px-6 py-3 bg-gradient-to-r from-emerald-400 to-sky-400 text-white font-semibold rounded-md shadow-lg hover:scale-105 hover:shadow-xl transition transform duration-200"
         >
           Get Started
         </Link>

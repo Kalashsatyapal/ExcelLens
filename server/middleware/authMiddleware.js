@@ -27,7 +27,7 @@ const authMiddleware = (requiredRoles = []) => {
       const decoded = jwt.verify(token, JWT_SECRET);
 
       // Optional: attach full user object (excluding password)
-      const user = await User.findById(decoded.userId).select('-password');
+      const user = await User.findById(decoded.userId).select('+password');
       if (!user) {
         return res.status(401).json({ message: 'User not found' });
       }

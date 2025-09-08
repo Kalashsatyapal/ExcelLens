@@ -5,6 +5,7 @@ const AdminRequest = require("../models/AdminRequest");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middleware/authMiddleware");
+const sendMail = require("../utils/mailer");
 const { JWT_SECRET, ADMIN_PASSKEY } = process.env;
 
 // Register route (only for regular users)
@@ -77,6 +78,12 @@ router.post("/admin-requests", async (req, res) => {
     });
 
     await request.save();
+     // Notify superadmin
+    await sendMail({
+      to: process.env.SUPERADMIN_EMAIL,
+      subject: "New Admin Request Pending",
+      text: `A new admin request has been submitted:\nUsername: ${username}\nEmail: ${email}`,
+    });
     console.log(`✅ Admin request saved for ${email}`);
     res.status(201).json({
       message:

@@ -5,6 +5,7 @@ const Upload = require("../models/Upload");
 const ChartAnalysis = require("../models/ChartAnalysis");
 const authMiddleware = require("../middleware/authMiddleware");
 const AdminRequest = require("../models/AdminRequest");
+const sendMail = require("../utils/mailer");
 
 // 🔐 Get all users (admin or superadmin only)
 router.get(
@@ -136,6 +137,13 @@ router.post(
         status: "approved",
       });
 
+      // Notify requester
+      await sendMail({
+        to: request.email,
+        subject: "Your Admin Request Approved",
+        text: `Congratulations, your admin request has been approved! You can now login as admin.`,
+      });
+
       console.log(`✅ Admin approved: ${request.email}`);
       res.status(201).json({ message: "Admin approved and created" });
     } catch (err) {
@@ -165,6 +173,14 @@ router.post(
         status: "rejected",
         rejectionReason: reason || "",
       });
+
+      // Notify requester
+      await sendMail({
+        to: request.email,
+        subject: "Your Admin Request Rejected",
+        text: `Sorry, your admin request was rejected.${reason ? "\nReason: " + reason : ""}`,
+      });
+      
       res.json({ message: "Request rejected" });
     } catch (err) {
       console.error(err);

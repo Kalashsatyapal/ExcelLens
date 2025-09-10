@@ -15,7 +15,7 @@ export default function UploadSection() {
     const file = acceptedFiles[0];
 
     if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
-      setMessage('Only Excel files (.xlsx, .xls) are supported.');
+      setMessage('❌ Only Excel files (.xlsx, .xls) are supported.');
       setUploading(false);
       return;
     }
@@ -28,38 +28,45 @@ export default function UploadSection() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      setMessage(res.data.message);
+      setMessage(`✅ ${res.data.message}`);
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Upload failed');
+      setMessage(`❌ ${err.response?.data?.message || 'Upload failed'}`);
     }
     setUploading(false);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: '.xls,.xlsx' });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: '.xls,.xlsx',
+  });
 
   return (
-    <div className="max-w-xl mx-auto">
+    <div className="max-w-xl mx-auto font-inter">
       <div
         {...getRootProps()}
-        className={`border-4 border-dashed rounded-md p-12 text-center cursor-pointer
-          ${isDragActive ? 'border-indigo-600 bg-indigo-50' : 'border-gray-300 bg-white'}
+        className={`border-4 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all duration-200
+          ${isDragActive ? 'border-indigo-500 bg-indigo-50 shadow-md' : 'border-gray-300 bg-white hover:border-indigo-400 hover:bg-gray-50'}
         `}
       >
         <input {...getInputProps()} />
         {uploading ? (
-          <p className="text-indigo-600 font-semibold">Uploading...</p>
+          <p className="text-indigo-600 font-semibold text-lg animate-pulse">Uploading...</p>
         ) : (
           <>
-            <p className="text-gray-500">Drag & drop an Excel file here, or click to select</p>
-            <p className="mt-2 text-sm text-gray-400">Only .xlsx and .xls files are accepted</p>
+            <p className="text-gray-600 text-lg font-medium">
+              Drag & drop an Excel file here, or click to select
+            </p>
+            <p className="mt-2 text-sm text-gray-400">
+              Only <code>.xlsx</code> and <code>.xls</code> files are accepted
+            </p>
           </>
         )}
       </div>
 
       {message && (
         <p
-          className={`mt-4 text-center font-medium ${
-            message.includes('success') ? 'text-green-600' : 'text-red-600'
+          className={`mt-6 text-center text-base font-medium transition ${
+            message.includes('✅') ? 'text-green-600' : 'text-red-600'
           }`}
         >
           {message}

@@ -1,13 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaLock, FaFileExcel, FaChartBar, FaDownload, FaHistory, FaTrashAlt } from "react-icons/fa";
+import {
+  FaLock,
+  FaFileExcel,
+  FaChartBar,
+  FaDownload,
+  FaHistory,
+  FaTrashAlt,
+} from "react-icons/fa";
 
 export default function LandingPage() {
   const features = [
     {
       title: "Secure Authentication",
       desc: "JWT-based login with role-based access. Admins require a secret passkey.",
-      icon: <FaLock className="text-emerald-600 text-xl" />,
+      icon: <FaLock className="text-teal-600 text-xl" />,
     },
     {
       title: "Excel Uploads",
@@ -17,7 +24,7 @@ export default function LandingPage() {
     {
       title: "File Management",
       desc: "Preview, track, and delete uploaded files with ease.",
-      icon: <FaTrashAlt className="text-red-500 text-xl" />,
+      icon: <FaTrashAlt className="text-rose-500 text-xl" />,
     },
     {
       title: "Data Visualization",
@@ -27,7 +34,7 @@ export default function LandingPage() {
     {
       title: "Export Charts",
       desc: "Download charts as PNG or PDF for reports and presentations.",
-      icon: <FaDownload className="text-sky-600 text-xl" />,
+      icon: <FaDownload className="text-cyan-600 text-xl" />,
     },
     {
       title: "Analysis History",
@@ -37,30 +44,30 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-emerald-50 text-slate-800">
+    <div className="min-h-screen flex flex-col bg-gradient-to-tr from-zinc-50 via-white to-teal-50 text-gray-800 font-sans">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+      <header className="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between py-4">
           <div className="flex items-center space-x-3">
             <img
               src="/src/assets/logo2.png"
               alt="ExcelLense Logo"
-              className="w-10 h-10 object-contain"
+              className="w-14 h-14 object-contain"
             />
-            <h1 className="text-2xl font-bold text-emerald-700 tracking-tight">
+            <h1 className="text-3xl font-bold text-teal-700 tracking-wide">
               ExcelLense
             </h1>
           </div>
           <nav className="space-x-4 flex items-center">
             <Link
               to="/login"
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-400 text-white rounded-md hover:bg-emerald-700 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-700 transition"
             >
               <FaLock /> Login
             </Link>
             <Link
               to="/register"
-              className="flex items-center gap-2 px-4 py-2 bg-sky-400 text-white rounded-md hover:bg-sky-700 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-white rounded-md hover:bg-cyan-700 transition"
             >
               <FaFileExcel /> Register
             </Link>
@@ -69,20 +76,20 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center text-center py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-emerald-100 via-white to-sky-50">
-        <h2 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-sky-600 to-indigo-600 mb-6 tracking-tight leading-tight">
+      <section className="flex flex-col items-center text-center py-24 px-6 bg-gradient-to-b from-teal-100 via-white to-cyan-50">
+        <h2 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 via-cyan-500 to-indigo-500 mb-6 tracking-tight leading-tight">
           Empower Your Excel Workflow
         </h2>
-        <p className="text-xl text-slate-700 max-w-3xl mb-8">
+        <p className="text-lg text-gray-700 max-w-3xl mb-8 leading-relaxed font-light tracking-wide">
           Upload, visualize, and manage Excel data with precision.{" "}
-          <span className="font-semibold text-emerald-600">Secure access</span>,{" "}
-          <span className="font-semibold text-sky-600">interactive charts</span>, and{" "}
+          <span className="font-semibold text-teal-600">Secure access</span>,{" "}
+          <span className="font-semibold text-cyan-600">interactive charts</span>, and{" "}
           <span className="font-semibold text-indigo-600">intuitive file handling</span>—
           all in one seamless experience.
         </p>
         <Link
           to="/register"
-          className="px-6 py-3 bg-gradient-to-r from-emerald-400 to-sky-400 text-white font-semibold rounded-md shadow-lg hover:scale-105 hover:shadow-xl transition transform duration-200"
+          className="px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition transform duration-200"
         >
           Get Started
         </Link>
@@ -90,21 +97,23 @@ export default function LandingPage() {
 
       {/* Features Section */}
       <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-bold text-center text-slate-800 mb-14">
+        <div className="max-w-7xl mx-auto px-6">
+          <h3 className="text-3xl font-bold text-center text-gray-800 mb-14 tracking-wide">
             Core Features
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {features.map(({ title, desc, icon }, i) => (
               <div
                 key={i}
-                className="p-6 bg-white rounded-xl border border-slate-200 shadow hover:shadow-xl hover:scale-[1.02] transition duration-300"
+                className="group p-6 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ring-1 ring-transparent hover:ring-teal-300 hover:ring-offset-2"
               >
                 <div className="flex items-center gap-3 mb-3">
                   {icon}
-                  <h4 className="text-xl font-semibold text-slate-800">{title}</h4>
+                  <h4 className="text-xl font-semibold text-gray-800 group-hover:text-teal-700 transition">
+                    {title}
+                  </h4>
                 </div>
-                <p className="text-slate-600 leading-relaxed">{desc}</p>
+                <p className="text-gray-600 leading-relaxed font-light">{desc}</p>
               </div>
             ))}
           </div>
@@ -112,8 +121,8 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-slate-100 to-emerald-100 py-6 mt-auto">
-        <div className="max-w-7xl mx-auto text-center text-slate-600 text-sm">
+      <footer className="bg-gradient-to-r from-gray-100 to-teal-100 py-6 border-t border-gray-200">
+        <div className="max-w-7xl mx-auto text-center text-gray-600 text-sm">
           © {new Date().getFullYear()} ExcelLense. Built with precision and passion.
         </div>
       </footer>

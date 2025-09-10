@@ -11,7 +11,6 @@ export default function AdminAnalyses() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🔐 Explicit role check
     if (!["admin", "superadmin"].includes(user?.role)) {
       console.warn(`Unauthorized access attempt by role: ${user?.role}`);
       navigate("/dashboard");
@@ -43,9 +42,9 @@ export default function AdminAnalyses() {
               <img
                 src="/logo2.png"
                 alt="Admin Logo"
-                className="h-10 w-10 object-contain"
+                className="h-14 w-14 object-contain drop-shadow-sm"
               />
-              <h1 className="text-2xl font-bold tracking-tight text-green-700">
+              <h1 className="text-3xl font-bold tracking-wide text-green-700">
                 ExcelLense
               </h1>
             </div>
@@ -95,7 +94,6 @@ export default function AdminAnalyses() {
                   <th className="border px-4 py-2 text-left">Chart Type</th>
                   <th className="border px-4 py-2 text-left">X Axis</th>
                   <th className="border px-4 py-2 text-left">Y Axis</th>
-                  <th className="border px-4 py-2 text-left">Summary</th>
                   <th className="border px-4 py-2 text-left">Created At</th>
                 </tr>
               </thead>
@@ -109,11 +107,6 @@ export default function AdminAnalyses() {
                     <td className="border px-4 py-2 capitalize">{a.chartType}</td>
                     <td className="border px-4 py-2">{a.xAxis}</td>
                     <td className="border px-4 py-2">{a.yAxis}</td>
-                    <td className="border px-4 py-2 max-w-xs">
-                      <div className="overflow-x-auto whitespace-nowrap text-sm text-gray-700">
-                        {a.summary}
-                      </div>
-                    </td>
                     <td className="border px-4 py-2">
                       {new Date(a.createdAt).toLocaleString()}
                     </td>

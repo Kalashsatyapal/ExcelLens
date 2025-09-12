@@ -83,7 +83,8 @@ export default function UploadRecordsPanel() {
           ) : uploads.length === 0 ? (
             <p className="text-slate-500">No uploads found.</p>
           ) : (
-            <table className="min-w-full border-collapse border border-slate-300 rounded-lg overflow-hidden">
+            <table className="min-w-full border border-slate-500 border-collapse rounded-lg shadow-md overflow-hidden">
+
               <thead className="bg-white/70 backdrop-blur-md text-slate-700">
                 <tr>
                   <th className="border px-4 py-2 text-left">User</th>

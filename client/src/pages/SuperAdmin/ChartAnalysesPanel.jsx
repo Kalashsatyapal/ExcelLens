@@ -114,35 +114,34 @@ export default function ChartAnalysesPanel() {
           ) : filteredAnalyses.length === 0 ? (
             <p className="text-slate-500">No chart analyses found.</p>
           ) : (
-            <table className="min-w-full border-collapse border border-slate-300 rounded-lg overflow-hidden">
+            <table className="min-w-full border border-slate-500 border-collapse rounded-lg overflow-hidden shadow-md">
+
               <thead className="bg-white/70 backdrop-blur-md text-slate-700 sticky top-0 z-10">
-                <tr>
-                  <th className="border px-4 py-2 text-left">Upload ID</th>
-                  <th className="border px-4 py-2 text-left">User Email</th>
-                  <th className="border px-4 py-2 text-left">Chart Type</th>
-                  <th className="border px-4 py-2 text-left">X Axis</th>
-                  <th className="border px-4 py-2 text-left">Y Axis</th>
-                  <th className="border px-4 py-2 text-left">Created At</th>
+                <tr className="border-b border-slate-300">
+                  <th className="border-r border-slate-300 px-4 py-2 text-left">Upload ID</th>
+                  <th className="border-r border-slate-300 px-4 py-2 text-left">User Email</th>
+                  <th className="border-r border-slate-300 px-4 py-2 text-left">Chart Type</th>
+                  <th className="border-r border-slate-300 px-4 py-2 text-left">X Axis</th>
+                  <th className="border-r border-slate-300 px-4 py-2 text-left">Y Axis</th>
+                  <th className="px-4 py-2 text-left">Created At</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredAnalyses.map((a, i) => (
                   <tr
                     key={a._id}
-                    className={`${
+                    className={`border-b border-slate-300 ${
                       i % 2 === 0 ? "bg-white/60" : "bg-blue-50"
                     } hover:bg-white/80 transition`}
                   >
-                    <td className="border px-4 py-2 break-words">{a.uploadId}</td>
-                    <td className="border px-4 py-2 text-sm text-slate-700">
+                    <td className="border-r border-slate-300 px-4 py-2 break-words">{a.uploadId}</td>
+                    <td className="border-r border-slate-300 px-4 py-2 text-sm text-slate-700">
                       {a.userEmail || "—"}
                     </td>
-                    <td className="border px-4 py-2 capitalize">{a.chartType}</td>
-                    <td className="border px-4 py-2">{a.xAxis}</td>
-                    <td className="border px-4 py-2">{a.yAxis}</td>
-                    <td className="border px-4 py-2">
-                      {new Date(a.createdAt).toLocaleString()}
-                    </td>
+                    <td className="border-r border-slate-300 px-4 py-2 capitalize">{a.chartType}</td>
+                    <td className="border-r border-slate-300 px-4 py-2">{a.xAxis}</td>
+                    <td className="border-r border-slate-300 px-4 py-2">{a.yAxis}</td>
+                    <td className="px-4 py-2">{new Date(a.createdAt).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

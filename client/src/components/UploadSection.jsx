@@ -44,19 +44,25 @@ export default function UploadSection() {
     <div className="max-w-xl mx-auto font-inter">
       <div
         {...getRootProps()}
-        className={`border-4 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all duration-200
-          ${isDragActive ? 'border-indigo-500 bg-indigo-50 shadow-md' : 'border-gray-300 bg-white hover:border-indigo-400 hover:bg-gray-50'}
+        className={`border-4 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all duration-200 backdrop-blur-md
+          ${
+            isDragActive
+              ? 'border-cyan-500 bg-cyan-50 shadow-md'
+              : 'border-slate-300 bg-white/60 hover:border-cyan-400 hover:bg-white/80'
+          }
         `}
       >
         <input {...getInputProps()} />
         {uploading ? (
-          <p className="text-indigo-600 font-semibold text-lg animate-pulse">Uploading...</p>
+          <p className="text-cyan-600 font-semibold text-lg animate-pulse">
+            Uploading...
+          </p>
         ) : (
           <>
-            <p className="text-gray-600 text-lg font-medium">
+            <p className="text-slate-700 text-lg font-medium">
               Drag & drop an Excel file here, or click to select
             </p>
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="mt-2 text-sm text-slate-500">
               Only <code>.xlsx</code> and <code>.xls</code> files are accepted
             </p>
           </>
@@ -66,7 +72,7 @@ export default function UploadSection() {
       {message && (
         <p
           className={`mt-6 text-center text-base font-medium transition ${
-            message.includes('✅') ? 'text-green-600' : 'text-red-600'
+            message.includes('✅') ? 'text-cyan-600' : 'text-red-600'
           }`}
         >
           {message}

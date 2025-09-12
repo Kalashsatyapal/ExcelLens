@@ -94,18 +94,18 @@ export default function DataVisualization() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50 text-gray-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 dark:text-gray-100 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-cyan-50 text-slate-800 font-inter">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white dark:bg-gray-900 shadow px-6 py-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+      <header className="sticky top-0 z-10 bg-white/30 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center border-b border-cyan-100">
         <div className="flex items-center gap-4">
           <img src="/src/assets/logo2.png" alt="Logo" className="h-10 w-auto rounded-md shadow-sm" />
-          <h1 className="text-2xl font-bold tracking-tight text-green-700 dark:text-green-400">ExcelLense</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-cyan-700">ExcelLense</h1>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/dashboard")} className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+          <button onClick={() => navigate("/dashboard")} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded hover:scale-105 transition shadow-sm">
             Dashboard
           </button>
-          <button onClick={() => navigate("/analysis-history")} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+          <button onClick={() => navigate("/analysis-history")} className="px-4 py-2 bg-white/40 backdrop-blur-md border border-blue-300 text-blue-700 rounded hover:bg-white/60 transition shadow-sm">
             History
           </button>
         </div>
@@ -113,13 +113,13 @@ export default function DataVisualization() {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-10 space-y-8">
-        <h2 className="text-3xl font-bold text-green-800 dark:text-green-300">📊 Data Visualization</h2>
+        <h2 className="text-3xl font-bold text-cyan-700">📊 Data Visualization</h2>
 
         {/* Controls */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
             <label className="block font-semibold mb-2">📁 Select Excel File</label>
-            <select className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-600" value={selectedUploadId} onChange={(e) => setSelectedUploadId(e.target.value)}>
+            <select className="w-full border rounded px-3 py-2 bg-white/70 backdrop-blur-md border-cyan-200 text-slate-800" value={selectedUploadId} onChange={(e) => setSelectedUploadId(e.target.value)}>
               <option value="">-- Select file --</option>
               {uploads.map((u) => (
                 <option key={u._id} value={u._id}>{u.filename}</option>
@@ -129,7 +129,7 @@ export default function DataVisualization() {
 
           <div>
             <label className="block font-semibold mb-2">📐 Chart Type</label>
-            <select className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-600" value={chartType} onChange={(e) => setChartType(e.target.value)} disabled={!selectedUpload}>
+            <select className="w-full border rounded px-3 py-2 bg-white/70 backdrop-blur-md border-cyan-200 text-slate-800" value={chartType} onChange={(e) => setChartType(e.target.value)} disabled={!selectedUpload}>
               <option value="bar">Bar</option>
               <option value="line">Line</option>
               <option value="pie">Pie</option>
@@ -141,7 +141,7 @@ export default function DataVisualization() {
 
           <div>
             <label className="block font-semibold mb-2">🧭 X Axis</label>
-            <select className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-600" value={xAxis} onChange={(e) => setXAxis(e.target.value)} disabled={!selectedUpload}>
+            <select className="w-full border rounded px-3 py-2 bg-white/70 backdrop-blur-md border-cyan-200 text-slate-800" value={xAxis} onChange={(e) => setXAxis(e.target.value)} disabled={!selectedUpload}>
               <option value="">-- Select X Axis --</option>
               {selectedUpload && Object.keys(selectedUpload.data[0] || {}).map((k) => (
                 <option key={k} value={k}>{k}</option>
@@ -151,7 +151,7 @@ export default function DataVisualization() {
 
           <div>
             <label className="block font-semibold mb-2">📏 Y Axis</label>
-            <select className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-600" value={yAxis} onChange={(e) => setYAxis(e.target.value)} disabled={!selectedUpload}>
+            <select className="w-full border rounded px-3 py-2 bg-white/70 backdrop-blur-md border-cyan-200 text-slate-800" value={yAxis} onChange={(e) => setYAxis(e.target.value)} disabled={!selectedUpload}>
               <option value="">-- Select Y Axis --</option>
               {selectedUpload && Object.keys(selectedUpload.data[0] || {}).map((k) => (
                 <option key={k} value={k}>{k}</option>
@@ -161,7 +161,7 @@ export default function DataVisualization() {
         </div>
 
         {/* Chart Display */}
-        <div className="border rounded-lg p-6 bg-gray-50 dark:bg-gray-800 min-h-[400px] flex justify-center items-center">
+        <div className="border rounded-lg p-6 bg-white/60 backdrop-blur-md min-h-[400px] flex justify-center items-center shadow">
           {selectedUpload ? (
             is3DChart ? (
               <Chart3D selectedUpload={selectedUpload} xAxis={xAxis} yAxis={yAxis} chartType={chartType} />
@@ -169,23 +169,24 @@ export default function DataVisualization() {
               <Chart2D selectedUpload={selectedUpload} xAxis={xAxis} yAxis={yAxis} chartType={chartType} />
             )
           ) : (
-            <p className="text-gray-500 dark:text-gray-400 italic">Select a file and chart type to begin.</p>
+            <p className="text-slate-500 italic">Select a file and chart type to begin.</p>
           )}
         </div>
-                {/* Status + Downloads */}
+
+        {/* Status + Downloads */}
         {saveStatus && (
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
-            <p className="text-sm text-gray-600 dark:text-gray-300 italic">{saveStatus}</p>
+            <p className="text-sm text-slate-600 italic">{saveStatus}</p>
             <div className="flex gap-3">
               <button
                 onClick={handleDownloadPNG}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded shadow transition"
+                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm rounded shadow transition"
               >
                 ⬇️ Download PNG
               </button>
               <button
                 onClick={handleDownloadPDF}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded shadow transition"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded shadow transition"
               >
                 ⬇️ Download PDF
               </button>
@@ -195,9 +196,10 @@ export default function DataVisualization() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-100 dark:bg-gray-900 py-6 mt-auto border-t border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto text-center text-gray-600 dark:text-gray-400 text-sm">
-          © {new Date().getFullYear()} <span className="font-semibold text-green-700 dark:text-green-400">ExcelLense</span>. Built with precision and passion.
+      <footer className="bg-gradient-to-r from-gray-100 to-cyan-100 py-6 mt-auto border-t border-gray-200">
+        <div className="container mx-auto text-center text-slate-500 text-sm">
+          © {new Date().getFullYear()}{" "}
+          <span className="font-semibold text-cyan-700">ExcelLense</span>. Built with precision and passion.
         </div>
       </footer>
     </div>

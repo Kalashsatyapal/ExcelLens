@@ -1,19 +1,21 @@
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 // 🎨 Generate distinct HSL colors
 const generateColors = (num) =>
   Array.from({ length: num }, (_, i) => `hsl(${(i * 360) / num}, 70%, 50%)`);
 
-// 🔠 Abbreviate text into acronym (e.g. "Maruti Suzuki Motors India" → "MSMI")
+// 🔠 Abbreviate text into acronym
 const abbreviateText = (text) => {
   if (!text || text.length < 3) return text;
   const words = text.trim().split(/\s+/);
   if (words.length === 1 && words[0].length < 3) return text;
   return words.map(word => word[0]?.toUpperCase() || "").join("");
 };
-// 🏷️ Create label sprite with background and text
-const createLabel = (text, color = "#ffffff") => {
+
+// 🏷️ Create label sprite with glassmorphism styling
+const createLabel = (text, color = "#111827") => {
   const size = 256;
   const scaleFactor = window.devicePixelRatio || 2;
   const canvas = document.createElement("canvas");
@@ -23,37 +25,30 @@ const createLabel = (text, color = "#ffffff") => {
 
   ctx.clearRect(0, 0, size, size);
 
-  // Text settings
   const fontSize = 56;
-  ctx.font = `bold ${fontSize}px Arial`;
+  ctx.font = `bold ${fontSize}px Inter, Arial`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  // Measure text width
   const textMetrics = ctx.measureText(text);
   const textWidth = textMetrics.width;
   const padding = 32;
   const boxWidth = textWidth + padding;
   const boxHeight = fontSize + padding / 2;
-
-  // Center box
   const boxX = (size - boxWidth) / 2;
   const boxY = (size - boxHeight) / 2;
   const radius = 12;
 
-  // Background box
-  ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+  // Glassmorphism background
+  ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+  ctx.shadowColor = "rgba(0,0,0,0.3)";
+  ctx.shadowBlur = 12;
   ctx.beginPath();
   ctx.moveTo(boxX + radius, boxY);
   ctx.lineTo(boxX + boxWidth - radius, boxY);
   ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
   ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
-  ctx.quadraticCurveTo(
-    boxX + boxWidth,
-    boxY + boxHeight,
-    boxX + boxWidth - radius,
-    boxY + boxHeight
-  );
+  ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
   ctx.lineTo(boxX + radius, boxY + boxHeight);
   ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
   ctx.lineTo(boxX, boxY + radius);
@@ -61,11 +56,7 @@ const createLabel = (text, color = "#ffffff") => {
   ctx.closePath();
   ctx.fill();
 
-  // Drop shadow
-  ctx.shadowColor = "black";
-  ctx.shadowBlur = 6;
-
-  // Draw text
+  // Text
   ctx.fillStyle = color;
   ctx.fillText(text, size / 2, size / 2);
 
@@ -98,7 +89,6 @@ export default function Chart3D({ selectedUpload, xAxis, yAxis, chartType }) {
     const width = container.clientWidth || 800;
     const height = 500;
 
-    // 🧹 Cleanup previous render
     if (rendererRef.current) {
       rendererRef.current.forceContextLoss?.();
       rendererRef.current.domElement?.remove();
@@ -106,7 +96,6 @@ export default function Chart3D({ selectedUpload, xAxis, yAxis, chartType }) {
     }
     if (sceneRef.current) sceneRef.current.clear();
 
-    // 🎥 Setup renderer and scene
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -117,27 +106,37 @@ export default function Chart3D({ selectedUpload, xAxis, yAxis, chartType }) {
     rendererRef.current = renderer;
 
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#f9fafb");
+    scene.fog = new THREE.Fog("#f9fafb", 20, 60);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(0, 18, 34);
     camera.lookAt(0, 6, 0);
 
-    // 💡 Lighting
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+    controls.rotateSpeed = 0.5;
+    controls.minDistance = 10;
+    controls.maxDistance = 80;
+    controls.target.set(0, 6, 0);
+    controls.update();
+
     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 0.4));
     const dir = new THREE.DirectionalLight(0xffffff, 0.8);
     dir.position.set(20, 40, 10);
+    dir.castShadow = true;
+    dir.shadow.mapSize.width = 1024;
+    dir.shadow.mapSize.height = 1024;
     scene.add(dir);
 
-    // 🧱 Grid
     const grid = new THREE.GridHelper(60, 30, 0x888888, 0x444444);
     grid.position.y = 1.5;
     scene.add(grid);
 
-    // 📊 Process data
-    const rows = selectedUpload.data.filter(
-      (r) => r[xAxis] !== undefined && r[xAxis] !== ""
-    );
+    const rows = selectedUpload.data.filter((r) => r[xAxis] !== undefined && r[xAxis] !== "");
     const groups = {};
     rows.forEach((r) => {
       const val = yAxis ? Number(r[yAxis]) || 0 : 1;
@@ -149,7 +148,6 @@ export default function Chart3D({ selectedUpload, xAxis, yAxis, chartType }) {
     const values = labels.map((l) => groups[l]);
     const colors = generateColors(labels.length);
 
-    // 🏷️ Chart title
     const titleLabel = createLabel("Chart Overview");
     titleLabel.position.set(0, 10.5, 0);
     scene.add(titleLabel);
@@ -163,20 +161,23 @@ export default function Chart3D({ selectedUpload, xAxis, yAxis, chartType }) {
         const x = idx * 1.6 - (labels.length - 1) * 0.8;
         const y = height / 2 + 1.5;
 
-        // 📦 Bar
         const mesh = new THREE.Mesh(
           new THREE.BoxGeometry(1.2, Math.max(0.1, height), 1.2),
-          new THREE.MeshPhongMaterial({ color: colors[idx] })
+          new THREE.MeshStandardMaterial({
+            color: colors[idx],
+            metalness: 0.3,
+            roughness: 0.4,
+            transparent: true,
+            opacity: 0.95,
+          })
         );
         mesh.position.set(x, y, 0);
         scene.add(mesh);
 
-        // 🔢 Value label
         const yLabel = createLabel(values[idx].toFixed(1));
         yLabel.position.set(x, y + height / 2 + 2.0, 0);
         scene.add(yLabel);
 
-        // 🏷️ X-axis abbreviation label
         const xLabel = createLabel(abbreviateText(label));
         xLabel.position.set(x, 0.6 + (idx % 2 === 0 ? 0.3 : -0.3), 0);
         scene.add(xLabel);
@@ -201,9 +202,15 @@ export default function Chart3D({ selectedUpload, xAxis, yAxis, chartType }) {
         const offsetZ = Math.sin(midAngle) * 0.12;
         geom.translate(offsetX, 0, offsetZ);
 
-        const mesh = new THREE.Mesh(
+               const mesh = new THREE.Mesh(
           geom,
-          new THREE.MeshPhongMaterial({ color: colors[idx] })
+          new THREE.MeshStandardMaterial({
+            color: colors[idx],
+            metalness: 0.3,
+            roughness: 0.4,
+            transparent: true,
+            opacity: 0.95,
+          })
         );
         mesh.position.y = 1.5;
         scene.add(mesh);
@@ -233,8 +240,13 @@ export default function Chart3D({ selectedUpload, xAxis, yAxis, chartType }) {
       camera.lookAt(0, 2, 0);
     }
 
-    // 🖼️ Render the scene once
-    renderer.render(scene, camera);
+    // 🎞️ Animate with orbit controls
+    const animate = () => {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    animate();
 
     // 🧹 Cleanup on unmount
     return () => {

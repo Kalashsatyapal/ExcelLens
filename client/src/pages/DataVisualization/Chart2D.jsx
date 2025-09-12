@@ -34,6 +34,8 @@ ChartJS.register(
 const generateColors = (num) =>
   Array.from({ length: num }, (_, i) => `hsl(${(i * 360) / num}, 70%, 50%)`);
 
+const formatNumber = (num) => Math.round(num * 10) / 10;
+
 export default function Chart2D({ selectedUpload, xAxis, yAxis, chartType }) {
   const chartRef = useRef();
 
@@ -47,9 +49,15 @@ export default function Chart2D({ selectedUpload, xAxis, yAxis, chartType }) {
   );
 
   const labels = rows.map((r) => r[xAxis]);
-  let dataObj = null;
 
-  const formatNumber = (num) => Math.round(num * 10) / 10;
+  const getGradient = (ctx, colorStart, colorEnd) => {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, colorStart);
+    gradient.addColorStop(1, colorEnd);
+    return gradient;
+  };
+
+  let dataObj = null;
 
   if (chartType === "pie") {
     if (!yAxis) {
@@ -61,12 +69,24 @@ export default function Chart2D({ selectedUpload, xAxis, yAxis, chartType }) {
           {
             data: Object.values(counts).map(formatNumber),
             backgroundColor: generateColors(Object.keys(counts).length),
+            borderColor: "#fff",
+            borderWidth: 2,
           },
         ],
       };
     } else {
       const data = rows.map((r) => formatNumber(Number(r[yAxis]) || 0));
-      dataObj = { labels, datasets: [{ data, backgroundColor: generateColors(labels.length) }] };
+      dataObj = {
+        labels,
+        datasets: [
+          {
+            data,
+            backgroundColor: generateColors(labels.length),
+            borderColor: "#fff",
+            borderWidth: 2,
+          },
+        ],
+      };
     }
   } else if (chartType === "scatter") {
     dataObj = {
@@ -82,6 +102,8 @@ export default function Chart2D({ selectedUpload, xAxis, yAxis, chartType }) {
             })
             .filter(Boolean),
           backgroundColor: "rgba(75,192,192,0.8)",
+          pointRadius: 6,
+          pointHoverRadius: 8,
         },
       ],
     };
@@ -94,10 +116,15 @@ export default function Chart2D({ selectedUpload, xAxis, yAxis, chartType }) {
         {
           label: yAxis,
           data,
-          backgroundColor: "rgba(59,130,246,0.7)",
+          backgroundColor: (context) =>
+            chartType === "bar"
+              ? getGradient(context.chart.ctx, "rgba(59,130,246,0.8)", "rgba(59,130,246,0.2)")
+              : "rgba(59,130,246,0.6)",
           borderColor: "rgba(37,99,235,1)",
-          borderWidth: 1,
-          fill: chartType === "line" ? false : true,
+          borderWidth: 2,
+          pointBackgroundColor: "rgba(37,99,235,1)",
+          tension: 0.4,
+          fill: chartType === "line" ? true : false,
         },
       ],
     };
@@ -106,46 +133,71 @@ export default function Chart2D({ selectedUpload, xAxis, yAxis, chartType }) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      duration: 1000,
+      easing: "easeOutQuart",
+    },
     plugins: {
-      legend: { position: "top" },
+      legend: {
+        position: "top",
+        labels: {
+          font: { family: "Inter, sans-serif", size: 13 },
+          color: "#374151",
+          boxWidth: 12,
+          padding: 16,
+        },
+      },
       tooltip: {
+        backgroundColor: "#1f2937",
+        titleFont: { family: "Inter", size: 14 },
+        bodyFont: { family: "Inter", size: 12 },
+        cornerRadius: 6,
+        padding: 10,
         callbacks: {
-          label: (tooltipItem) => `${tooltipItem.dataset.label || ""}: ${formatNumber(tooltipItem.raw)}`,
+          label: (tooltipItem) =>
+            `${tooltipItem.dataset.label || ""}: ${formatNumber(tooltipItem.raw)}`,
         },
       },
     },
     scales: {
-      x: { title: { display: true, text: xAxis } },
-      y: chartType !== "pie" ? { title: { display: true, text: yAxis } } : undefined,
+      x: {
+        title: { display: true, text: xAxis, font: { size: 14 } },
+        grid: { color: "rgba(203,213,225,0.3)" },
+        ticks: { color: "#4b5563", font: { family: "Inter", size: 12 } },
+      },
+      y:
+        chartType !== "pie"
+          ? {
+              title: { display: true, text: yAxis, font: { size: 14 } },
+              grid: { color: "rgba(203,213,225,0.3)" },
+              ticks: { color: "#4b5563", font: { family: "Inter", size: 12 } },
+            }
+          : undefined,
     },
   };
 
-  switch (chartType) {
-    case "bar":
-      return (
-        <div style={{ height: 400 }}>
-          <Bar ref={chartRef} data={dataObj} options={options} />
-        </div>
-      );
-    case "line":
-      return (
-        <div style={{ height: 400 }}>
-          <Line ref={chartRef} data={dataObj} options={options} />
-        </div>
-      );
-    case "pie":
-      return (
-        <div style={{ height: 400 }}>
-          <Pie ref={chartRef} data={dataObj} options={options} />
-        </div>
-      );
-    case "scatter":
-      return (
-        <div style={{ height: 400 }}>
-          <Scatter ref={chartRef} data={dataObj} options={options} />
-        </div>
-      );
-    default:
-      return <p>Unsupported 2D chart type</p>;
-  }
+  const containerStyle = {
+    height: 400,
+    padding: "1rem",
+    borderRadius: "16px",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+    background: "rgba(255,255,255,0.6)",
+    backdropFilter: "blur(12px)",
+    border: "1px solid rgba(255,255,255,0.3)",
+  };
+
+  const ChartComponent = {
+    bar: Bar,
+    line: Line,
+    pie: Pie,
+    scatter: Scatter,
+  }[chartType];
+
+  return ChartComponent ? (
+    <div style={containerStyle}>
+      <ChartComponent ref={chartRef} data={dataObj} options={options} />
+    </div>
+  ) : (
+    <p>Unsupported 2D chart type</p>
+  );
 }

@@ -11,7 +11,6 @@ export default function AllUploadHistory() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🔐 Explicit role check
     if (!["admin", "superadmin"].includes(user?.role)) {
       console.warn(`Unauthorized access attempt by role: ${user?.role}`);
       navigate("/dashboard");
@@ -33,9 +32,9 @@ export default function AllUploadHistory() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-purple-50 text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-cyan-50 text-slate-800 font-inter">
       {/* 🌟 Topbar */}
-      <div className="sticky top-0 z-10 bg-white shadow-md border-b border-purple-200">
+      <div className="sticky top-0 z-10 bg-white/30 backdrop-blur-md shadow-md border-b border-cyan-100">
         <div className="max-w-screen-xl mx-auto px-6 py-4 space-y-2">
           {/* 🔷 Logo and Title */}
           <div className="flex items-center justify-between">
@@ -45,7 +44,7 @@ export default function AllUploadHistory() {
                 alt="Admin Logo"
                 className="h-10 w-10 object-contain"
               />
-              <h1 className="text-2xl font-bold tracking-tight text-green-700">
+              <h1 className="text-2xl font-bold tracking-tight text-cyan-700">
                 ExcelLense
               </h1>
             </div>
@@ -54,22 +53,22 @@ export default function AllUploadHistory() {
           {/* 👤 User Info + Page Title + Navigation */}
           <div className="flex items-center justify-between">
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
-              <h6 className="text-2xl font-bold text-purple-700">
+              <h6 className="text-2xl font-bold text-blue-600">
                 📁 Upload History
               </h6>
-              <p className="text-sm text-gray-600 mt-1 sm:mt-0">
+              <p className="text-sm text-slate-600 mt-1 sm:mt-0">
                 Logged in as{" "}
-                <span className="font-medium text-gray-800">
+                <span className="font-medium text-slate-800">
                   {user?.username}
                 </span>{" "}
                 (
-                <span className="capitalize text-purple-600">{user?.role}</span>
+                <span className="capitalize text-cyan-600">{user?.role}</span>
                 )
               </p>
             </div>
             <button
               onClick={() => navigate("/admin")}
-              className="px-4 py-2 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700 font-semibold rounded-md hover:from-purple-200 hover:to-purple-300 transition"
+              className="px-4 py-2 bg-gradient-to-r from-cyan-100 to-blue-100 text-cyan-700 font-semibold rounded-md hover:from-cyan-200 hover:to-blue-200 transition"
             >
               Go to Admin Dashboard
             </button>
@@ -80,15 +79,15 @@ export default function AllUploadHistory() {
       {/* 📄 Main Content */}
       <div className="max-w-screen-xl mx-auto px-6 py-8">
         {loading ? (
-          <p className="text-purple-600">Loading uploads...</p>
+          <p className="text-cyan-600 animate-pulse">Loading uploads...</p>
         ) : error ? (
           <p className="text-red-600">{error}</p>
         ) : uploads.length === 0 ? (
-          <p className="text-gray-600">No uploads found.</p>
+          <p className="text-slate-500">No uploads found.</p>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 overflow-x-auto">
-            <table className="min-w-full border-collapse border border-gray-300">
-              <thead className="bg-purple-100 text-purple-800">
+          <div className="bg-white/60 backdrop-blur-md rounded-xl shadow-lg p-6 border border-white/30 overflow-x-auto">
+            <table className="min-w-full border-collapse border border-slate-300">
+              <thead className="bg-white/70 backdrop-blur-md text-slate-700">
                 <tr>
                   <th className="border px-4 py-2 text-left">User</th>
                   <th className="border px-4 py-2 text-left">Email</th>
@@ -98,7 +97,7 @@ export default function AllUploadHistory() {
               </thead>
               <tbody>
                 {uploads.map((upload) => (
-                  <tr key={upload._id} className="hover:bg-purple-50">
+                  <tr key={upload._id} className="hover:bg-white/80 transition">
                     <td className="border px-4 py-2">
                       {upload.user?.username || "Unknown"}
                     </td>

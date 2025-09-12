@@ -42,9 +42,9 @@ export default function ChartAnalysesPanel() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-sky-100 via-white to-green-100 text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-cyan-50 text-slate-800 font-inter">
       {/* 🔝 Topbar */}
-      <div className="sticky top-0 z-20 bg-gradient-to-r from-sky-800 via-sky-700 to-sky-600 shadow-md border-b border-sky-400">
+      <div className="sticky top-0 z-20 bg-white/30 backdrop-blur-md shadow-md border-b border-cyan-100">
         <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between relative">
           <div className="flex items-center gap-3">
             <img
@@ -52,10 +52,10 @@ export default function ChartAnalysesPanel() {
               alt="ExcelLense Logo"
               className="h-10 w-10 object-contain rounded-md shadow-md"
             />
-            <h1 className="text-2xl font-bold text-sky-200">ExcelLense</h1>
+            <h1 className="text-2xl font-bold text-cyan-700">ExcelLense</h1>
           </div>
           <div className="absolute left-1/2 transform -translate-x-1/2">
-            <h2 className="text-xl sm:text-2xl font-semibold text-white tracking-wide">
+            <h2 className="text-xl sm:text-2xl font-semibold text-blue-600 tracking-wide">
               📊 Chart Analyses Panel
             </h2>
           </div>
@@ -63,7 +63,7 @@ export default function ChartAnalysesPanel() {
       </div>
 
       {/* 🧭 Navigation Bar */}
-      <nav className="bg-white text-sky-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium">
+      <nav className="bg-white/60 backdrop-blur-md text-slate-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium border-b border-white/30">
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
@@ -74,8 +74,8 @@ export default function ChartAnalysesPanel() {
 
       {/* 📄 Main Content */}
       <div className="px-6 py-10 max-w-screen-xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
-          <h2 className="text-2xl font-semibold mb-6 text-sky-700">
+        <div className="bg-white/60 backdrop-blur-md rounded-xl shadow-lg p-6 border border-white/30 overflow-x-auto">
+          <h2 className="text-2xl font-semibold mb-6 text-cyan-700">
             📊 Chart Analyses History
           </h2>
 
@@ -84,7 +84,7 @@ export default function ChartAnalysesPanel() {
             <select
               value={chartTypeFilter}
               onChange={(e) => setChartTypeFilter(e.target.value)}
-              className="px-4 py-2 border rounded-md bg-white shadow-sm"
+              className="px-4 py-2 border border-slate-300 rounded-md bg-white/70 backdrop-blur-md text-slate-800 shadow-sm"
             >
               <option value="">All Chart Types</option>
               {[...new Set(analyses.map((a) => a.chartType))].map((type) => (
@@ -98,7 +98,7 @@ export default function ChartAnalysesPanel() {
               type="date"
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="px-4 py-2 border rounded-md bg-white shadow-sm"
+              className="px-4 py-2 border border-slate-300 rounded-md bg-white/70 backdrop-blur-md text-slate-800 shadow-sm"
             />
           </div>
 
@@ -106,23 +106,23 @@ export default function ChartAnalysesPanel() {
           {loading ? (
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="animate-pulse bg-sky-200 h-6 rounded-md w-full" />
+                <div key={i} className="animate-pulse bg-cyan-100 h-6 rounded-md w-full" />
               ))}
             </div>
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : filteredAnalyses.length === 0 ? (
-            <p className="text-gray-600">No chart analyses found.</p>
+            <p className="text-slate-500">No chart analyses found.</p>
           ) : (
-            <table className="min-w-full border-separate border-spacing-0 rounded-lg overflow-hidden">
-              <thead className="bg-sky-100 text-sky-800 sticky top-0 z-10">
+            <table className="min-w-full border-collapse border border-slate-300 rounded-lg overflow-hidden">
+              <thead className="bg-white/70 backdrop-blur-md text-slate-700 sticky top-0 z-10">
                 <tr>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Upload ID</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">User Email</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Chart Type</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">X Axis</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Y Axis</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Created At</th>
+                  <th className="border px-4 py-2 text-left">Upload ID</th>
+                  <th className="border px-4 py-2 text-left">User Email</th>
+                  <th className="border px-4 py-2 text-left">Chart Type</th>
+                  <th className="border px-4 py-2 text-left">X Axis</th>
+                  <th className="border px-4 py-2 text-left">Y Axis</th>
+                  <th className="border px-4 py-2 text-left">Created At</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,17 +130,17 @@ export default function ChartAnalysesPanel() {
                   <tr
                     key={a._id}
                     className={`${
-                      i % 2 === 0 ? "bg-white" : "bg-green-50"
-                    } hover:bg-sky-50 transition`}
+                      i % 2 === 0 ? "bg-white/60" : "bg-blue-50"
+                    } hover:bg-white/80 transition`}
                   >
-                    <td className="border border-gray-300 px-4 py-2 break-words">{a.uploadId}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    <td className="border px-4 py-2 break-words">{a.uploadId}</td>
+                    <td className="border px-4 py-2 text-sm text-slate-700">
                       {a.userEmail || "—"}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2 capitalize">{a.chartType}</td>
-                    <td className="border border-gray-300 px-4 py-2">{a.xAxis}</td>
-                    <td className="border border-gray-300 px-4 py-2">{a.yAxis}</td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border px-4 py-2 capitalize">{a.chartType}</td>
+                    <td className="border px-4 py-2">{a.xAxis}</td>
+                    <td className="border px-4 py-2">{a.yAxis}</td>
+                    <td className="border px-4 py-2">
                       {new Date(a.createdAt).toLocaleString()}
                     </td>
                   </tr>
@@ -162,7 +162,9 @@ function NavButton({ label, path, active }) {
     <button
       onClick={() => navigate(path)}
       className={`px-4 py-2 rounded-md transition duration-200 ease-in-out ${
-        active ? "bg-sky-600 text-white shadow-sm" : "hover:bg-sky-100 text-sky-700"
+        active
+          ? "bg-cyan-600 text-white shadow-sm"
+          : "hover:bg-cyan-100 text-cyan-700"
       }`}
     >
       {label}

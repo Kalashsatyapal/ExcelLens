@@ -32,9 +32,9 @@ export default function UploadRecordsPanel() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-green-100 via-sky-100 to-white text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-cyan-50 text-slate-800 font-inter">
       {/* 🔝 Topbar */}
-      <div className="sticky top-0 z-20 bg-gradient-to-r from-green-800 via-green-700 to-green-600 shadow-md border-b border-green-400">
+      <div className="sticky top-0 z-20 bg-white/30 backdrop-blur-md shadow-md border-b border-cyan-100">
         <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between relative">
           {/* Logo */}
           <div className="flex items-center gap-3">
@@ -43,12 +43,12 @@ export default function UploadRecordsPanel() {
               alt="ExcelLense Logo"
               className="h-10 w-10 object-contain rounded-md shadow-md"
             />
-            <h1 className="text-2xl font-bold text-lime-200">ExcelLense</h1>
+            <h1 className="text-2xl font-bold text-cyan-700">ExcelLense</h1>
           </div>
 
           {/* Centered Heading */}
           <div className="absolute left-1/2 transform -translate-x-1/2">
-            <h2 className="text-xl sm:text-2xl font-semibold text-white tracking-wide">
+            <h2 className="text-xl sm:text-2xl font-semibold text-blue-600 tracking-wide">
               📁 Upload Records Panel
             </h2>
           </div>
@@ -56,7 +56,7 @@ export default function UploadRecordsPanel() {
       </div>
 
       {/* 🧭 Navigation Bar */}
-      <nav className="bg-white text-green-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium">
+      <nav className="bg-white/60 backdrop-blur-md text-slate-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium border-b border-white/30">
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" />
@@ -67,29 +67,29 @@ export default function UploadRecordsPanel() {
 
       {/* 📄 Main Content */}
       <div className="px-6 py-10 max-w-screen-xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
-          <h2 className="text-2xl font-semibold mb-4 text-green-700">
+        <div className="bg-white/60 backdrop-blur-md rounded-xl shadow-lg p-6 border border-white/30 overflow-x-auto">
+          <h2 className="text-2xl font-semibold mb-4 text-cyan-700">
             📁 Upload History
           </h2>
 
           {loading ? (
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="animate-pulse bg-sky-200 h-6 rounded-md w-full" />
+                <div key={i} className="animate-pulse bg-cyan-100 h-6 rounded-md w-full" />
               ))}
             </div>
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : uploads.length === 0 ? (
-            <p className="text-gray-600">No uploads found.</p>
+            <p className="text-slate-500">No uploads found.</p>
           ) : (
-            <table className="min-w-full border-separate border-spacing-0 rounded-lg overflow-hidden">
-              <thead className="bg-green-100 text-green-800">
+            <table className="min-w-full border-collapse border border-slate-300 rounded-lg overflow-hidden">
+              <thead className="bg-white/70 backdrop-blur-md text-slate-700">
                 <tr>
-                  <th className="border border-gray-300 px-4 py-2 text-left">User</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Filename</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Uploaded At</th>
+                  <th className="border px-4 py-2 text-left">User</th>
+                  <th className="border px-4 py-2 text-left">Email</th>
+                  <th className="border px-4 py-2 text-left">Filename</th>
+                  <th className="border px-4 py-2 text-left">Uploaded At</th>
                 </tr>
               </thead>
               <tbody>
@@ -97,19 +97,19 @@ export default function UploadRecordsPanel() {
                   <tr
                     key={upload._id}
                     className={`${
-                      i % 2 === 0 ? "bg-white" : "bg-sky-50"
-                    } hover:bg-sky-100 transition`}
+                      i % 2 === 0 ? "bg-white/60" : "bg-blue-50"
+                    } hover:bg-white/80 transition`}
                   >
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border px-4 py-2">
                       {upload.user?.username || "Unknown"}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border px-4 py-2">
                       {upload.user?.email || "Unknown"}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2 break-words max-w-xs">
+                    <td className="border px-4 py-2 break-words max-w-xs">
                       {upload.filename}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border px-4 py-2">
                       {upload.uploadedAt
                         ? new Date(upload.uploadedAt).toLocaleString()
                         : "Unknown"}
@@ -134,8 +134,8 @@ function NavButton({ label, path, active }) {
       onClick={() => navigate(path)}
       className={`px-4 py-2 rounded-md transition duration-200 ease-in-out ${
         active
-          ? "bg-green-600 text-white shadow-sm"
-          : "hover:bg-green-100 text-green-700"
+          ? "bg-cyan-600 text-white shadow-sm"
+          : "hover:bg-cyan-100 text-cyan-700"
       }`}
     >
       {label}

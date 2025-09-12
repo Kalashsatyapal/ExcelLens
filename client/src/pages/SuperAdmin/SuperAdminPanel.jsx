@@ -1,4 +1,3 @@
-// SuperAdminPanel.jsx
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -11,6 +10,7 @@ export default function SuperAdminPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [view, setView] = useState("pending");
+  const navigate = useNavigate();
 
   const fetchRequests = async () => {
     setLoading(true);
@@ -50,35 +50,30 @@ export default function SuperAdminPanel() {
   }, [view]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-700 to-pink-600 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-cyan-50 text-slate-800 font-inter">
       <Toaster position="top-right" />
 
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-900 via-purple-700 to-purple-600 shadow-md border-b border-purple-400">
+      <div className="sticky top-0 z-20 bg-white/30 backdrop-blur-md shadow-md border-b border-cyan-100">
         <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
           <div className="flex items-center gap-4">
             <img
               src="/logo2.png"
               alt="ExcelLense Logo"
               className="h-10 w-10 rounded-md shadow-md"
             />
-            <h1 className="text-2xl font-extrabold tracking-tight text-green-200">
+            <h1 className="text-2xl font-extrabold tracking-tight text-cyan-700">
               ExcelLense
             </h1>
           </div>
-
-          {/* Centered Heading */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <h2 className="text-xl sm:text-2xl font-semibold text-white">
-              🛡️ Super Admin Panel
-            </h2>
-          </div>
+          <h2 className="text-xl sm:text-2xl font-semibold text-blue-600">
+            🛡️ Super Admin Panel
+          </h2>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="bg-white text-purple-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium">
+      <nav className="bg-white/60 backdrop-blur-md text-slate-700 shadow-md px-6 py-3 flex flex-wrap gap-4 font-medium border-b border-white/30">
         <NavButton label="Dashboard" path="/dashboard" />
         <NavButton label="Admin Panel" path="/admin" />
         <NavButton label="Admin Requests" path="/superadmin" active />
@@ -89,26 +84,26 @@ export default function SuperAdminPanel() {
 
       {/* Main */}
       <div className="px-6 py-10">
-        <div className="bg-white text-gray-800 rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-center">
+        <div className="bg-white/60 backdrop-blur-md text-slate-800 rounded-xl shadow-lg p-8 max-w-4xl mx-auto border border-white/30">
+          <h1 className="text-3xl font-bold mb-6 text-center text-cyan-700">
             Admin Requests
           </h1>
 
           {/* Tabs */}
-          <div className="flex justify-center gap-4 mb-6 border-b border-gray-300">
+          <div className="flex justify-center gap-4 mb-6 border-b border-slate-300">
             {["pending", "approved", "rejected"].map((status) => (
               <button
                 key={status}
                 onClick={() => setView(status)}
                 className={`relative px-4 py-2 font-semibold transition ${
                   view === status
-                    ? "text-green-700"
-                    : "text-gray-500 hover:text-green-600"
+                    ? "text-cyan-700"
+                    : "text-slate-500 hover:text-cyan-600"
                 }`}
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
                 {view === status && (
-                  <span className="absolute bottom-0 left-0 w-full h-1 bg-green-500 rounded-t-md" />
+                  <span className="absolute bottom-0 left-0 w-full h-1 bg-cyan-500 rounded-t-md" />
                 )}
               </button>
             ))}
@@ -120,14 +115,14 @@ export default function SuperAdminPanel() {
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
-                  className="animate-pulse bg-sky-200 h-20 rounded-lg"
+                  className="animate-pulse bg-cyan-100 h-20 rounded-lg"
                 />
               ))}
             </div>
           ) : error ? (
             <p className="text-center text-red-500">{error}</p>
           ) : requests.length === 0 ? (
-            <p className="text-center text-green-600 font-medium">
+            <p className="text-center text-cyan-600 font-medium">
               No {view} requests
             </p>
           ) : (
@@ -157,8 +152,8 @@ function NavButton({ label, path, active }) {
       onClick={() => navigate(path)}
       className={`px-4 py-2 rounded-md transition ${
         active
-          ? "bg-purple-700 text-white"
-          : "hover:bg-purple-100 text-purple-700"
+          ? "bg-cyan-600 text-white"
+          : "hover:bg-cyan-100 text-cyan-700"
       }`}
     >
       {label}
@@ -169,7 +164,7 @@ function NavButton({ label, path, active }) {
 // 🔸 RequestCard Component
 function RequestCard({ req, view, onApprove, onReject }) {
   return (
-    <li className="bg-sky-100 p-4 rounded-lg shadow-md hover:shadow-xl hover:bg-sky-200 transition duration-200">
+    <li className="bg-white/70 backdrop-blur-md p-4 rounded-lg shadow-md hover:shadow-xl hover:bg-white transition duration-200 border border-white/30">
       <p>
         <strong>Username:</strong> {req.username}
       </p>
@@ -191,7 +186,7 @@ function RequestCard({ req, view, onApprove, onReject }) {
         <div className="mt-4 flex gap-4">
           <button
             onClick={() => onApprove(req._id)}
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md"
+            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-md"
           >
             Approve
           </button>

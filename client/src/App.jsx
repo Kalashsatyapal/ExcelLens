@@ -20,7 +20,6 @@ import UserManagementPanel from "./pages/SuperAdmin/UserManagementPanel";
 import UploadRecordsPanel from "./pages/SuperAdmin/UploadRecordsPanel";
 import ChartAnalysesPanel from "./pages/SuperAdmin/ChartAnalysesPanel";
 import ProfileMenu from "./pages/Profile";
-import Settings from "./pages/Settings";
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);
@@ -41,7 +40,6 @@ function App() {
           <Route path="/login" element={<AuthForm type="login" />} />
           <Route path="/register" element={<AuthForm type="register" />} />
           <Route path="/profile" element={<ProfileMenu/>} />
-          <Route path="/settings" element={<Settings />} />
           <Route
             path="/dashboard"
             element={

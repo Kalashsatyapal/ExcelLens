@@ -73,18 +73,6 @@ export default function Dashboard() {
                     </button>
                   )}
                 </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={() => navigate("/settings")}
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } flex w-full items-center rounded-md px-4 py-2 text-sm text-slate-700`}
-                    >
-                      Settings
-                    </button>
-                  )}
-                </Menu.Item>
               </div>
               <div className="px-1 py-1">
                 <Menu.Item>

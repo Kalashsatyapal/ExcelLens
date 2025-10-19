@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import UploadSection from "../components/UploadSection";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { ChevronDownIcon, UserIcon } from "@heroicons/react/20/solid";
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -45,13 +45,21 @@ export default function Dashboard() {
           {/* Profile Dropdown */}
           <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="flex items-center gap-2 px-3 py-2 bg-white/40 backdrop-blur-md hover:bg-white/60 rounded-md text-sm font-medium text-slate-700 transition shadow-sm">
-              <div className="h-8 w-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">
-                {user.username?.[0]?.toUpperCase()}
-              </div>
+              {user.profileImage ? (
+                <img
+                  src={user.profileImage}
+                  alt="Profile"
+                  className="h-8 w-8 rounded-full object-cover border bg-gray-100 shadow"
+                />
+              ) : (
+                <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center border shadow">
+                  <UserIcon className="h-5 w-5 text-gray-500" />
+                </div>
+              )}
               <span className="font-semibold">{user.username}</span>
               <ChevronDownIcon className="h-4 w-4 text-slate-500" />
             </Menu.Button>
-            <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none z-20">
+            <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black/5 focus:outline-none">
               <div className="px-1 py-1">
                 <Menu.Item>
                   {({ active }) => (
@@ -62,6 +70,18 @@ export default function Dashboard() {
                       } flex w-full items-center rounded-md px-4 py-2 text-sm text-slate-700`}
                     >
                       My Profile
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => navigate("/settings")}
+                      className={`${
+                        active ? "bg-gray-100" : ""
+                      } flex w-full items-center rounded-md px-4 py-2 text-sm text-slate-700`}
+                    >
+                      Settings
                     </button>
                   )}
                 </Menu.Item>
@@ -96,21 +116,27 @@ export default function Dashboard() {
             to="/upload-history"
             className="group block bg-cyan-50 text-cyan-900 font-semibold text-center py-6 rounded-xl shadow hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
           >
-            <div className="text-4xl mb-2 group-hover:scale-110 transition">📁</div>
+            <div className="text-4xl mb-2 group-hover:scale-110 transition">
+              📁
+            </div>
             <span className="text-lg tracking-wide">Upload History</span>
           </Link>
           <Link
             to="/analysis-history"
             className="group block bg-blue-50 text-blue-900 font-semibold text-center py-6 rounded-xl shadow hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
           >
-            <div className="text-4xl mb-2 group-hover:scale-110 transition">📊</div>
+            <div className="text-4xl mb-2 group-hover:scale-110 transition">
+              📊
+            </div>
             <span className="text-lg tracking-wide">Analysis History</span>
           </Link>
           <Link
             to="/visualize"
             className="group block bg-white/70 backdrop-blur-md text-slate-800 font-semibold text-center py-6 rounded-xl shadow hover:shadow-lg hover:scale-[1.03] transition-all duration-200 border border-white/30"
           >
-            <div className="text-4xl mb-2 group-hover:scale-110 transition">📈</div>
+            <div className="text-4xl mb-2 group-hover:scale-110 transition">
+              📈
+            </div>
             <span className="text-lg tracking-wide">Data Visualization</span>
           </Link>
         </section>
@@ -120,7 +146,8 @@ export default function Dashboard() {
       <footer className="bg-gradient-to-r from-gray-100 to-cyan-100 py-6 mt-auto border-t border-gray-200">
         <div className="container mx-auto text-center text-slate-500 text-sm">
           © {new Date().getFullYear()}{" "}
-          <span className="font-semibold text-cyan-700">ExcelLense</span>. Built with precision and passion.
+          <span className="font-semibold text-cyan-700">ExcelLense</span>. Built
+          with precision and passion.
         </div>
       </footer>
     </div>

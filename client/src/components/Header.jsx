@@ -53,7 +53,15 @@ export default function Header({ showAdminButtons = false }) {
             <div className="h-8 w-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">
               {user.username?.[0]?.toUpperCase()}
             </div>
-            <span className="font-semibold">{user.username}</span>
+            <img
+              src={
+                user.profileImage
+                  ? `${process.env.REACT_APP_API_URL}${user.profileImage}`
+                  : "/default-avatar.png"
+              }
+              alt="Profile"
+              className="h-24 w-24 rounded-full object-cover border bg-gray-100"
+            />
             <ChevronDownIcon className="h-4 w-4 text-slate-500" />
           </Menu.Button>
           <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none z-20">

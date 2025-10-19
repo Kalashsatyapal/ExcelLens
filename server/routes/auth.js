@@ -132,5 +132,42 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() }); 
 
+router.put("/update-name", authMiddleware(), async (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ message: "Name required" });
+  const user = await User.findByIdAndUpdate(req.user._id, { username: name }, { new: true });
+  res.json({ username: user.username });
+});
+
+router.put("/update-password", authMiddleware(), async (req, res) => {
+  const { password } = req.body;
+  if (!password) return res.status(400).json({ message: "Password required" });
+  const hashed = await bcrypt.hash(password, 10);
+  await User.findByIdAndUpdate(req.user._id, { password: hashed });
+  res.json({ message: "Password updated" });
+});
+
+router.post(
+  "/update-profile-image",
+  authMiddleware(),
+  upload.single("profileImage"),
+  async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ message: "No image uploaded" });
+      // Convert buffer to base64 string
+      const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+      const user = await User.findByIdAndUpdate(
+        req.user._id,
+        { profileImage: base64Image },
+        { new: true }
+      );
+      res.json({ profileImage: user.profileImage });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to upload image" });
+    }
+  }
+);
 module.exports = router;

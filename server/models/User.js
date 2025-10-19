@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
     blocked: { type: Boolean, default: false },
+    profileImage: { type: String, default: "" },
   },
   { timestamps: true }
 );

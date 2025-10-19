@@ -32,6 +32,7 @@ app.use('/chart-analysis', chartAnalysisRoutes);
 app.use('/admin', adminRoutes);
 
 
+
 app.get('/', (req, res) => res.send('🚀 MERN Auth API is up and running!'));
 
 // 🔌 Connect to DB and start server

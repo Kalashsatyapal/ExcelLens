@@ -104,18 +104,27 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Please fill all fields" });
     }
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    // Lowercase and trim email for consistent lookup
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({
+      email: { $regex: new RegExp(`^${normalizedEmail}$`, "i") },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
     if (user.blocked) {
       return res.status(403).json({ message: "Your account is blocked" });
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
+    }
 
     const payload = { userId: user._id, role: user.role };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
 
     res.json({
       token,

@@ -14,32 +14,34 @@ export default function LandingPage() {
     {
       title: "Secure Authentication",
       desc: "JWT-based login with role-based access. Admins require a secret passkey.",
-      icon: <FaLock className="text-cyan-500 text-xl" />,
+      icon: <FaLock className="text-cyan-500 text-xl group-hover:animate-bounce" />,
+      badge: "Secure",
     },
     {
       title: "Excel Uploads",
       desc: "Drag-and-drop ExcelJS-powered uploads with MongoDB storage.",
-      icon: <FaFileExcel className="text-blue-400 text-xl" />,
+      icon: <FaFileExcel className="text-blue-500 text-xl group-hover:animate-bounce" />,
+      badge: "New",
     },
     {
       title: "File Management",
       desc: "Preview, track, and delete uploaded files with ease.",
-      icon: <FaTrashAlt className="text-slate-500 text-xl" />,
+      icon: <FaTrashAlt className="text-slate-500 text-xl group-hover:animate-bounce" />,
     },
     {
       title: "Data Visualization",
       desc: "Chart.js & Three.js powered 2D/3D charts: bar, line, pie, scatter, and more.",
-      icon: <FaChartBar className="text-blue-500 text-xl" />,
+      icon: <FaChartBar className="text-blue-500 text-xl group-hover:animate-bounce" />,
     },
     {
       title: "Export Charts",
       desc: "Download charts as PNG or PDF for reports and presentations.",
-      icon: <FaDownload className="text-cyan-500 text-xl" />,
+      icon: <FaDownload className="text-cyan-500 text-xl group-hover:animate-bounce" />,
     },
     {
       title: "Analysis History",
       desc: "Charts history is stored in the database for future access and comparison.",
-      icon: <FaHistory className="text-slate-600 text-xl" />,
+      icon: <FaHistory className="text-slate-600 text-xl group-hover:animate-bounce" />,
     },
   ];
 
@@ -52,7 +54,8 @@ export default function LandingPage() {
             <img
               src="/src/assets/logo2.png"
               alt="ExcelLense Logo"
-              className="w-14 h-14 object-contain"
+              className="w-14 h-14 object-contain transition-transform hover:scale-105"
+              loading="lazy"
             />
             <h1 className="text-3xl font-bold text-cyan-700 tracking-wide">
               ExcelLense
@@ -61,12 +64,14 @@ export default function LandingPage() {
           <nav className="space-x-4 flex items-center">
             <Link
               to="/login"
+              aria-label="Login"
               className="flex items-center gap-2 px-4 py-2 bg-white/30 backdrop-blur-md border border-cyan-300 text-cyan-700 rounded-md hover:bg-white/50 transition"
             >
               <FaLock /> Login
             </Link>
             <Link
               to="/register"
+              aria-label="Register"
               className="flex items-center gap-2 px-4 py-2 bg-white/30 backdrop-blur-md border border-blue-300 text-blue-700 rounded-md hover:bg-white/50 transition"
             >
               <FaFileExcel /> Register
@@ -87,22 +92,24 @@ export default function LandingPage() {
           <span className="font-semibold text-slate-500">intuitive file handling</span>—
           all in one seamless experience.
         </p>
-        <Link
-          to="/register"
-          className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-400 text-white font-semibold rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition transform duration-200"
-        >
-          Get Started
-        </Link>
+        <div className="flex gap-4">
+          <Link
+            to="/register"
+            className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-400 text-white font-semibold rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition transform duration-200"
+          >
+            Get Started
+          </Link>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section id="features" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h3 className="text-3xl font-bold text-center text-slate-800 mb-14 tracking-wide">
             Core Features
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {features.map(({ title, desc, icon }, i) => (
+            {features.map(({ title, desc, icon, badge }, i) => (
               <div
                 key={i}
                 className="group p-6 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ring-1 ring-transparent hover:ring-cyan-300 hover:ring-offset-2"
@@ -112,6 +119,11 @@ export default function LandingPage() {
                   <h4 className="text-xl font-semibold text-slate-800 group-hover:text-cyan-600 transition">
                     {title}
                   </h4>
+                  {badge && (
+                    <span className="ml-auto text-xs bg-cyan-500 text-white px-2 py-1 rounded-full">
+                      {badge}
+                    </span>
+                  )}
                 </div>
                 <p className="text-slate-600 leading-relaxed font-light">{desc}</p>
               </div>

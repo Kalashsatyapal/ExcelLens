@@ -52,7 +52,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between py-4">
           <div className="flex items-center space-x-3">
             <img
-              src="/assets/logo2.png"
+              src="/logo2.png"
               alt="ExcelLense Logo"
               className="w-14 h-14 object-contain transition-transform hover:scale-105"
               loading="lazy"

@@ -15,7 +15,7 @@ export default function Dashboard() {
       <header className="sticky top-0 z-10 bg-white/30 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center border-b border-cyan-100">
         <div className="flex items-center gap-4">
           <img
-            src="logo2.png"
+            src="/logo2.png"
             alt="Logo"
             className="h-10 w-auto rounded-md shadow-sm"
           />

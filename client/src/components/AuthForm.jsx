@@ -12,7 +12,6 @@ export default function AuthForm({ type }) {
     email: "",
     password: "",
     role: "user",
-    adminPassKey: "",
   });
 
   const [error, setError] = useState("");
@@ -29,7 +28,7 @@ export default function AuthForm({ type }) {
     setLoading(true);
 
     try {
-      const { username, email, password, role, adminPassKey } = formData;
+      const { username, email, password, role } = formData;
 
       if (isRegister) {
         if (role === "admin") {
@@ -37,9 +36,10 @@ export default function AuthForm({ type }) {
             username,
             email,
             password,
-            adminPassKey,
           });
-          alert("Admin registration request submitted. Await superadmin approval.");
+          alert(
+            "Admin registration request submitted. Await superadmin approval."
+          );
           navigate("/login");
         } else {
           await API.post("/auth/register", { username, email, password, role });
@@ -177,27 +177,6 @@ export default function AuthForm({ type }) {
                   Role
                 </label>
               </div>
-
-              {formData.role === "admin" && (
-                <div className="relative z-0 w-full group">
-                  <input
-                    type="password"
-                    name="adminPassKey"
-                    id="adminPassKey"
-                    required
-                    value={formData.adminPassKey}
-                    onChange={handleChange}
-                    placeholder=" "
-                    className="peer block w-full border border-gray-300 bg-white/70 px-4 pt-6 pb-2 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:shadow-[0_0_0_4px_rgba(6,182,212,0.3)] transition"
-                  />
-                  <label
-                    htmlFor="adminPassKey"
-                    className="absolute text-sm text-slate-500 duration-300 transform -translate-y-4 scale-75 top-3 left-4 z-10 origin-[0] peer-placeholder-shown:translate-y-2 peer-placeholder-shown:scale-100 peer-focus:scale-75 peer-focus:-translate-y-4"
-                  >
-                    Admin PassKey
-                  </label>
-                </div>
-              )}
             </>
           )}
 
@@ -241,7 +220,8 @@ export default function AuthForm({ type }) {
       <footer className="bg-gradient-to-r from-gray-100 to-cyan-100 py-6 mt-auto border-t border-gray-200">
         <div className="container mx-auto text-center text-slate-500 text-sm">
           © {new Date().getFullYear()}{" "}
-          <span className="font-semibold text-cyan-700">ExcelLense</span>. Built with precision and passion.
+          <span className="font-semibold text-cyan-700">ExcelLense</span>. Built
+          with precision and passion.
         </div>
       </footer>
     </div>

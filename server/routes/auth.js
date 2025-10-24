@@ -5,8 +5,8 @@ const AdminRequest = require("../models/AdminRequest");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middleware/authMiddleware");
-const sendMail = require("../utils/mailer");
-const { JWT_SECRET, ADMIN_PASSKEY } = process.env;
+
+const { JWT_SECRET } = process.env;
 
 // Register route (only for regular users)
 router.post("/register", async (req, res) => {
@@ -47,17 +47,13 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Admin registration request
+// Admin registration request (no passkey, no email notification)
 router.post("/admin-requests", async (req, res) => {
   try {
-    const { username, email, password, adminPassKey } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!username || !email || !password || !adminPassKey) {
+    if (!username || !email || !password) {
       return res.status(400).json({ message: "Please fill all fields" });
-    }
-
-    if (adminPassKey !== ADMIN_PASSKEY) {
-      return res.status(403).json({ message: "Invalid Admin PassKey" });
     }
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -78,13 +74,7 @@ router.post("/admin-requests", async (req, res) => {
     });
 
     await request.save();
-     // Notify superadmin
-    await sendMail({
-      to: process.env.SUPERADMIN_EMAIL,
-      subject: "New Admin Request Pending",
-      text: `A new admin request has been submitted:\nUsername: ${username}\nEmail: ${email}`,
-    });
-    console.log(`✅ Admin request saved for ${email}`);
+
     res.status(201).json({
       message:
         "Admin registration request submitted. Await superadmin approval.",
@@ -104,7 +94,6 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Please fill all fields" });
     }
 
-    // Lowercase and trim email for consistent lookup
     const normalizedEmail = email.trim().toLowerCase();
     const user = await User.findOne({
       email: { $regex: new RegExp(`^${normalizedEmail}$`, "i") },
@@ -124,7 +113,7 @@ router.post("/login", async (req, res) => {
     }
 
     const payload = { userId: user._id, role: user.role };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 
     res.json({
       token,
@@ -141,13 +130,18 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 const multer = require("multer");
-const upload = multer({ storage: multer.memoryStorage() }); 
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.put("/update-name", authMiddleware(), async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ message: "Name required" });
-  const user = await User.findByIdAndUpdate(req.user._id, { username: name }, { new: true });
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { username: name },
+    { new: true }
+  );
   res.json({ username: user.username });
 });
 
@@ -165,9 +159,11 @@ router.post(
   upload.single("profileImage"),
   async (req, res) => {
     try {
-      if (!req.file) return res.status(400).json({ message: "No image uploaded" });
-      // Convert buffer to base64 string
-      const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+      if (!req.file)
+        return res.status(400).json({ message: "No image uploaded" });
+      const base64Image = `data:${
+        req.file.mimetype
+      };base64,${req.file.buffer.toString("base64")}`;
       const user = await User.findByIdAndUpdate(
         req.user._id,
         { profileImage: base64Image },

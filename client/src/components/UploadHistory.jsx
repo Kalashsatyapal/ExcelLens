@@ -44,7 +44,7 @@ export default function UploadHistory() {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white/30 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center border-b border-cyan-100">
         <div className="flex items-center gap-4">
-          <img src="/src/assets/logo2.png" alt="Logo" className="h-10 w-auto rounded-md shadow-sm" />
+          <img src="/logo2.png" alt="Logo" className="h-10 w-auto rounded-md shadow-sm" />
           <h1 className="text-3xl font-extrabold tracking-tight text-cyan-700">ExcelLense</h1>
         </div>
         <div className="flex items-center gap-3">

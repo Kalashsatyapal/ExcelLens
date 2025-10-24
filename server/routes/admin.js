@@ -5,7 +5,7 @@ const Upload = require("../models/Upload");
 const ChartAnalysis = require("../models/ChartAnalysis");
 const authMiddleware = require("../middleware/authMiddleware");
 const AdminRequest = require("../models/AdminRequest");
-const sendMail = require("../utils/mailer");
+// sendMail removed per requirement (no email notifications)
 
 // 🔐 Get all users (admin or superadmin only)
 router.get(
@@ -93,10 +93,11 @@ router.get(
     }
   }
 );
-// Get all pending admin requests
+
+// Get all pending admin requests (superadmin only)
 router.get(
   "/admin-requests",
-  authMiddleware("superadmin"),
+  authMiddleware(["superadmin"]),
   async (req, res) => {
     try {
       const { status = "pending" } = req.query;
@@ -111,10 +112,10 @@ router.get(
   }
 );
 
-// Approve admin request
+// Approve admin request (superadmin only)
 router.post(
   "/admin-requests/:id/approve",
-  authMiddleware("superadmin"),
+  authMiddleware(["superadmin"]),
   async (req, res) => {
     try {
       const request = await AdminRequest.findById(req.params.id);
@@ -137,13 +138,7 @@ router.post(
         status: "approved",
       });
 
-      // Notify requester
-      await sendMail({
-        to: request.email,
-        subject: "Your Admin Request Approved",
-        text: `Congratulations, your admin request has been approved! You can now login as admin.`,
-      });
-
+      // No email notification per requirement — just log
       console.log(`✅ Admin approved: ${request.email}`);
       res.status(201).json({ message: "Admin approved and created" });
     } catch (err) {
@@ -153,10 +148,10 @@ router.post(
   }
 );
 
-// Reject admin request
+// Reject admin request (superadmin only)
 router.post(
   "/admin-requests/:id/reject",
-  authMiddleware("superadmin"),
+  authMiddleware(["superadmin"]),
   async (req, res) => {
     try {
       const { reason } = req.body;
@@ -174,13 +169,7 @@ router.post(
         rejectionReason: reason || "",
       });
 
-      // Notify requester
-      await sendMail({
-        to: request.email,
-        subject: "Your Admin Request Rejected",
-        text: `Sorry, your admin request was rejected.${reason ? "\nReason: " + reason : ""}`,
-      });
-      
+      // No email notification per requirement
       res.json({ message: "Request rejected" });
     } catch (err) {
       console.error(err);
@@ -188,10 +177,11 @@ router.post(
     }
   }
 );
+
 // Block/Unblock user (superadmin only)
 router.put(
   "/users/:id/block",
-  authMiddleware("superadmin"),
+  authMiddleware(["superadmin"]),
   async (req, res) => {
     try {
       const { blocked } = req.body;
@@ -210,4 +200,5 @@ router.put(
     }
   }
 );
+
 module.exports = router;

@@ -76,53 +76,90 @@ export default function AnalysisHistory() {
     pdf.save(`${filename}.pdf`);
   };
 
+  // ...existing code until return statement...
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-blue-50 to-cyan-50 text-slate-800 font-inter">
+    <div className="min-h-screen flex flex-col bg-gradient-to-tr from-slate-900 via-slate-800 to-indigo-900 text-slate-100 font-sans">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/30 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center border-b border-cyan-100">
-        <div className="flex items-center gap-4">
-          <img src="/logo2.png" alt="Logo" className="h-10 w-auto rounded-md shadow-sm" />
-          <h1 className="text-2xl font-bold tracking-tight text-cyan-700">ExcelLense</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/dashboard")} className="px-4 py-2 bg-gradient-to-r from-cyan-100 to-blue-100 text-cyan-700 font-medium rounded-md hover:from-cyan-200 hover:to-blue-200 transition">Dashboard</button>
-          <button onClick={() => navigate("/visualize")} className="px-4 py-2 bg-white/40 backdrop-blur-md border border-blue-300 text-blue-700 font-medium rounded-md hover:bg-white/60 transition">Back to Visualization</button>
-          <button onClick={logout} className="px-4 py-2 bg-gradient-to-r from-red-100 to-red-200 text-red-600 font-medium rounded-md hover:from-red-200 hover:to-red-300 transition">Logout</button>
+      <header className="bg-slate-800/60 backdrop-blur-md shadow-md sticky top-0 z-50 border-b border-slate-700">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between py-4">
+          <div className="flex items-center space-x-3">
+            <img src="/logo2.png" alt="Logo" className="w-14 h-14 object-contain transition-transform hover:scale-105" />
+            <h1 className="text-3xl font-bold text-cyan-400 tracking-wide">ExcelLense</h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => navigate("/dashboard")} 
+              className="flex items-center gap-2 px-4 py-2 bg-slate-700/50 backdrop-blur-md border border-cyan-500 text-cyan-300 rounded-md hover:bg-slate-600 transition"
+            >
+              Dashboard
+            </button>
+            <button 
+              onClick={() => navigate("/visualize")} 
+              className="flex items-center gap-2 px-4 py-2 bg-slate-700/50 backdrop-blur-md border border-indigo-500 text-indigo-300 rounded-md hover:bg-slate-600 transition"
+            >
+              Back to Visualization
+            </button>
+            <button 
+              onClick={logout} 
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/20 backdrop-blur-md border border-red-500 text-red-300 rounded-md hover:bg-red-500/30 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-10 space-y-10 flex-grow">
-        <h1 className="text-3xl font-bold text-cyan-700">Analysis History</h1>
+      <main className="max-w-7xl mx-auto px-6 py-10 space-y-10 flex-grow">
+        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-slate-300">
+          Analysis History
+        </h1>
 
         {loading ? (
           <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-cyan-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-cyan-400"></div>
           </div>
         ) : fetchError ? (
-          <div className="text-red-600 flex items-center gap-2">
+          <div className="text-red-400 flex items-center gap-2 bg-red-500/10 p-4 rounded-lg border border-red-500/20">
             <span>⚠️</span> <span>{fetchError}</span>
           </div>
         ) : analyses.length === 0 ? (
-          <div className="text-center text-slate-500">No analyses found.</div>
+          <div className="text-center text-slate-400">No analyses found.</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {analyses.map((a) => (
-              <div key={a._id} className="bg-white/60 backdrop-blur-md border border-white/30 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-5 flex flex-col justify-between">
+              <div key={a._id} className="group p-5 bg-slate-800/40 backdrop-blur-lg rounded-xl border border-slate-700 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ring-1 ring-transparent hover:ring-cyan-400 hover:ring-offset-2 hover:ring-offset-slate-900">
                 <div>
-                  <h2 className="text-xl font-semibold text-cyan-700 mb-2">{a.chartType}</h2>
-                  <p className="text-sm text-slate-700 mb-1">
-                    <span className="font-medium">X:</span> {a.xAxis} | <span className="font-medium">Y:</span> {a.yAxis}
+                  <h2 className="text-xl font-semibold text-cyan-400 mb-2">{a.chartType}</h2>
+                  <p className="text-sm text-slate-300 mb-1">
+                    <span className="font-medium text-indigo-400">X:</span> {a.xAxis} | 
+                    <span className="font-medium text-indigo-400"> Y:</span> {a.yAxis}
                   </p>
-                  <p className="text-sm text-slate-600 italic mb-3">{a.summary}</p>
-                  <div className="rounded overflow-hidden border bg-white mb-4">
+                  <p className="text-sm text-slate-400 italic mb-3">{a.summary}</p>
+                  <div className="rounded-lg overflow-hidden border border-slate-700 bg-slate-800/50 mb-4">
                     <img src={a.chartImageBase64} alt="Chart Preview" className="w-full h-48 object-contain" />
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-auto">
-                  <button onClick={() => downloadImage(a.chartImageBase64, a._id, "png")} className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">PNG</button>
-                  <button onClick={() => downloadPDF(a.chartImageBase64, a._id)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">PDF</button>
-                  <button onClick={() => handleDelete(a._id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">Delete</button>
+                  <button 
+                    onClick={() => downloadImage(a.chartImageBase64, a._id, "png")} 
+                    className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500 px-4 py-1.5 rounded-md text-sm font-medium transition"
+                  >
+                    PNG
+                  </button>
+                  <button 
+                    onClick={() => downloadPDF(a.chartImageBase64, a._id)} 
+                    className="bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500 px-4 py-1.5 rounded-md text-sm font-medium transition"
+                  >
+                    PDF
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(a._id)} 
+                    className="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500 px-4 py-1.5 rounded-md text-sm font-medium transition"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -130,18 +167,18 @@ export default function AnalysisHistory() {
         )}
 
         {deleteStatus && (
-          <div className="text-sm mt-4 text-right text-slate-500 italic transition-opacity duration-500">
+          <div className="text-sm mt-4 text-right text-slate-400 italic transition-opacity duration-500">
             {deleteStatus}
           </div>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-100 to-cyan-100 py-6 mt-auto border-t border-gray-200">
-        <div className="container mx-auto text-center text-slate-500 text-sm">
-          © {new Date().getFullYear()} <span className="font-semibold text-cyan-700">ExcelLense</span>. Built with precision and passion.
+      <footer className="bg-slate-800 py-6 border-t border-slate-700">
+        <div className="max-w-7xl mx-auto text-center text-slate-400 text-sm">
+          © {new Date().getFullYear()} <span className="font-semibold text-cyan-400">ExcelLense</span>. Built with precision and passion.
         </div>
       </footer>
     </div>
-  );
-}
+    );
+  }

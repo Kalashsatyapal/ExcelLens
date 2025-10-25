@@ -123,6 +123,7 @@ router.post("/login", async (req, res) => {
         role: user.role,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        profileImage: user.profileImage,
       },
     });
   } catch (error) {

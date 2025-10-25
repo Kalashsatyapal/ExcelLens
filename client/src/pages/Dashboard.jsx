@@ -4,7 +4,7 @@ import UploadSection from "../components/UploadSection";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon, UserIcon } from "@heroicons/react/20/solid";
-// ...existing code...
+
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -141,4 +141,3 @@ export default function Dashboard() {
     </div>
   );
 }
-// ...existing code...
